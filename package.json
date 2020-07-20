@@ -1,0 +1,22 @@
+{
+  "name": "express",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "nyc mocha",
+    "eslint": "eslint . --ext .js",
+    "preCommit": "npm test && npm run eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bernie-walker/express.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bernie-walker/express/issues"
+  },
+  "homepage": "https://github.com/bernie-walker/express#readme"
+}
