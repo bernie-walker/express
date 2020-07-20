@@ -1,5 +1,5 @@
 {
-  "name": "express",
+  "name": "expressMediumClone",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -18,5 +18,15 @@
   "bugs": {
     "url": "https://github.com/bernie-walker/express/issues"
   },
-  "homepage": "https://github.com/bernie-walker/express#readme"
+  "homepage": "https://github.com/bernie-walker/express#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^7.5.0",
+    "mocha": "^8.0.1",
+    "nyc": "^15.1.0",
+    "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
