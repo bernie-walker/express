@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/bernie-walker/express/issues"
   },
-  "homepage": "https://github.com/bernie-walker/express#readme"
+  "homepage": "https://github.com/bernie-walker/express#readme",
+  "dependencies": {
+    "pug": "^3.0.0",
+    "pug-cli": "^1.0.0-alpha6"
+  }
 }
