@@ -1,0 +1,47 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+header {
+  height: 100px;
+  justify-content: center;
+  display: flex;
+}
+button {
+  height: 40px;
+  line-height: 40px;
+  align-items: center;
+  background: blue;
+  color: white;
+  padding: 4px 16px;
+  font-size: 20px;
+}
+.editor {
+  display: flex;
+  flex-direction: column;
+}
+.title {
+  margin: 0 auto;
+  width: 45%;
+  font-size: 28px;
+  outline: none;
+  padding: 8px;
+  font-weight: 500;
+}
+
+.title:empty:before {
+  font-weight: 100;
+  color: #aaa;
+  content: 'New title...';
+}
+
+.title[contenteditable='true']:read-write:focus {
+  border-left: 2px solid #333;
+}
+
+#editorjs div[contenteditable='true']:empty:before {
+  font-weight: 100;
+  color: #aaa;
+  content: 'Tell us about your story...';
+}
