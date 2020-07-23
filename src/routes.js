@@ -1,16 +1,12 @@
 const express = require('express');
+const { logRequest, serveDashboard } = require('./handlers');
 const app = express();
 
 app.set('view engine', 'pug');
 
+app.use(logRequest);
 app.use(express.static('public'));
 
-app.get('/dashboard', (req, res) => {
-  res.render('dashboard', {
-    avatarUrl: 'https://avatars2.githubusercontent.com/u/58025838?s=460&v=4',
-    username: 'palPriyanshu',
-    displayName: 'priyanshu',
-  });
-});
+app.get('/dashboard', serveDashboard);
 
 module.exports = { app };

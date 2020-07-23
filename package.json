@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha",
+    "test": "export NO_LOG=1; nyc mocha",
     "eslint": "eslint . --ext .js",
     "preCommit": "npm test && npm run eslint",
     "dev": "nodemon server.js",
