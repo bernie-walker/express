@@ -13,4 +13,14 @@ const serveDashboard = function (req, res) {
   });
 };
 
-module.exports = { logRequest, serveDashboard };
+const serveBlogImage = function (req, res) {
+  const { notFound, blogImagePath } = req.app.locals;
+  const [, root] = __dirname.match(/(.*express\/)(.*)/);
+  res.sendFile(root + blogImagePath + req.params.imageId, (err) => {
+    if (err) {
+      res.status(notFound).send('<h1>Image Not Found</h1>');
+    }
+  });
+};
+
+module.exports = { logRequest, serveDashboard, serveBlogImage };

@@ -19,4 +19,32 @@ describe('GET', () => {
         .expect(/Express/);
     });
   });
+
+  context('/blog_image', function () {
+    it('should respond with OK if image is found', function (done) {
+      request(app)
+        .get('/blog_image/image')
+        .expect(200)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond NOT FOUND if image is not present', function (done) {
+      request(app)
+        .get('/blog_image/badImage')
+        .expect(404)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+  });
 });
