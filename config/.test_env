@@ -1,0 +1,2 @@
+export NO_LOG=1
+export BLOG_IMAGE_PATH=test/testData/images/
