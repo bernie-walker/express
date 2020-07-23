@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "source config/.test_env; nyc mocha",
+    "test": ". config/.test_env; nyc mocha",
     "eslint": "eslint . --ext .js",
     "preCommit": "npm test && npm run eslint",
-    "dev": "source config/.prod_env; nodemon server.js",
-    "start": "source config/.prod_env; node server.js"
+    "dev": ". config/.prod_env; nodemon server.js",
+    "start": ". config/.prod_env; node server.js"
   },
   "repository": {
     "type": "git",
