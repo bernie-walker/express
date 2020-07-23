@@ -10,4 +10,13 @@ describe('GET', () => {
         .expect(/Express/);
     });
   });
+
+  context('/dashboard', () => {
+    it('should serve the dashboard', async () => {
+      await request(app)
+        .get('/dashboard')
+        .expect(200)
+        .expect(/Express/);
+    });
+  });
 });

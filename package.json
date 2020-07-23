@@ -6,7 +6,9 @@
   "scripts": {
     "test": "nyc mocha",
     "eslint": "eslint . --ext .js",
-    "preCommit": "npm test && npm run eslint"
+    "preCommit": "npm test && npm run eslint",
+    "dev": "nodemon server.js",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -24,7 +26,8 @@
     "eslint": "^7.5.0",
     "mocha": "^8.0.1",
     "nyc": "^15.1.0",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2",
+    "nodemon": "^2.0.4"
   },
   "dependencies": {
     "express": "^4.17.1",

@@ -1,0 +1,34 @@
+.header {
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0 4px 2px #eee;
+  display: flex;
+  justify-content: center;
+  padding: 4px;
+}
+
+.header > div {
+  width: 40%;
+}
+
+.logo img {
+  width: 228px;
+  height: 60px;
+}
+
+.searchAndProfile {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.profile {
+  height: 48px;
+  width: 48px;
+}
+
+.profile img {
+  cursor: pointer;
+  height: inherit;
+  width: inherit;
+  border-radius: 50%;
+}
