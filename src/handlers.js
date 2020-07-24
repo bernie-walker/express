@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 const logRequest = function (req, res, next) {
   if (!process.env.NO_LOG) {
     process.stdout.write(`${req.method} ${req.url}\n`);
@@ -11,7 +13,7 @@ const serveDashboard = async function (req, res) {
   const stories = req.app.locals.stories;
   const blogsNeeded = 10;
   const recentStories = await stories.get(blogsNeeded);
-  res.render('dashboard', Object.assign({ recentStories }, userInfo));
+  res.render('dashboard', Object.assign({ recentStories, moment }, userInfo));
 };
 
 const serveBlogImage = function (req, res) {

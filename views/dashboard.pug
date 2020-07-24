@@ -1,25 +1,26 @@
 mixin storyCard(title, content, author, createdAt, imageUrl)
     div.card 
-        div.text
+        div.card-content
             div.title= title
             div.content
-              each para in content
-                p #{para.data.text}
+                p= content
             div.author= author
-            div.date= createdAt
-        .image
-            img.imageTag(src= imageUrl, alt="blogImage")
+            - dateFormat = moment(createdAt, 'YYYY-MM-DD HH:mm:ss').format('MMM DD, YYYY')
+            div.date= dateFormat
+        .card-image
+            img(src= imageUrl, alt="blogImage")
 
 html
   head
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Express
     link(rel="stylesheet", href="./css/dashboard.css")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js", type="text/javascript")
   body 
     include ./includes/header.pug
-    div.allStories
+    div.card-container
       each value in recentStories
         - const sliceContent = JSON.parse(value.content);
-        - const paragraph = sliceContent.filter(data=> data.type ==='paragraph').slice(0,2) 
-        //- - const stringPara = '<p>'+paragraph+'</p>';
-
-        +storyCard(value.title, paragraph, value.written_by, value.last_modified, value.cover_image)
+        - const paragraph = sliceContent.filter(data=> data.type ==='paragraph').slice(0,2)
+        - const text = (paragraph[0].data.text + paragraph[1].data.text).slice(0, 150) + '...'
+        +storyCard(value.title, text, value.written_by, value.last_modified, value.cover_image)
