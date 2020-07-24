@@ -13,7 +13,9 @@ describe('GET', () => {
   });
 
   context('/dashboard', () => {
-    before(() => setUpDatabase(app.locals.dbClientReference));
+    before(() =>
+      setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
+    );
 
     it('should serve the dashboard', async () => {
       await request(app)
@@ -24,9 +26,13 @@ describe('GET', () => {
   });
 
   context('/blogPage', function () {
+    before(() =>
+      setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
+    );
+
     it('should serve the blog page', function (done) {
       request(app)
-        .get('/blogPage/9')
+        .get('/blogPage/1')
         .expect(200)
         .end((err) => {
           if (err) {

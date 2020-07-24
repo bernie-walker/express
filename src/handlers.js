@@ -1,5 +1,4 @@
 const moment = require('moment');
-const blog = require('./tempBlogData.json');
 
 const logRequest = function (req, res, next) {
   if (!process.env.NO_LOG) {
@@ -9,11 +8,10 @@ const logRequest = function (req, res, next) {
 };
 
 const serveDashboard = async function (req, res) {
+  const blogsNeeded = 10;
   const users = req.app.locals.users;
   const userInfo = await users.getUserInfo('palpriyanshu');
-  const stories = req.app.locals.stories;
-  const blogsNeeded = 10;
-  const recentStories = await stories.get(blogsNeeded);
+  const recentStories = await req.app.locals.stories.get(blogsNeeded);
   res.render('dashboard', Object.assign({ recentStories, moment }, userInfo));
 };
 
@@ -27,8 +25,13 @@ const serveBlogImage = function (req, res) {
   });
 };
 
-const serveBlogPage = function (req, res) {
-  res.render('blogPage', blog);
+const serveBlogPage = async function (req, res) {
+  const blog = await req.app.locals.stories.getStory(req.params.blogID);
+  if (blog) {
+    res.render('blogPage', blog);
+  } else {
+    res.sendStatus(req.app.locals.notFound);
+  }
 };
 
 module.exports = { logRequest, serveDashboard, serveBlogImage, serveBlogPage };
