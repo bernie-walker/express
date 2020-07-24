@@ -1,10 +1,10 @@
 INSERT INTO	users(id, display_name, avatar_url) 
 VALUES
-	('bernie-walker','Bernard','https://avatars3.githubusercontent.com/u/583231?v=4'),
-	('palpriyanshu','Priyanshu','https://avatars3.githubusercontent.com/u/583231?v=4'),
-	('shiviraj','Shivam','https://avatars3.githubusercontent.com/u/583231?v=4'),
-	('lazyhackerthani','Thanya','https://avatars3.githubusercontent.com/u/583231?v=4'),
-  ('bugdriver','Rajath','https://avatars3.githubusercontent.com/u/583231?v=4');
+	('bernie-walker','Bernard Nehal Dcunha','https://avatars3.githubusercontent.com/u/583231?v=4'),
+	('palpriyanshu','Priyanshu Pal','https://avatars3.githubusercontent.com/u/583231?v=4'),
+	('shiviraj','Shivam Rajputh','https://avatars3.githubusercontent.com/u/583231?v=4'),
+	('lazyhackerthani','Thanya Cherumanalil','https://avatars3.githubusercontent.com/u/583231?v=4'),
+  ('bugdriver','Rajath Kushawaha','https://avatars3.githubusercontent.com/u/583231?v=4');
 
 INSERT INTO stories(written_by, state, title, content, cover_image, last_modified) 
 VALUES
