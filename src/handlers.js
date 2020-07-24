@@ -5,12 +5,10 @@ const logRequest = function (req, res, next) {
   next();
 };
 
-const serveDashboard = function (req, res) {
-  res.render('dashboard', {
-    avatarUrl: 'https://avatars2.githubusercontent.com/u/58025838?s=460&v=4',
-    username: 'palPriyanshu',
-    displayName: 'priyanshu',
-  });
+const serveDashboard = async function (req, res) {
+  const users = req.app.locals.users;
+  const userInfo = await users.getUserInfo('palpriyanshu');
+  res.render('dashboard', userInfo);
 };
 
 const serveBlogImage = function (req, res) {

@@ -1,1 +1,2 @@
 export BLOG_IMAGE_PATH=data/images/
+export DB_PATH=data/express.db
