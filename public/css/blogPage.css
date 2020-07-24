@@ -1,0 +1,93 @@
+body {
+  font-family: 'Playfair Display', serif;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.header {
+  height: 45px;
+}
+
+.blog {
+  margin: auto;
+  width: 60%;
+}
+
+.blog-title {
+  padding: 1vh;
+  font-size: 3vw;
+  color: rgba(10, 10, 10, 0.9);
+}
+
+.blog-meta {
+  padding: 1.5vw;
+  display: flex;
+}
+
+.author-icon {
+  border: 0.05vw solid rgba(12, 12, 12, 0.6);
+  height: 7.2vh;
+  width: 7%;
+  border-radius: 50%;
+}
+
+.icon-image {
+  border-radius: inherit;
+  height: 90%;
+  width: 90%;
+  margin-top: 5%;
+  margin-left: 5.4%;
+}
+
+.blog-info {
+  padding-top: 0.5vh;
+  padding-left: 1vh;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 1.4vw;
+  font-weight: 300;
+  line-height: 3.4vh;
+  letter-spacing: 0.05vw;
+}
+
+.author-name {
+  color: rgba(10, 10, 10, 0.8);
+}
+
+.blog-date {
+  color: rgba(10, 10, 10, 0.5);
+}
+
+.blog-content {
+  margin-top: 1vh;
+  padding: 1.2vw;
+  font-size: 1.5vw;
+  line-height: 4.5vh;
+  letter-spacing: 0.05vw;
+  word-spacing: 0.02vw;
+  color: rgba(10, 10, 10, 0.8);
+}
+
+.blog-content-text-block {
+  margin-bottom: 5vh;
+}
+
+figure {
+  text-align: center;
+  font-style: italic;
+  font-size: 1.3vw;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: rgba(10, 10, 10, 0.5);
+}
+
+figure > img {
+  max-width: 100%;
+  margin: auto;
+  display: block;
+}
