@@ -1,4 +1,5 @@
 const moment = require('moment');
+const blog = require('./tempBlogData.json');
 
 const logRequest = function (req, res, next) {
   if (!process.env.NO_LOG) {
@@ -19,11 +20,15 @@ const serveDashboard = async function (req, res) {
 const serveBlogImage = function (req, res) {
   const { notFound, blogImagePath } = req.app.locals;
   const [, root] = __dirname.match(/(.*express\/)(.*)/);
-  res.sendFile(root + blogImagePath + req.params.imageId, (err) => {
+  res.sendFile(root + blogImagePath + req.params.imageID, (err) => {
     if (err) {
       res.status(notFound).send('<h1>Image Not Found</h1>');
     }
   });
 };
 
-module.exports = { logRequest, serveDashboard, serveBlogImage };
+const serveBlogPage = function (req, res) {
+  res.render('blogPage', blog);
+};
+
+module.exports = { logRequest, serveDashboard, serveBlogImage, serveBlogPage };

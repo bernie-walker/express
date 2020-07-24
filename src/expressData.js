@@ -8,7 +8,7 @@ const generateGetNStoriesQuery = function (offset, count) {
   LIMIT ${offset},${count};`;
 };
 const generateGetStoryQuery = function (storyID) {
-  return `SELECT usr.display_name as authorName,usr.avatar_url as avatar,
+  return `SELECT usr.display_name as authorName,usr.avatar_url,
   str.title,str.content,str.id as storyID,str.written_by as authorID,
   date(str.last_modified) as lastModified
   FROM stories AS str
@@ -34,7 +34,6 @@ class Stories {
     const query = generateGetStoryQuery(storyID);
     return new Promise((resolve) => {
       this.db.get(query, (err, row) => {
-        row.content = JSON.parse(row.content);
         resolve(row);
       });
     });

@@ -2,7 +2,12 @@ const express = require('express');
 const Sqlite3 = require('sqlite3').verbose();
 const { Users, Stories } = require('./expressData');
 
-const { logRequest, serveDashboard, serveBlogImage } = require('./handlers');
+const {
+  logRequest,
+  serveDashboard,
+  serveBlogImage,
+  serveBlogPage,
+} = require('./handlers');
 const app = express();
 
 app.locals.noLog = process.env.NO_LOG;
@@ -20,7 +25,7 @@ app.use(logRequest);
 app.use(express.static('public'));
 
 app.get('/dashboard', serveDashboard);
-
-app.get('/blog_image/:imageId', serveBlogImage);
+app.get('/blogPage/:blogID', serveBlogPage);
+app.get('/blog_image/:imageID', serveBlogImage);
 
 module.exports = { app };

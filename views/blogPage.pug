@@ -1,0 +1,33 @@
+mixin generateImageBlock(url, caption)
+  figure
+    img(src= url)
+    if caption
+    figcaption= caption
+
+doctype html
+html
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    link(href='https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap' rel='stylesheet')
+    link(rel='stylesheet' href='/css/blogPage.css')
+    title Express | Blog
+  body
+    .header
+    .blog
+      .blog-title= title
+      .blog-meta
+        .author-icon
+          img(src=avatar_url class="icon-image")
+        .blog-info
+          .author-name
+            a(href="")= authorName
+          - const [,month,date,year] = new Date(lastModified).toString().split(' ');
+          .blog-date= `${month} ${date}, ${year}`
+      .blog-content
+        - const contentBlocks = JSON.parse(content);
+        each block in contentBlocks
+          if block.type == "image"
+            +generateImageBlock(block.data.file.url, block.data.caption)
+          if block.type = "paragraph"
+            p= block.data.text

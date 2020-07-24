@@ -23,6 +23,21 @@ describe('GET', () => {
     });
   });
 
+  context('/blogPage', function () {
+    it('should serve the blog page', function (done) {
+      request(app)
+        .get('/blogPage/9')
+        .expect(200)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+  });
+
   context('/blog_image', function () {
     it('should respond with OK if image is found', function (done) {
       request(app)
