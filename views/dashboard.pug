@@ -1,6 +1,25 @@
+mixin storyCard(title, content, author, createdAt, imageUrl)
+    div.card 
+        div.text
+            div.title= title
+            div.content
+              each para in content
+                p #{para.data.text}
+            div.author= author
+            div.date= createdAt
+        .image
+            img.imageTag(src= imageUrl, alt="blogImage")
+
 html
   head
     title Express
     link(rel="stylesheet", href="./css/dashboard.css")
   body 
     include ./includes/header.pug
+    div.allStories
+      each value in recentStories
+        - const sliceContent = JSON.parse(value.content);
+        - const paragraph = sliceContent.filter(data=> data.type ==='paragraph').slice(0,2) 
+        //- - const stringPara = '<p>'+paragraph+'</p>';
+
+        +storyCard(value.title, paragraph, value.written_by, value.last_modified, value.cover_image)

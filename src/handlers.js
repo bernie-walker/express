@@ -8,7 +8,10 @@ const logRequest = function (req, res, next) {
 const serveDashboard = async function (req, res) {
   const users = req.app.locals.users;
   const userInfo = await users.getUserInfo('palpriyanshu');
-  res.render('dashboard', userInfo);
+  const stories = req.app.locals.stories;
+  const blogsNeeded = 10;
+  const recentStories = await stories.get(blogsNeeded);
+  res.render('dashboard', Object.assign({ recentStories }, userInfo));
 };
 
 const serveBlogImage = function (req, res) {
