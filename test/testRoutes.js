@@ -1,6 +1,6 @@
 const request = require('supertest');
 const { app } = require('../src/routes');
-const { setUpDatabase } = require('./fixture/databaseSetUp');
+const { setUpDatabase, cleanDatabase } = require('./fixture/databaseSetUp');
 
 describe('GET', () => {
   context('/', () => {
@@ -16,6 +16,7 @@ describe('GET', () => {
     before(() =>
       setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
     );
+    after(() => cleanDatabase(app.locals.dbClientReference));
 
     it('should serve the dashboard', async () => {
       await request(app)
@@ -29,11 +30,25 @@ describe('GET', () => {
     before(() =>
       setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
     );
+    after(() => cleanDatabase(app.locals.dbClientReference));
 
-    it('should serve the blog page', function (done) {
+    it('should serve the blog page when exists', function (done) {
       request(app)
         .get('/blogPage/1')
         .expect(200)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond NOT FOUND if blog does not exists', function (done) {
+      request(app)
+        .get('/blogPage/2')
+        .expect(404)
         .end((err) => {
           if (err) {
             done(err);

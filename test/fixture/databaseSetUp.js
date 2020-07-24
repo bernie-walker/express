@@ -12,9 +12,10 @@ const setUpDatabase = async (dbClient, tableNames) => {
   }
 };
 
-const cleanDatabase = async (dbClient, tableNames) => {
-  for (const table of tableNames) {
-    await runScript(`drop table ${table}`, dbClient);
+const cleanDatabase = async (dbClient) => {
+  const tables = ['users', 'stories', 'tags', 'claps', 'comments'];
+  for (const table of tables) {
+    await runScript(`drop table if exists ${table}`, dbClient);
   }
 };
 
