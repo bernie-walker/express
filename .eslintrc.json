@@ -78,7 +78,7 @@
   },
   "overrides": [
     {
-      "files": ["test*.js", "server.js"],
+      "files": ["test*.js", "server.js", "test/*/*.js"],
       "rules": {
         "max-len": "warn",
         "no-magic-numbers": "off",
@@ -88,6 +88,10 @@
     {
       "files": ["public/js/*.js"],
       "rules": { "no-undef": "off", "no-unused-vars": "off", "max-len": "warn" }
+    },
+    {
+      "files": ["src/expressData.js"],
+      "rules": { "handle-callback-err": "off" }
     }
   ]
 }
