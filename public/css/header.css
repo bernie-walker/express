@@ -42,7 +42,6 @@
   display: flex;
   flex-direction: column;
   border: 1px solid #888;
-  /* box-shadow: 0px 0px 12px #888; */
   right: 110px;
 }
 
@@ -58,6 +57,10 @@
   display: block;
   border-right: 0;
   border-bottom: 0;
+}
+
+.hidden {
+  display: none;
 }
 
 .section {
