@@ -1,6 +1,6 @@
 const request = require('supertest');
 const { app } = require('../src/routes');
-const { setUpDatabase, cleanDatabase } = require('./fixture/databaseSetUp');
+const { setUpDatabase } = require('./fixture/databaseSetUp');
 
 describe('GET', () => {
   context('/', () => {
@@ -13,8 +13,8 @@ describe('GET', () => {
   });
 
   context('/dashboard', () => {
-    beforeEach(setUpDatabase);
-    afterEach(cleanDatabase);
+    before(() => setUpDatabase(app.locals.dbClientReference));
+
     it('should serve the dashboard', async () => {
       await request(app)
         .get('/dashboard')
