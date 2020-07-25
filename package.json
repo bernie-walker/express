@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": ". config/.test_env; nyc mocha",
+    "test": ". config/.test_env; mocha",
     "eslint": "eslint . --ext .js",
     "preCommit": "npm test && npm run eslint",
     "dev": ". config/.prod_env; nodemon server.js",

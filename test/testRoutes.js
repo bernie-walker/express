@@ -13,7 +13,6 @@ describe('GET', () => {
   });
 
   context('/editor', function () {
-    this.timeout(3000);
     it('should serve the editor page', function (done) {
       request(app)
         .get('/editor')
