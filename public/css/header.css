@@ -4,10 +4,11 @@
   display: flex;
   justify-content: center;
   padding: 4px;
+  height: 48px;
 }
 
 .header > div {
-  width: 40%;
+  width: 35%;
 }
 @media (max-width: 420px) {
   .header {
@@ -18,9 +19,16 @@
 #logo {
   display: flex;
   align-items: center;
+}
+
+#logo > div {
+  justify-content: center;
   cursor: pointer;
-  transform: scale(1.3);
-  width: 20%;
+  transform: scale(1.4);
+  width: 28%;
+  align-items: center;
+  position: relative;
+  margin-left: 28px;
 }
 
 @media (max-width: 420px) {
@@ -34,7 +42,6 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding-right: 100px;
 }
 
 @media (max-width: 420px) {
@@ -127,4 +134,20 @@
 
 .username::before {
   content: '@';
+}
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(117, 117, 121, 0.8);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(117, 117, 121, 0.8);
 }

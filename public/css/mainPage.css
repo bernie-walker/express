@@ -1,21 +1,68 @@
 .header {
-  padding: 12px;
+  border-bottom: 1px solid #fff;
+  box-shadow: 0 5px 2px #efefef;
+  display: flex;
+  justify-content: center;
+  padding: 4px;
+}
+
+.header > div {
+  width: 35%;
+}
+@media (max-width: 420px) {
+  .header {
+    justify-content: space-between;
+  }
+}
+
+#logo {
+  display: flex;
+  align-items: center;
+}
+
+#logo > div {
+  justify-content: center;
+  cursor: pointer;
+  transform: scale(1.4);
+  width: 28%;
+  align-items: center;
+  position: relative;
+  margin-left: 28px;
+  height: 28px;
+}
+
+@media (max-width: 420px) {
+  #logo {
+    transform: scale(1);
+    width: 40%;
+  }
 }
 
 .links {
   display: flex;
-  align-items: center;
   justify-content: flex-end;
+  align-items: center;
+  height: 48px;
 }
 
-.links a {
+.get-start {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.get-start a {
+  cursor: pointer;
+  height: 32px;
   text-decoration: none;
-  font-size: 20px;
-  border: 1px solid green;
+  font-size: 24px;
+  line-height: 32px;
+  color: #fff;
+  border: 1px solid;
+  border-radius: 6px;
+  letter-spacing: 2px;
   background-color: green;
   padding: 4px 16px;
-  color: white;
-  border-radius: 4px;
 }
 
 .advertise {

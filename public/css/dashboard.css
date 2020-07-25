@@ -1,12 +1,3 @@
-* {
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 .card-container {
   width: 800px;
   display: flex;
@@ -97,7 +88,7 @@ body {
   color: inherit;
 }
 
-.author a:hover {
+.author:hover {
   text-decoration: underline;
 }
 .date {
