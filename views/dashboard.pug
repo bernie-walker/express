@@ -26,6 +26,6 @@ html(lang="en")
     div.card-container
       each value in recentStories
         - const sliceContent=value.content;
-        - const paragraph = sliceContent.filter(data=> data.type ==='paragraph').slice(0,2)
-        - const text = (paragraph[0].data.text + paragraph[1].data.text).slice(0, 150) + '...'
+        - const paragraph = sliceContent.find(data=> data.type ==='paragraph')
+        - const text = paragraph ? paragraph.data.text.slice(0, 150) + '...' : ''
         +storyCard(value.id, value.title, text, value.authorName, value.last_modified, value.cover_image)(onclick='visitBlog')
