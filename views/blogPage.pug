@@ -25,7 +25,7 @@ html
           - const [,month,date,year] = new Date(lastModified).toString().split(' ');
           .blog-date= `${month} ${date}, ${year}`
       .blog-content
-        - const contentBlocks = JSON.parse(content);
+        -const contentBlocks=content
         each block in contentBlocks
           if block.type == "image"
             +generateImageBlock(block.data.file.url, block.data.caption)

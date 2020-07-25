@@ -34,6 +34,9 @@ class Stories {
     const query = generateGetStoryQuery(storyID);
     return new Promise((resolve) => {
       this.db.get(query, (err, row) => {
+        if (row && row.content) {
+          row.content = JSON.parse(row.content);
+        }
         resolve(row);
       });
     });
