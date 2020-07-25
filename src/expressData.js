@@ -50,11 +50,14 @@ class Stories {
     const query = `
     INSERT INTO stories(title, written_by, state, content) 
     VALUES(?,?,?,?)`;
+
     return new Promise((resolve) => {
       this.db.run(
         query,
         [title, author, state, JSON.stringify(content)],
-        resolve
+        function () {
+          resolve(this.lastID);
+        }
       );
     });
   }

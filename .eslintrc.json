@@ -91,7 +91,11 @@
     },
     {
       "files": ["src/expressData.js"],
-      "rules": { "handle-callback-err": "off", "no-magic-numbers": "off" }
+      "rules": {
+        "handle-callback-err": "off",
+        "no-magic-numbers": "off",
+        "no-invalid-this": "off"
+      }
     }
   ]
 }
