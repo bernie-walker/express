@@ -5,7 +5,7 @@ mixin storyCard(id, title, content, author, createdAt, imageUrl)
             div.title= title
             div.content
                 p= content
-            div.author= author
+            a.author(href="")= author
             - dateFormat = moment(createdAt, 'YYYY-MM-DD HH:mm:ss').format('MMM DD, YYYY')
             div.date= dateFormat
         if imageUrl

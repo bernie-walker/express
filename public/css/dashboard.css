@@ -48,7 +48,8 @@ body {
   display: flex;
   flex-direction: column;
   width: 72%;
-  text-align: justify;
+  /* text-align: justify; */
+  color: rgba(10, 10, 10, 0.8);
 }
 
 .card-image {
@@ -87,10 +88,19 @@ body {
   font-family: sans-serif;
   font-weight: 300;
   color: #888;
-  word-spacing: 1.05;
-  line-height: 1.1;
+  word-spacing: 1.01;
+  letter-spacing: 0.5;
+  line-height: 1.2;
 }
 
+.author {
+  text-decoration: none;
+  color: inherit;
+}
+
+.author a:hover {
+  text-decoration: underline;
+}
 .date {
   font-size: 14px;
   color: #aaa;

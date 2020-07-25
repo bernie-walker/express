@@ -1,6 +1,6 @@
 .header {
-  border-bottom: 1px solid #ccc;
-  box-shadow: 0 4px 2px #eee;
+  border-bottom: 1px solid #fff;
+  box-shadow: 0 5px 2px #efefef;
   display: flex;
   justify-content: center;
   padding: 4px;
@@ -19,15 +19,14 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+  transform: scale(1.3);
+  width: 20%;
 }
-#logo img {
-  width: 228px;
-  height: 60px;
-}
+
 @media (max-width: 420px) {
-  #logo img {
-    width: 90%;
-    height: 90%;
+  #logo {
+    transform: scale(1);
+    width: 40%;
   }
 }
 
@@ -70,14 +69,14 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  border: 1px solid #888;
+  border: 1px solid #ddd;
   right: 80px;
 }
 .profile-modal::before {
   content: '';
   height: 14px;
   width: 14px;
-  border: 1px solid #888;
+  border: 1px solid #ddd;
   transform: rotate(45deg);
   background: #fff;
   margin-top: -8px;
