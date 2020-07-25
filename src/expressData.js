@@ -25,6 +25,9 @@ class Stories {
     const query = generateGetNStoriesQuery(offset, count);
     return new Promise((resolve) => {
       this.db.all(query, (err, rows) => {
+        rows.forEach((row) => {
+          row.content = JSON.parse(row.content);
+        });
         resolve(rows);
       });
     });
