@@ -21,6 +21,7 @@ class Stories {
   constructor(db) {
     this.db = db;
   }
+
   get(count = -1, offset = 0) {
     const query = generateGetNStoriesQuery(offset, count);
     return new Promise((resolve) => {
@@ -42,6 +43,19 @@ class Stories {
         }
         resolve(row);
       });
+    });
+  }
+
+  addStory(title, author, state, content) {
+    const query = `
+    INSERT INTO stories(title, written_by, state, content) 
+    VALUES(?,?,?,?)`;
+    return new Promise((resolve) => {
+      this.db.run(
+        query,
+        [title, author, state, JSON.stringify(content)],
+        resolve
+      );
     });
   }
 }
