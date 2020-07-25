@@ -30,6 +30,7 @@ body {
   margin: 1vw;
   border: 1px solid #eee;
   transition: 0.4s;
+  cursor: pointer;
 }
 .card:hover {
   transition: 0.4s;

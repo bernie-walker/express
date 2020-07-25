@@ -63,8 +63,7 @@ a:hover {
 }
 
 .blog-content {
-  margin-top: 1vh;
-  padding: 1.2vw;
+  padding: 0 1.2vw 0 1.2vw;
   font-size: 1.5vw;
   line-height: 4.5vh;
   letter-spacing: 0.05vw;

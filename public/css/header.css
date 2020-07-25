@@ -15,16 +15,17 @@
   }
 }
 
-.logo {
+#logo {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
-.logo img {
+#logo img {
   width: 228px;
   height: 60px;
 }
 @media (max-width: 420px) {
-  .logo img {
+  #logo img {
     width: 90%;
     height: 90%;
   }

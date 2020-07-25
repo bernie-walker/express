@@ -1,5 +1,5 @@
-mixin storyCard(title, content, author, createdAt, imageUrl)
-    div.card 
+mixin storyCard(id, title, content, author, createdAt, imageUrl)
+    div.card(id=id) 
         div.card-content
             div.title= title
             div.content
@@ -16,6 +16,7 @@ html
     title Express
     link(rel="stylesheet", href="./css/dashboard.css")
     script(src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js", type="text/javascript")
+    script(src="/js/dashBoard.js")
   body 
     include ./includes/header.pug
     div.card-container
@@ -23,4 +24,4 @@ html
         - const sliceContent = JSON.parse(value.content);
         - const paragraph = sliceContent.filter(data=> data.type ==='paragraph').slice(0,2)
         - const text = (paragraph[0].data.text + paragraph[1].data.text).slice(0, 150) + '...'
-        +storyCard(value.title, text, value.written_by, value.last_modified, value.cover_image)
+        +storyCard(value.id, value.title, text, value.authorName, value.last_modified, value.cover_image)(onclick='visitBlog')

@@ -1,9 +1,11 @@
 link(rel="stylesheet", href="./css/header.css")
 script(src="./js/header.js")
 .header
-  .logo
-    a(href="/dashboard")
-      img(src="/images/logo.png", alt="logo")
+  #logo
+    svg&attributes({width:21, height:26, style:{"background-color": 'black'}})
+      text&attributes({y:24, style:{"font-family": 'sans-serif', "font-size": '1.9em', "font-weight": 600, fill: 'white'}}) E
+    svg&attributes({width:103, height:26})
+      text&attributes({y:25.72, x:2, style:{"font-size": "1.48em", "font-weight": 700, color: "white", "font-family": "'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif"}}) XPRESS
   .searchAndProfile
     .search
     .profile
@@ -22,3 +24,18 @@ script(src="./js/header.js")
         .section
           div help
           div sign out
+
+    //-           <svg ">
+    //-   <text
+    //-     y="25.5"
+    //-     style="
+    //-       font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
+    //-         sans-serif;
+    //-       font-size: 1.48em;
+    //-       font-weight: 700;
+    //-       color: white;
+    //-     "
+    //-   >
+    //-     
+    //-   </text>
+    //- </svg>
