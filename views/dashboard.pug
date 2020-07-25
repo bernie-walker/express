@@ -1,21 +1,23 @@
 mixin storyCard(id, title, content, author, createdAt, imageUrl)
     div.card(id=id) 
-        div.card-content
+      - className = imageUrl ? 'card-content' : '';
+        div(class= className)
             div.title= title
             div.content
                 p= content
             div.author= author
             - dateFormat = moment(createdAt, 'YYYY-MM-DD HH:mm:ss').format('MMM DD, YYYY')
             div.date= dateFormat
-        .card-image
+        if imageUrl
+          .card-image
             img(src= imageUrl, alt="blogImage")
 
 html
   head
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Express
+    link(rel="stylesheet", href="./css/normalize.css")
     link(rel="stylesheet", href="./css/dashboard.css")
-    script(src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js", type="text/javascript")
     script(src="/js/dashBoard.js")
   body 
     include ./includes/header.pug
