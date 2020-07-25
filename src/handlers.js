@@ -1,4 +1,5 @@
 const moment = require('moment');
+const statusCodes = require('./statusCodes.json');
 
 const logRequest = function (req, res, next) {
   if (!process.env.NO_LOG) {
@@ -16,11 +17,11 @@ const serveDashboard = async function (req, res) {
 };
 
 const serveBlogImage = function (req, res) {
-  const { notFound, blogImagePath } = req.app.locals;
+  const { blogImagePath } = req.app.locals;
   const [, root] = __dirname.match(/(.*express\/)(.*)/);
   res.sendFile(root + blogImagePath + req.params.imageID, (err) => {
     if (err) {
-      res.status(notFound).send('<h1>Image Not Found</h1>');
+      res.status(statusCodes.notFound).send('<h1>Image Not Found</h1>');
     }
   });
 };
@@ -30,8 +31,34 @@ const serveBlogPage = async function (req, res) {
   if (blog) {
     res.render('blogPage', blog);
   } else {
-    res.sendStatus(req.app.locals.notFound);
+    res.sendStatus(statusCodes.notFound);
   }
 };
 
-module.exports = { logRequest, serveDashboard, serveBlogImage, serveBlogPage };
+const serveEditorPage = function (req, res) {
+  res.render('editor');
+};
+
+const publishStory = function (req, res) {
+  const author = 'palpriyanshu';
+  const { articleTitle, blocks } = req.body;
+
+  if (!articleTitle.match(/\S/)) {
+    res.sendStatus(statusCodes.unprocessableEntity);
+  }
+
+  req.app.locals.stories
+    .addStory(articleTitle, author, 'published', blocks)
+    .then((blogID) => {
+      res.json({ blogID });
+    });
+};
+
+module.exports = {
+  logRequest,
+  serveDashboard,
+  serveBlogImage,
+  serveBlogPage,
+  serveEditorPage,
+  publishStory,
+};

@@ -12,6 +12,22 @@ describe('GET', () => {
     });
   });
 
+  context('/editor', function () {
+    it('should serve the editor page', function (done) {
+      request(app)
+        .get('/editor')
+        .expect(200)
+        .expect(/Editor/)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+  });
+
   context('/dashboard', () => {
     before(() =>
       setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
