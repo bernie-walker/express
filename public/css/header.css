@@ -6,7 +6,11 @@
   padding: 4px;
   height: 48px;
 }
-
+@media (max-width: 420px) {
+  .header {
+    height: 32px;
+  }
+}
 .header > div {
   width: 35%;
 }
@@ -25,16 +29,18 @@
   justify-content: center;
   cursor: pointer;
   transform: scale(1.4);
-  width: 28%;
+  width: 132px;
   align-items: center;
   position: relative;
   margin-left: 28px;
+  height: 28px;
 }
 
 @media (max-width: 420px) {
-  #logo {
+  #logo > div {
     transform: scale(1);
-    width: 40%;
+    width: 100%;
+    margin-left: 0;
   }
 }
 
