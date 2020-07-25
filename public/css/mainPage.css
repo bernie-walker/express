@@ -27,7 +27,6 @@
 
 #logo > div {
   justify-content: center;
-  cursor: pointer;
   transform: scale(1.4);
   width: 132px;
   align-items: center;
