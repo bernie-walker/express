@@ -50,6 +50,10 @@ const handleTitleKeypress = function () {
   togglePublishedOnTitle();
 };
 
+const gotoDashboard = function () {
+  window.location = '/dashboard';
+};
+
 const createEditor = function () {
   editor = new EditorJS({
     holder: 'editorjs',
@@ -58,6 +62,9 @@ const createEditor = function () {
 
 const main = function () {
   createEditor();
+  document
+    .querySelector('#logo > svg')
+    .addEventListener('click', gotoDashboard);
   articleTitle.addEventListener('keypress', handleTitleKeypress);
   articleTitle.addEventListener('keyup', togglePublishedOnTitle);
   publishBtn.addEventListener('click', publishBlog);

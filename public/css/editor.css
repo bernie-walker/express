@@ -20,6 +20,10 @@ body {
   width: fit-content;
 }
 
+#logo > svg {
+  cursor: pointer;
+}
+
 #publishBtn {
   border: 1px solid;
   height: 3.5vh;

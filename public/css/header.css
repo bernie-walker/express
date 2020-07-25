@@ -84,7 +84,9 @@
   flex-direction: column;
   border: 1px solid #ddd;
   right: 80px;
+  font-family: sans-serif;
 }
+
 .profile-modal::before {
   content: '';
   height: 14px;
@@ -116,11 +118,21 @@
   border-bottom: 1px solid #ddd;
   padding: 4px;
   font-size: 18px;
-  color: #333;
+  color: rgba(10, 10, 10, 0.8);
 }
 
 .section div {
   margin: 4px 8px;
+  text-align: center;
+}
+
+.section a {
+  text-decoration: none;
+  color: rgba(10, 10, 10, 0.6);
+}
+
+.section a:hover {
+  color: rgba(10, 10, 10, 0.8);
 }
 
 .profile-section {
@@ -131,7 +143,6 @@
 .username {
   color: #555;
   font-weight: 200;
-  font-family: sans-serif;
 }
 
 .username:hover {

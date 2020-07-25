@@ -8,7 +8,8 @@
     "eslint": "eslint . --ext .js",
     "preCommit": "npm test && npm run eslint",
     "dev": ". config/.prod_env; nodemon server.js",
-    "start": ". config/.prod_env; node server.js"
+    "start": ". config/.prod_env; node server.js",
+    "coverage": ". config/.test_env; nyc mocha"
   },
   "repository": {
     "type": "git",
