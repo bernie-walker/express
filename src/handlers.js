@@ -43,8 +43,9 @@ const publishStory = function (req, res) {
   const author = 'palpriyanshu';
   const { articleTitle, blocks } = req.body;
 
-  if (!articleTitle.match(/\S/)) {
+  if (!(articleTitle && articleTitle.match(/\S/))) {
     res.sendStatus(statusCodes.unprocessableEntity);
+    return;
   }
 
   req.app.locals.stories

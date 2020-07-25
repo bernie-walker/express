@@ -13,6 +13,7 @@ describe('GET', () => {
   });
 
   context('/editor', function () {
+    this.timeout(3000);
     it('should serve the editor page', function (done) {
       request(app)
         .get('/editor')
@@ -93,6 +94,67 @@ describe('GET', () => {
       request(app)
         .get('/blog_image/badImage')
         .expect(404)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+  });
+});
+
+describe('POST', function () {
+  context('/publishStory', function () {
+    before(() => setUpDatabase(app.locals.dbClientReference, ['stories']));
+    after(() => cleanDatabase(app.locals.dbClientReference));
+
+    it('should respond with a blogID for a valid story', function (done) {
+      request(app)
+        .post('/publishStory')
+        .send({
+          articleTitle: 'validTitle',
+          content: [],
+          time: 1595688605709,
+        })
+        .expect(200)
+        .expect(JSON.stringify({ blogID: 2 }))
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond with 422 for untitled story', function (done) {
+      request(app)
+        .post('/publishStory')
+        .send({
+          content: [],
+          time: 1595688605709,
+        })
+        .expect(422)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond with a blogID for a valid story', function (done) {
+      request(app)
+        .post('/publishStory')
+        .send({
+          articleTitle: '     ',
+          content: [],
+          time: 1595688605709,
+        })
+        .expect(422)
         .end((err) => {
           if (err) {
             done(err);

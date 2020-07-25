@@ -7,6 +7,7 @@ const {
   serveBlogImage,
   serveBlogPage,
   serveEditorPage,
+  publishStory,
 } = require('./handlers');
 
 const app = express();
@@ -23,10 +24,13 @@ app.set('view engine', 'pug');
 
 app.use(logRequest);
 app.use(express.static('public'));
+app.use(express.json());
 
 app.get('/dashboard', serveDashboard);
 app.get('/blogPage/:blogID', serveBlogPage);
 app.get('/blog_image/:imageID', serveBlogImage);
 app.get('/editor', serveEditorPage);
+
+app.post('/publishStory', publishStory);
 
 module.exports = { app };

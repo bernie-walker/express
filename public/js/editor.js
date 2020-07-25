@@ -1,18 +1,38 @@
+const OK = 200;
 let editor;
 
-const saveAndPublish = async function (title) {
-  const data = await editor.save();
-  out.innerHTML = JSON.stringify(Object.assign(data, { articleTitle: title }));
+const getPublishStoryOptions = function (story) {
+  return {
+    method: 'POST',
+    body: JSON.stringify(story),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+};
+
+const publishAndGotoBlog = async function (story) {
+  const response = await fetch('/publishStory', getPublishStoryOptions(story));
+
+  if (response.status !== OK) {
+    alert('Story Could not be Published!!! Please retry.');
+    return;
+  }
+
+  const { blogID } = await response.json();
+  window.location = `/blogPage/${blogID}`;
 };
 
 const publishBlog = function () {
   const title = articleTitle.innerText;
 
-  if (!title) {
+  if (!title.match(/\S/)) {
     alert('A story without a title does not seem cool right...');
   }
 
-  saveAndPublish(title);
+  editor.save().then((data) => {
+    publishAndGotoBlog(Object.assign(data, { articleTitle: title }));
+  });
 };
 
 const togglePublishedOnTitle = function () {
