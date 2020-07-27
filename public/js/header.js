@@ -15,10 +15,5 @@ const attachHeadListener = function () {
   $profile.addEventListener('click', () => {
     getElement('.profile-modal').classList.toggle('hidden');
   });
-
   attachGotoDashboardToLogo();
-
-  attachBodyListeners();
 };
-
-window.onload = attachHeadListener;

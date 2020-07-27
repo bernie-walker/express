@@ -7,3 +7,8 @@ const attachBodyListeners = function () {
     card.addEventListener('click', visitBlogPage.bind(null, card.id))
   );
 };
+
+window.onload = () => {
+  attachHeadListener();
+  attachBodyListeners();
+};

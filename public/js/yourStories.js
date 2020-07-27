@@ -3,7 +3,7 @@ const showList = function (toShow, toHide) {
   document.getElementById(toHide).classList.add('hidden');
 };
 
-const main = function () {
+const attachOptionListeners = function () {
   Drafts.addEventListener('click', function () {
     showList('DraftsList', 'PublishedList');
   });
@@ -12,4 +12,7 @@ const main = function () {
   });
 };
 
-window.onload = main;
+window.onload = () => {
+  attachHeadListener();
+  attachOptionListeners();
+};
