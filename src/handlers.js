@@ -55,6 +55,12 @@ const publishStory = function (req, res) {
     });
 };
 
+const serveYourStoriesPage = async function (req, res) {
+  const users = req.app.locals.users;
+  const userInfo = await users.getUserInfo('palpriyanshu');
+  res.render('yourStories', userInfo);
+};
+
 module.exports = {
   logRequest,
   serveDashboard,
@@ -62,4 +68,5 @@ module.exports = {
   serveBlogPage,
   serveEditorPage,
   publishStory,
+  serveYourStoriesPage,
 };

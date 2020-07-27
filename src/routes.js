@@ -8,6 +8,7 @@ const {
   serveBlogPage,
   serveEditorPage,
   publishStory,
+  serveYourStoriesPage,
 } = require('./handlers');
 
 const app = express();
@@ -30,6 +31,7 @@ app.get('/dashboard', serveDashboard);
 app.get('/blogPage/:blogID', serveBlogPage);
 app.get('/blog_image/:imageID', serveBlogImage);
 app.get('/editor', serveEditorPage);
+app.get('/yourStories', serveYourStoriesPage);
 
 app.post('/publishStory', publishStory);
 
