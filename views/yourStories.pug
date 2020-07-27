@@ -1,8 +1,40 @@
+mixin storyCard(id, title, content, lastModified)
+    div.card(id=id) 
+        div(class= 'card-content')
+            div.title= title
+            div.content
+                p= content
+            - const [,month,date,year] = new Date(lastModified).toString().split(' ');
+            .date= `${month} ${date}, ${year}`
+
+mixin stories(list)
+  each story in list
+     - const paragraph = story.content.find(data=> data.type ==='paragraph')
+     - const text = paragraph ? paragraph.data.text.slice(0, 150) + '...' : ''
+     +storyCard(story.storyID,story.title,text,story.lastModified)
+
 html
   head
     title Express | Stories
     link(rel="stylesheet", href="./css/header.css")
+    link(rel="stylesheet", href="./css/yourStories.css")
+    link(rel="stylesheet", href="./css/normalize.css")
     script(src="./js/header.js")
+    script(src="/js/yourStories.js")
   body 
     include ./includes/header.pug
-    h1 Your Stories
+    h1.page-title Your Stories
+    .container
+      .optionBar
+        div#Drafts Drafts
+        div#Published Published
+      #DraftsList.card-container
+        if draftedStories.length==0
+          .emptyMessage You have no drafts
+        else
+          +stories(draftedStories)
+      #PublishedList.card-container.hidden
+        if publishedStories.length==0
+          .emptyMessage You haven’t published any public stories yet.
+        else
+          +stories(publishedStories)

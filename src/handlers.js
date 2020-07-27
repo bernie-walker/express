@@ -58,7 +58,12 @@ const publishStory = function (req, res) {
 const serveYourStoriesPage = async function (req, res) {
   const users = req.app.locals.users;
   const userInfo = await users.getUserInfo('palpriyanshu');
-  res.render('yourStories', userInfo);
+  const publishedStories = await users.getUserStories(userInfo.id, 'published');
+  const draftedStories = await users.getUserStories(userInfo.id, 'drafted');
+  res.render(
+    'yourStories',
+    Object.assign({ publishedStories, draftedStories }, userInfo)
+  );
 };
 
 module.exports = {

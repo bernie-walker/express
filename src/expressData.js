@@ -17,6 +17,12 @@ const generateGetStoryQuery = function (storyID) {
   WHERE state='published' AND str.id='${storyID}';`;
 };
 
+const generateUserStoriesQuery = function (userId, state) {
+  return `SELECT title,content,id as storyID,date(last_modified) as lastModified
+  FROM stories 
+  WHERE written_by = '${userId}' AND state='${state}';`;
+};
+
 class Stories {
   constructor(db) {
     this.db = db;
@@ -72,6 +78,17 @@ class Users {
     return new Promise((resolve) => {
       this.db.get(query, (err, row) => {
         resolve(row);
+      });
+    });
+  }
+  getUserStories(userId, state) {
+    const query = generateUserStoriesQuery(userId, state);
+    return new Promise((resolve) => {
+      this.db.all(query, (err, rows) => {
+        rows.forEach((row) => {
+          row.content = JSON.parse(row.content);
+        });
+        resolve(rows);
       });
     });
   }
