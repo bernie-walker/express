@@ -6,8 +6,9 @@ mixin storyCard(id, title, content, author, createdAt, imageUrl)
             div.content
                 p= content
             a.author(href="")= author
-            - dateFormat = moment(createdAt, 'YYYY-MM-DD HH:mm:ss').format('MMM DD, YYYY')
-            div.date= dateFormat
+            - dateFormat = moment(createdAt, 'YYYY-MM-DD HH:mm:ss').fromNow()
+            .date 
+              i Last modified #{dateFormat}
         if imageUrl
           .card-image
             img(src= imageUrl, alt="blogImage")
