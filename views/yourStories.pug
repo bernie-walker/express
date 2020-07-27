@@ -26,8 +26,8 @@ html
     h1.page-title Your Stories
     .container
       .optionBar
-        div#Drafts Drafts
-        div#Published Published
+        div#Drafts Drafts #{draftedStories.length}
+        div#Published Published #{publishedStories.length}
       #DraftsList.card-container
         if draftedStories.length==0
           .emptyMessage You have no drafts
