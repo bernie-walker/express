@@ -55,6 +55,8 @@ html
             h2 !{block.data.text}
           if block.type == 'list'
             +generateListBLock(block.data.style, JSON.stringify(block.data.items))
+          if block.type == 'delimiter'
+            p.content-block(style="text-align:center") * * *
     script. 
       {
         document.querySelector('#logo > svg').addEventListener('click', ()=> {window.location = '/dashboard';});

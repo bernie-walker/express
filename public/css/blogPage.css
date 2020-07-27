@@ -182,3 +182,10 @@ figure > img {
 p b {
   font-weight: 900;
 }
+
+.inline-code {
+  color: crimson;
+  background-color: #f1f1f1;
+  padding-left: 4px;
+  padding-right: 4px;
+}
