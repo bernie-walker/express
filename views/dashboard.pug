@@ -13,7 +13,7 @@ mixin storyCard(id, title, content, author, createdAt, imageUrl)
             div.content
               +generateSubContent(content)
             a.author(href="")= author
-            - dateFormat = moment(createdAt, 'YYYY-MM-DD HH:mm:ss').utc('Asia/Kolkata').fromNow()
+            - const dateFormat = moment(createdAt, 'YYYY-MM-DD HH:mm:ss').utc('Asia/Kolkata').fromNow()
             .date 
               i Last modified #{dateFormat}
         if imageUrl

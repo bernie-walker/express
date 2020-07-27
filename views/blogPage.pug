@@ -21,6 +21,7 @@ html
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     link(href='https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap' rel='stylesheet')
     link(rel='stylesheet' href='/css/blogPage.css')
+    script(src="/js/blogPage.js")
     title Express | Blog
   body
     .header
@@ -35,15 +36,19 @@ html
             ')
               | E
     .blog
-      .blog-title= title
+      #blogTitle(storyid=storyID)= title
       .blog-meta
-        .author-icon
-          img(src=avatar_url class="icon-image")
-        .blog-info
-          .author-name
-            a(href="")= authorName
-          - const [,month,date,year] = new Date(lastModified).toString().split(' ');
-          .blog-date= `${month} ${date}, ${year}`
+        div
+          .author-icon
+            img(src=avatar_url class="icon-image")
+          .blog-info
+            .author-name
+              a(href="")= authorName
+            - const [,month,date,year] = new Date(lastModified).toString().split(' ');
+            .blog-date= `${month} ${date}, ${year}`
+        #shareSection
+          #linkCopiedMsg.hidden link copied 
+          img#shareBtn(src="/images/share_icon.svg", alt="share icon")
       .blog-content
         -const contentBlocks = content
         each block in contentBlocks
@@ -57,8 +62,4 @@ html
             +generateListBLock(block.data.style, JSON.stringify(block.data.items))
           if block.type == 'delimiter'
             p.content-block(style="text-align:center") * * *
-    script. 
-      {
-        document.querySelector('#logo > svg').addEventListener('click', ()=> {window.location = '/dashboard';});
-
-      }
+            

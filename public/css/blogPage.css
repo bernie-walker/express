@@ -71,13 +71,13 @@ a:hover {
   }
 }
 
-.blog-title {
+#blogTitle {
   font-size: 4.15rem;
   color: rgba(10, 10, 10, 0.9);
 }
 
 @media (max-width: 45rem) {
-  .blog-title {
+  #blogTitle {
     font-size: 2rem;
     margin-bottom: 1.2rem;
   }
@@ -85,6 +85,12 @@ a:hover {
 
 .blog-meta {
   padding: 1.5vw;
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.blog-meta > div {
   display: flex;
 }
 
@@ -111,7 +117,6 @@ a:hover {
 .blog-info {
   padding-top: 0.5vh;
   padding-left: 1vh;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 2rem;
   font-weight: 300;
   line-height: 3.4vh;
@@ -162,7 +167,6 @@ figure {
   text-align: center;
   font-style: italic;
   font-size: 2rem;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   color: rgba(10, 10, 10, 0.5);
   font-weight: 400;
 }
@@ -188,4 +192,30 @@ p b {
   background-color: #f1f1f1;
   padding-left: 4px;
   padding-right: 4px;
+}
+
+#shareSection {
+  margin: -1vw 0.7vw auto;
+  display: grid;
+}
+
+#shareBtn {
+  cursor: pointer;
+  margin: 1vh auto;
+  opacity: 70%;
+  transform: scale(1.4);
+}
+
+#shareBtn:hover {
+  opacity: 100%;
+}
+
+#linkCopiedMsg {
+  background-color: greenyellow;
+  color: green;
+  padding: 0.2vw;
+}
+
+.hidden {
+  visibility: hidden;
 }
