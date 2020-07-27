@@ -1,12 +1,20 @@
+mixin  generateSubContent(content)
+  - let miniContent = content.replace(/<\/?(b|i|a|br)>/g, '').replace(/<a.*>/g,'').slice(0,150) 
+  - miniContent += miniContent.length < 150 ? '...' : ''
+  p 
+    | !{miniContent}
+
+
+
 mixin storyCard(id, title, content, author, createdAt, imageUrl)
     div.card(id=id) 
       - className = imageUrl ? 'card-content' : '';
         div(class= className)
             div.title= title
             div.content
-                p= content
+              +generateSubContent(content)
             a.author(href="")= author
-            - dateFormat = moment(createdAt, 'YYYY-MM-DD HH:mm:ss').fromNow()
+            - dateFormat = moment(createdAt, 'YYYY-MM-DD HH:mm:ss').utc('Asia/Kolkata').fromNow()
             .date 
               i Last modified #{dateFormat}
         if imageUrl
@@ -26,7 +34,6 @@ html(lang="en")
     include ./includes/header.pug
     div.card-container
       each value in recentStories
-        - const sliceContent=value.content;
-        - const paragraph = sliceContent.find(data=> data.type ==='paragraph')
-        - const text = paragraph ? paragraph.data.text.slice(0, 150) + '...' : ''
-        +storyCard(value.id, value.title, text, value.authorName, value.last_modified, value.cover_image)(onclick='visitBlog')
+        - const paragraph = value.content.find(data=> data.type ==='paragraph')
+        - const content = paragraph ? paragraph.data.text : ''
+        +storyCard(value.id, value.title, content, value.authorName, value.last_modified, value.cover_image)(onclick='visitBlog')

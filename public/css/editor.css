@@ -83,3 +83,7 @@ body {
   word-spacing: 0.02vw;
   color: rgba(10, 10, 10, 0.8);
 }
+
+#editorjs a {
+  color: inherit;
+}

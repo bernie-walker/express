@@ -1,7 +1,6 @@
 html {
   font-size: 62.5%;
 }
-
 body {
   font-family: 'Playfair Display', serif;
   font-size: 1.6rem;
@@ -17,13 +16,13 @@ button:disabled {
 }
 
 a {
-  text-decoration: none;
   color: inherit;
 }
 
 a:hover {
   text-decoration: underline;
 }
+
 .header {
   border-bottom: 1px solid #fff;
   box-shadow: 0 5px 2px #efefef;
@@ -130,6 +129,10 @@ a:hover {
   color: rgba(10, 10, 10, 0.8);
 }
 
+.author-name a {
+  text-decoration: none;
+}
+
 .blog-date {
   color: rgba(10, 10, 10, 0.5);
 }
@@ -176,4 +179,7 @@ figure > img {
     font-weight: 200;
     font-size: 2rem;
   }
+}
+p b {
+  font-weight: 900;
 }

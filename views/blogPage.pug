@@ -40,7 +40,8 @@ html
           if block.type == "image"
             +generateImageBlock(block.data.file.url, block.data.caption)
           if block.type = "paragraph"
-            p= block.data.text
+            p 
+              | !{block.data.text}
     script. 
       {
         document.querySelector('#logo > svg').addEventListener('click', ()=> {window.location = '/dashboard';});
