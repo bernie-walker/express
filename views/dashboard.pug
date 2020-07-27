@@ -1,8 +1,7 @@
 mixin  generateSubContent(content)
-  - let miniContent = content.replace(/<\/?(b|i|a|br)>/g, '').replace(/<a.*>/g,'').slice(0,150) 
+  - let miniContent = content.replace(/<\/?(b|i|a)>/g, '').replace(/<a.*>/g,'').slice(0,150) 
   - miniContent += miniContent.length < 150 ? '...' : ''
-  p 
-    | !{miniContent}
+  p !{miniContent}
 
 
 

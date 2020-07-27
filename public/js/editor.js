@@ -57,6 +57,13 @@ const gotoDashboard = function () {
 const createEditor = function () {
   editor = new EditorJS({
     holder: 'editorjs',
+    tools: {
+      header: { class: Header, inlineToolbar: true, shortcut: 'CMD+SHIFT+H' },
+      list: { class: List, inlineToolbar: true, shortcut: 'CMD+SHIFT+L' },
+      Marker: { class: Marker, shortcut: 'CMD+SHIFT+M' },
+      delimiter: { class: Delimiter },
+      inlineCode: { class: InlineCode },
+    },
   });
 };
 

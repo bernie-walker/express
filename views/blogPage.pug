@@ -1,3 +1,13 @@
+mixin  generateListBLock(listType, items)
+  if listType == 'unordered'
+    ul
+      each item in  JSON.parse(items)
+        li !{item}
+  else
+    ol  
+      each item in  JSON.parse(items)
+        li !{item}
+
 mixin generateImageBlock(url, caption)
   figure
     img(src= url)
@@ -35,13 +45,16 @@ html
           - const [,month,date,year] = new Date(lastModified).toString().split(' ');
           .blog-date= `${month} ${date}, ${year}`
       .blog-content
-        -const contentBlocks=content
+        -const contentBlocks = content
         each block in contentBlocks
           if block.type == "image"
             +generateImageBlock(block.data.file.url, block.data.caption)
-          if block.type = "paragraph"
-            p 
-              | !{block.data.text}
+          if block.type == "paragraph"
+            p.content-block !{block.data.text}
+          if block.type == 'header'
+            h2 !{block.data.text}
+          if block.type == 'list'
+            +generateListBLock(block.data.style, JSON.stringify(block.data.items))
     script. 
       {
         document.querySelector('#logo > svg').addEventListener('click', ()=> {window.location = '/dashboard';});
