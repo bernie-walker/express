@@ -187,7 +187,7 @@ describe('POST', function () {
       request(app)
         .post('/publishStory')
         .send({
-          articleTitle: 'validTitle',
+          storyTitle: 'validTitle',
           blocks: [],
           storyID: '2',
         })
@@ -223,7 +223,7 @@ describe('POST', function () {
       request(app)
         .post('/publishStory')
         .send({
-          articleTitle: '     ',
+          storyTitle: '     ',
           blocks: [],
           storyID: '2',
         })
@@ -241,7 +241,7 @@ describe('POST', function () {
       request(app)
         .post('/publishStory')
         .send({
-          articleTitle: 'valid',
+          storyTitle: 'valid',
           blocks: [],
           storyID: '3',
         })
@@ -264,7 +264,7 @@ describe('POST', function () {
       request(app)
         .post('/saveStory')
         .send({
-          articleTitle: 'validTitle',
+          storyTitle: 'validTitle',
           blocks: [],
           storyID: '1',
         })
@@ -282,7 +282,7 @@ describe('POST', function () {
       request(app)
         .post('/saveStory')
         .send({
-          articleTitle: 'validTitle',
+          storyTitle: 'validTitle',
           blocks: [],
           storyID: '3',
         })

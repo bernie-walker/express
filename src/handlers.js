@@ -71,8 +71,8 @@ const checkIfUserIsTheAuthor = async function (req, res, next) {
 const saveStory = async function (req, res) {
   const { stories } = req.app.locals;
   const author = 'palpriyanshu';
-  const { articleTitle, blocks: content, storyID: id } = req.body;
-  const title = articleTitle.trim() || 'Untitled Story';
+  const { storyTitle, blocks: content, storyID: id } = req.body;
+  const title = storyTitle.trim() || 'Untitled Story';
 
   await stories.updateStory({ title, content, state: 'drafted', author, id });
   res.end();
@@ -81,7 +81,7 @@ const saveStory = async function (req, res) {
 const publishStory = async function (req, res) {
   const author = 'palpriyanshu';
   const { stories } = req.app.locals;
-  const { articleTitle: title, blocks: content, storyID: id } = req.body;
+  const { storyTitle: title, blocks: content, storyID: id } = req.body;
 
   if (!(title && title.trim())) {
     res.sendStatus(statusCodes.unprocessableEntity);
