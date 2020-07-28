@@ -62,7 +62,7 @@ const createEditor = function () {
       list: { class: List, inlineToolbar: true, shortcut: 'CMD+SHIFT+L' },
       Marker: { class: Marker, shortcut: 'CMD+SHIFT+M' },
       delimiter: { class: Delimiter },
-      inlineCode: { class: InlineCode },
+      inlineCode: { class: InlineCode, shortcut: 'OPTION+CMD+SHIFT+C' },
     },
   });
 };

@@ -19,10 +19,6 @@ a {
   color: inherit;
 }
 
-a:hover {
-  text-decoration: underline;
-}
-
 .header {
   border-bottom: 1px solid #fff;
   box-shadow: 0 5px 2px #efefef;
@@ -138,6 +134,10 @@ a:hover {
   text-decoration: none;
 }
 
+.author-name a:hover {
+  text-decoration: underline;
+}
+
 .blog-date {
   color: rgba(10, 10, 10, 0.5);
 }
@@ -192,6 +192,10 @@ p b {
   background-color: #f1f1f1;
   padding-left: 4px;
   padding-right: 4px;
+}
+
+.cdx-marker {
+  background-color: rgba(245, 235, 111, 0.29);
 }
 
 #shareSection {
