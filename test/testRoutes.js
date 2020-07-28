@@ -12,12 +12,17 @@ describe('GET', () => {
     });
   });
 
-  context('/editor', function () {
-    it('should serve the editor page', function (done) {
+  context('/newStory', function () {
+    before(() =>
+      setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
+    );
+    after(() => cleanDatabase(app.locals.dbClientReference));
+    it('should create a new story and serve editor page', function (done) {
       request(app)
-        .get('/editor')
+        .get('/newStory')
         .expect(200)
         .expect(/Editor/)
+        .expect(/storyid="2"/)
         .end((err) => {
           if (err) {
             done(err);

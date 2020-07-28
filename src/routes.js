@@ -1,12 +1,13 @@
 const express = require('express');
 const Sqlite3 = require('sqlite3').verbose();
 const { Users, Stories } = require('./expressData');
+
 const {
   logRequest,
   serveDashboard,
   serveBlogImage,
   serveBlogPage,
-  serveEditorPage,
+  createNewStory,
   publishStory,
   serveYourStoriesPage,
   serveProfilePage,
@@ -28,10 +29,11 @@ app.use(logRequest);
 app.use(express.static('public'));
 app.use(express.json());
 
-app.get('/dashboard', serveDashboard);
 app.get('/blogPage/:blogID', serveBlogPage);
 app.get('/blog_image/:imageID', serveBlogImage);
-app.get('/editor', serveEditorPage);
+
+app.get('/dashboard', serveDashboard);
+app.get('/newStory', createNewStory);
 app.get('/yourStories', serveYourStoriesPage);
 app.get('/profile/:userID', serveProfilePage);
 

@@ -35,9 +35,22 @@ const serveBlogPage = async function (req, res) {
   }
 };
 
-const serveEditorPage = function (req, res) {
-  res.render('editor');
+const createNewStory = async function (req, res) {
+  const Stories = req.app.locals.stories;
+  const newStoryParams = ['Untitled Story', 'palpriyanshu', 'drafted', []];
+  const storyID = await Stories.addStory(...newStoryParams);
+  res.render('editor', { storyID });
 };
+
+// const serveEditorPageWithDraft = async function (req, res) {
+//   try {
+//     const Stories = req.app.locals.stories;
+//     const blog = await Stories.getUserStory(req.params.blogID, req.user.id);
+//     res.render('editor', blog);
+//   } catch (error) {
+//     res.status(500).end();
+//   }
+// };
 
 const publishStory = function (req, res) {
   const author = 'palpriyanshu';
@@ -83,7 +96,7 @@ module.exports = {
   serveDashboard,
   serveBlogImage,
   serveBlogPage,
-  serveEditorPage,
+  createNewStory,
   publishStory,
   serveYourStoriesPage,
   serveProfilePage,

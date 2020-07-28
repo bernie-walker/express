@@ -24,13 +24,17 @@ body {
   cursor: pointer;
 }
 
-#publishBtn {
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+.btn {
+  margin: 1.5vh 1vw;
   border: 1px solid;
   height: 3.5vh;
   border-radius: 0.4em;
   padding: 0.3vw 0.6vw 0 0.6vw;
   align-content: center;
-  margin: 1.1vh 20vh auto;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   background-color: green;
   color: white;
