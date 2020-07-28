@@ -12,9 +12,8 @@ head
   link(href='https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap' rel='stylesheet')
   link(rel='stylesheet' href='/css/editor.css')
   script. 
-    {
-      localStorage.setItem('storyContent', JSON.stringify(content))
-    }
+      const content = !{JSON.stringify(content)};
+      localStorage.setItem('storyContent', JSON.stringify(content));
   title Express | Editor
 body
   #editorHeader
@@ -27,6 +26,7 @@ body
         fill: white;\
         ')
           | E
+      #saveConfirmation Draft
     .actions
       if state === 'drafted'
         #saveAsDraft.btn Save As Draft

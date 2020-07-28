@@ -87,7 +87,12 @@
     },
     {
       "files": ["public/js/*.js"],
-      "rules": { "no-undef": "off", "no-unused-vars": "off", "max-len": "warn" }
+      "rules": {
+        "no-undef": "off",
+        "no-unused-vars": "off",
+        "max-len": "warn",
+        "no-magic-numbers": "off"
+      }
     },
     {
       "files": ["src/expressData.js"],

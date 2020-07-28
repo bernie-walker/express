@@ -55,11 +55,28 @@ const renderEditor = async function (req, res) {
   }
 };
 
+const saveStory = async function (req, res) {
+  const { stories } = req.app.locals;
+  const author = 'palpriyanshu';
+  const { articleTitle, blocks: content, storyID: id } = req.body;
+  const title = articleTitle.trim() || 'Untitled Story';
+
+  const story = await stories.getStoryContent(id, author);
+
+  if (!story) {
+    res.sendStatus(statusCodes.unprocessableEntity);
+    return;
+  }
+
+  await stories.updateStory({ title, content, state: 'drafted', author, id });
+  res.end();
+};
+
 const publishStory = function (req, res) {
   const author = 'palpriyanshu';
   const { articleTitle, blocks } = req.body;
 
-  if (!(articleTitle && articleTitle.match(/\S/))) {
+  if (!(articleTitle && articleTitle.trim())) {
     res.sendStatus(statusCodes.unprocessableEntity);
     return;
   }
@@ -105,6 +122,7 @@ module.exports = {
   serveBlogPage,
   createNewStory,
   renderEditor,
+  saveStory,
   publishStory,
   serveYourStoriesPage,
   serveProfilePage,

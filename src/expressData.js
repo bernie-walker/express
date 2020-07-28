@@ -18,8 +18,8 @@ const generateGetStoryQuery = function (storyID) {
   WHERE state='published' AND str.id='${storyID}';`;
 };
 
-const generateGetEditorStoryQuery = function (storyID, userID) {
-  return `SELECT title, content, state 
+const generateGetStoryContentQuery = function (storyID, userID) {
+  return `SELECT title, content, state, id as  storyID 
           FROM stories 
           WHERE id='${storyID}' AND written_by='${userID}';`;
 };
@@ -60,7 +60,7 @@ class Stories {
   }
 
   getStoryContent(storyID, userId) {
-    const query = generateGetEditorStoryQuery(storyID, userId);
+    const query = generateGetStoryContentQuery(storyID, userId);
     return new Promise((resolve) => {
       this.db.get(query, (err, row) => {
         if (row) {
@@ -83,6 +83,21 @@ class Stories {
         function () {
           resolve(this.lastID);
         }
+      );
+    });
+  }
+
+  updateStory(updateParams) {
+    const { title, content, state, id, author } = updateParams;
+    const query = `UPDATE stories SET title=?, content=?, state=?, 
+                   last_modified=CURRENT_TIMESTAMP
+                   WHERE id=? AND written_by=?`;
+
+    return new Promise((resolve) => {
+      this.db.run(
+        query,
+        [title, JSON.stringify(content), state, id, author],
+        resolve
       );
     });
   }

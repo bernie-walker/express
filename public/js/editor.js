@@ -1,20 +1,43 @@
-const OK = 200;
 let editor;
 
-const getPublishStoryOptions = function (story) {
-  return {
+const confirmSaveAndClearMessage = function () {
+  setTimeout(() => {
+    saveConfirmation.innerText = 'Draft Saved';
+  }, 2000);
+  setTimeout(() => {
+    saveConfirmation.innerText = 'Draft';
+  }, 3500);
+};
+
+const updateStory = function (url, story) {
+  return fetch(url, {
     method: 'POST',
     body: JSON.stringify(story),
     headers: {
       'Content-Type': 'application/json',
     },
-  };
+  });
+};
+
+const saveDraft = async function () {
+  saveConfirmation.innerText = 'Draft Saving...';
+  const title = articleTitle.innerText;
+  const storyID = articleTitle.getAttribute('storyid');
+
+  const data = await editor.save();
+  const draft = Object.assign(data, {
+    articleTitle: title,
+    storyID,
+  });
+
+  const response = await updateStory('/saveStory', draft);
+  confirmSaveAndClearMessage();
 };
 
 const publishAndGotoBlog = async function (story) {
-  const response = await fetch('/publishStory', getPublishStoryOptions(story));
+  const response = await updateStory('/publishStory', story);
 
-  if (response.status !== OK) {
+  if (!response.ok) {
     alert('Story Could not be Published!!! Please retry.');
     return;
   }
@@ -24,9 +47,9 @@ const publishAndGotoBlog = async function (story) {
 };
 
 const publishBlog = function () {
-  const title = articleTitle.innerText;
+  const title = articleTitle.innerText.trim();
 
-  if (!title.match(/\S/)) {
+  if (!title) {
     alert('A story without a title does not seem cool right...');
   }
 
@@ -36,7 +59,7 @@ const publishBlog = function () {
 };
 
 const togglePublishedOnTitle = function () {
-  if (articleTitle.innerText.match(/\S/)) {
+  if (articleTitle.innerText.trim()) {
     publishBtn.classList.remove('inactive');
   } else {
     publishBtn.classList.add('inactive');
@@ -77,6 +100,7 @@ const main = function () {
   articleTitle.addEventListener('keypress', handleTitleKeypress);
   articleTitle.addEventListener('keyup', togglePublishedOnTitle);
   publishBtn.addEventListener('click', publishBlog);
+  saveAsDraft.addEventListener('click', saveDraft);
   createEditor();
 };
 

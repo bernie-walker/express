@@ -237,4 +237,45 @@ describe('POST', function () {
         });
     });
   });
+
+  context('/saveStory', function () {
+    before(() => setUpDatabase(app.locals.dbClientReference, ['stories']));
+    after(() => cleanDatabase(app.locals.dbClientReference));
+
+    it('should respond with a OK for a valid story', function (done) {
+      request(app)
+        .post('/saveStory')
+        .send({
+          articleTitle: 'validTitle',
+          block: [],
+          storyID: '1',
+        })
+        .expect(200)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond with 422 for wrong story ID', function (done) {
+      request(app)
+        .post('/saveStory')
+        .send({
+          articleTitle: 'validTitle',
+          block: [],
+          storyID: '3',
+        })
+        .expect(422)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+  });
 });

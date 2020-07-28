@@ -9,6 +9,7 @@ const {
   serveBlogPage,
   createNewStory,
   renderEditor,
+  saveStory,
   publishStory,
   serveYourStoriesPage,
   serveProfilePage,
@@ -39,6 +40,7 @@ app.get('/editor/:storyID', renderEditor);
 app.get('/yourStories', serveYourStoriesPage);
 app.get('/profile/:authorID', serveProfilePage);
 
+app.post('/saveStory', saveStory);
 app.post('/publishStory', publishStory);
 
 module.exports = { app };

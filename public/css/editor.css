@@ -13,15 +13,25 @@ body {
   padding-top: 1vh;
   display: flex;
   justify-content: space-between;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 #logo {
   padding: 5px 50px;
   width: fit-content;
+  display: flex;
 }
 
 #logo > svg {
   cursor: pointer;
+}
+
+#saveConfirmation {
+  display: flex;
+  align-items: center;
+  margin-left: 1.5vw;
+  letter-spacing: 0.05vw;
+  word-spacing: 1.2vw;
 }
 
 .actions {
@@ -35,7 +45,6 @@ body {
   border-radius: 0.4em;
   padding: 0.3vw 0.6vw 0 0.6vw;
   align-content: center;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   background-color: green;
   color: white;
   cursor: pointer;
