@@ -102,6 +102,19 @@ describe('GET', () => {
         });
     });
   });
+  context('/yourStories', () => {
+    before(() =>
+      setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
+    );
+    after(() => cleanDatabase(app.locals.dbClientReference));
+
+    it('should serve the yourStories page', async () => {
+      await request(app)
+        .get('/yourStories')
+        .expect(200)
+        .expect(/Express/);
+    });
+  });
 });
 
 describe('POST', function () {
