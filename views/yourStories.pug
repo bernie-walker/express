@@ -1,17 +1,15 @@
 mixin storyCard(id, title, content, lastModified)
-    div.card(id=id) 
-        div(class= 'card-content')
-            div.title= title
-            div.content
-                p= content
-            - const [,month,date,year] = new Date(lastModified).toString().split(' ');
-            .date= `${month} ${date}, ${year}`
+  div.card(id=id) 
+    div(class= 'card-content')
+      div.title= title
+      - const [,month,date,year] = new Date(lastModified).toString().split(' ');
+      .date= `${month} ${date}, ${year}`
 
 mixin stories(list)
   each story in list
-     - const paragraph = story.content.find(data=> data.type ==='paragraph')
-     - const text = paragraph ? paragraph.data.text.slice(0, 150) + '...' : ''
-     +storyCard(story.storyID,story.title,text,story.lastModified)
+    - const paragraph = story.content.find(data=> data.type ==='paragraph')
+    - const text = paragraph ? paragraph.data.text.slice(0, 150) + '...' : ''
+    +storyCard(story.storyID,story.title,text,story.lastModified)
 
 html
   head
