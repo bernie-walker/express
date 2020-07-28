@@ -8,6 +8,7 @@ const {
   serveBlogImage,
   serveBlogPage,
   createNewStory,
+  renderEditor,
   publishStory,
   serveYourStoriesPage,
   serveProfilePage,
@@ -29,11 +30,12 @@ app.use(logRequest);
 app.use(express.static('public'));
 app.use(express.json());
 
-app.get('/blogPage/:blogID', serveBlogPage);
+app.get('/blogPage/:storyID', serveBlogPage);
 app.get('/blog_image/:imageID', serveBlogImage);
 
 app.get('/dashboard', serveDashboard);
 app.get('/newStory', createNewStory);
+app.get('/editor/:storyID', renderEditor);
 app.get('/yourStories', serveYourStoriesPage);
 app.get('/profile/:authorID', serveProfilePage);
 

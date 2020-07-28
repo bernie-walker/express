@@ -54,7 +54,8 @@ const gotoDashboard = function () {
   window.location = '/dashboard';
 };
 
-const createEditor = function () {
+const createEditor = async function () {
+  const content = JSON.parse(localStorage.getItem('storyContent'));
   editor = new EditorJS({
     holder: 'editorjs',
     tools: {
@@ -64,17 +65,19 @@ const createEditor = function () {
       delimiter: { class: Delimiter },
       inlineCode: { class: InlineCode, shortcut: 'OPTION+CMD+SHIFT+C' },
     },
+    data: { blocks: content },
   });
+  togglePublishedOnTitle();
 };
 
 const main = function () {
-  createEditor();
   document
     .querySelector('#logo > svg')
     .addEventListener('click', gotoDashboard);
   articleTitle.addEventListener('keypress', handleTitleKeypress);
   articleTitle.addEventListener('keyup', togglePublishedOnTitle);
   publishBtn.addEventListener('click', publishBlog);
+  createEditor();
 };
 
 window.onload = main;

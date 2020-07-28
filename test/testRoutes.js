@@ -17,12 +17,45 @@ describe('GET', () => {
       setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
     );
     after(() => cleanDatabase(app.locals.dbClientReference));
-    it('should create a new story and serve editor page', function (done) {
+    it('should create a new story redirect to the editor', function (done) {
       request(app)
         .get('/newStory')
+        .expect(302)
+        .expect('Location', '/editor/2')
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+  });
+
+  context('/editor', function () {
+    before(() =>
+      setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
+    );
+    after(() => cleanDatabase(app.locals.dbClientReference));
+
+    it('should render the editor when story exists for given user', function (done) {
+      request(app)
+        .get('/editor/1')
         .expect(200)
         .expect(/Editor/)
-        .expect(/storyid="2"/)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond with not found when story does not exist', function (done) {
+      request(app)
+        .get('/editor/2')
+        .expect(404)
         .end((err) => {
           if (err) {
             done(err);
@@ -107,6 +140,7 @@ describe('GET', () => {
         });
     });
   });
+
   context('/yourStories', () => {
     before(() =>
       setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])

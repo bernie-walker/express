@@ -11,6 +11,10 @@ head
   script(src='/js/editor.js')
   link(href='https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap' rel='stylesheet')
   link(rel='stylesheet' href='/css/editor.css')
+  script. 
+    {
+      localStorage.setItem('storyContent', JSON.stringify(content))
+    }
   title Express | Editor
 body
   #editorHeader
@@ -24,8 +28,10 @@ body
         ')
           | E
     .actions
-      #saveAsDraft.btn Save As Draft
-      #publishBtn.btn.inactive Publish
+      if state === 'drafted'
+        #saveAsDraft.btn Save As Draft
+      #publishBtn.btn Publish
   #editor
-    #articleTitle(contenteditable='true',storyid=storyID)
+    - const storyTitle = title === 'Untitled Story' ?  '' : title;
+    #articleTitle(contenteditable='true',storyid=storyID)= storyTitle
     #editorjs

@@ -27,7 +27,7 @@ const serveBlogImage = function (req, res) {
 };
 
 const serveBlogPage = async function (req, res) {
-  const blog = await req.app.locals.stories.getStory(req.params.blogID);
+  const blog = await req.app.locals.stories.getStory(req.params.storyID);
   if (blog) {
     res.render('blogPage', blog);
   } else {
@@ -39,18 +39,21 @@ const createNewStory = async function (req, res) {
   const Stories = req.app.locals.stories;
   const newStoryParams = ['Untitled Story', 'palpriyanshu', 'drafted', []];
   const storyID = await Stories.addStory(...newStoryParams);
-  res.render('editor', { storyID });
+  res.redirect(`/editor/${storyID}`);
 };
 
-// const serveEditorPageWithDraft = async function (req, res) {
-//   try {
-//     const Stories = req.app.locals.stories;
-//     const blog = await Stories.getUserStory(req.params.blogID, req.user.id);
-//     res.render('editor', blog);
-//   } catch (error) {
-//     res.status(500).end();
-//   }
-// };
+const renderEditor = async function (req, res) {
+  const { stories } = req.app.locals;
+  const storyContent = await stories.getStoryContent(
+    req.params.storyID,
+    'palpriyanshu'
+  );
+  if (storyContent) {
+    res.render('editor', storyContent);
+  } else {
+    res.sendStatus(statusCodes.notFound);
+  }
+};
 
 const publishStory = function (req, res) {
   const author = 'palpriyanshu';
@@ -101,6 +104,7 @@ module.exports = {
   serveBlogImage,
   serveBlogPage,
   createNewStory,
+  renderEditor,
   publishStory,
   serveYourStoriesPage,
   serveProfilePage,

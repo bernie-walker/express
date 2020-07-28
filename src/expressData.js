@@ -7,6 +7,7 @@ const generateGetNStoriesQuery = function (offset, count) {
   ORDER BY str.last_modified DESC
   LIMIT ${offset},${count};`;
 };
+
 const generateGetStoryQuery = function (storyID) {
   return `SELECT usr.display_name as authorName,usr.avatar_url,
   str.title,str.content,str.id as storyID,str.written_by as authorID,
@@ -15,6 +16,12 @@ const generateGetStoryQuery = function (storyID) {
   JOIN users AS usr 
   ON str.written_by = usr.id
   WHERE state='published' AND str.id='${storyID}';`;
+};
+
+const generateGetEditorStoryQuery = function (storyID, userID) {
+  return `SELECT title, content, state 
+          FROM stories 
+          WHERE id='${storyID}' AND written_by='${userID}';`;
 };
 
 const generateUserStoriesQuery = function (userId, state) {
@@ -45,6 +52,18 @@ class Stories {
     return new Promise((resolve) => {
       this.db.get(query, (err, row) => {
         if (row && row.content) {
+          row.content = JSON.parse(row.content);
+        }
+        resolve(row);
+      });
+    });
+  }
+
+  getStoryContent(storyID, userId) {
+    const query = generateGetEditorStoryQuery(storyID, userId);
+    return new Promise((resolve) => {
+      this.db.get(query, (err, row) => {
+        if (row) {
           row.content = JSON.parse(row.content);
         }
         resolve(row);
