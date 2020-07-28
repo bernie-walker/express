@@ -1,15 +1,48 @@
-.page-title {
-  text-align: center;
-}
-
 .container {
   width: 70%;
-  margin: auto;
+  margin: 10vh 15.5vw;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.heading {
+  width: 100%;
+  height: 7vh;
+  display: flex;
+  justify-content: space-between;
+}
+
+.page-title {
+  font-size: 6vh;
+  width: fit-content;
+  width: fit-content;
+  justify-content: left;
+}
+
+#writeBtn {
+  border: 1px solid green;
+  font-size: 3vh;
+  height: 3.5vh;
+  text-align: center;
+  margin-right: 5vh;
+  margin-top: 1.5vh;
+  padding-left: 1.5vh;
+  padding-right: 1.5vh;
+  justify-content: center;
+  cursor: pointer;
+}
+
+#writeBtn a {
+  text-decoration: none;
+  color: green;
+  font-weight: -0.5vh;
 }
 
 .optionBar {
   display: flex;
   height: 5vh;
+  margin-top: 2vh;
+  border-bottom: 1px solid #aaa;
 }
 
 .optionBar div {
@@ -23,6 +56,10 @@
 
 .optionBar div:hover {
   color: rgba(53, 48, 48, 1);
+}
+
+#Drafts {
+  border-bottom: 1px solid black;
 }
 
 .card-container {

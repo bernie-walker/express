@@ -23,8 +23,11 @@ html
     script(src="/js/yourStories.js")
   body 
     include ./includes/header.pug
-    h1.page-title Your Stories
-    .container
+    div.container
+      div.heading
+        div.page-title Your Stories
+        div#writeBtn
+          a(href="/editor") write a story
       .optionBar
         div#Drafts Drafts #{draftedStories.length}
         div#Published Published #{publishedStories.length}
