@@ -115,6 +115,28 @@ describe('GET', () => {
         .expect(/Express/);
     });
   });
+
+  context('/profile', () => {
+    before(() =>
+      setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
+    );
+    after(() => cleanDatabase(app.locals.dbClientReference));
+
+    it('should serve the profile page when user exists', async () => {
+      await request(app)
+        .get('/profile/palpriyanshu')
+        .expect(200)
+        .expect(/Express/)
+        .expect(/palpriyanshu/);
+    });
+
+    it('should not serve the profile page when user does not exists', async () => {
+      await request(app)
+        .get('/profile/wrongUserId')
+        .expect(404)
+        .expect(/user not found/);
+    });
+  });
 });
 
 describe('POST', function () {

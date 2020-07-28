@@ -70,7 +70,12 @@ const serveProfilePage = async function (req, res) {
   const users = req.app.locals.users;
   const userID = req.params.userID;
   const userInfo = await users.getUserInfo(userID);
-  res.render('profile', userInfo);
+  if (!userInfo) {
+    res.status(statusCodes.notFound).send('user not found');
+    return;
+  }
+  const publishedStories = await users.getUserStories(userInfo.id, 'published');
+  res.render('profile', Object.assign({ publishedStories }, userInfo));
 };
 
 module.exports = {
