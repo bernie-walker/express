@@ -21,7 +21,7 @@ describe('GET', () => {
       request(app)
         .get('/newStory')
         .expect(302)
-        .expect('Location', '/editor/2')
+        .expect('Location', '/editor/3')
         .end((err) => {
           if (err) {
             done(err);
@@ -54,7 +54,7 @@ describe('GET', () => {
 
     it('should respond with not found when story does not exist', function (done) {
       request(app)
-        .get('/editor/2')
+        .get('/editor/3')
         .expect(404)
         .end((err) => {
           if (err) {
@@ -192,7 +192,7 @@ describe('POST', function () {
           time: 1595688605709,
         })
         .expect(200)
-        .expect(JSON.stringify({ blogID: 2 }))
+        .expect(JSON.stringify({ blogID: 3 }))
         .end((err) => {
           if (err) {
             done(err);
