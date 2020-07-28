@@ -181,9 +181,9 @@ describe('GET', () => {
 describe('POST', function () {
   context('/publishStory', function () {
     beforeEach(() => setUpDatabase(app.locals.dbClientReference, ['stories']));
-    after(() => cleanDatabase(app.locals.dbClientReference));
+    afterEach(() => cleanDatabase(app.locals.dbClientReference));
 
-    it('should respond with a blogID for a valid story', function (done) {
+    it('should publish the story and redirect to the blogPage for a valid story', function (done) {
       request(app)
         .post('/publishStory')
         .send({
@@ -219,13 +219,31 @@ describe('POST', function () {
         });
     });
 
-    it('should respond with a blogID for a valid story', function (done) {
+    it('should respond with 422 for a story with white spaced title', function (done) {
       request(app)
         .post('/publishStory')
         .send({
           articleTitle: '     ',
           blocks: [],
           storyID: '2',
+        })
+        .expect(422)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond with 422 for the userid and story mismatch', function (done) {
+      request(app)
+        .post('/publishStory')
+        .send({
+          articleTitle: 'valid',
+          blocks: [],
+          storyID: '3',
         })
         .expect(422)
         .end((err) => {

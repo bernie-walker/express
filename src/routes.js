@@ -9,6 +9,7 @@ const {
   serveBlogPage,
   createNewStory,
   renderEditor,
+  checkIfUserIsTheAuthor,
   saveStory,
   publishStory,
   serveYourStoriesPage,
@@ -40,7 +41,7 @@ app.get('/editor/:storyID', renderEditor);
 app.get('/yourStories', serveYourStoriesPage);
 app.get('/profile/:authorID', serveProfilePage);
 
-app.post('/saveStory', saveStory);
-app.post('/publishStory', publishStory);
+app.post('/saveStory', checkIfUserIsTheAuthor, saveStory);
+app.post('/publishStory', checkIfUserIsTheAuthor, publishStory);
 
 module.exports = { app };

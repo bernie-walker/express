@@ -19,19 +19,28 @@ const updateStory = function (url, story) {
   });
 };
 
-const saveDraft = async function () {
-  saveConfirmation.innerText = 'Draft Saving...';
+const getStory = async function () {
   const title = articleTitle.innerText;
   const storyID = articleTitle.getAttribute('storyid');
 
-  const data = await editor.save();
-  const draft = Object.assign(data, {
+  const content = await editor.save();
+  return Object.assign(content, {
     articleTitle: title,
     storyID,
   });
+};
 
-  const response = await updateStory('/saveStory', draft);
-  confirmSaveAndClearMessage();
+const saveDraft = async function () {
+  saveConfirmation.innerText = 'Draft Saving...';
+
+  const story = await getStory();
+  const response = await updateStory('/saveStory', story);
+
+  if (response.ok) {
+    confirmSaveAndClearMessage();
+  } else {
+    alert('Story could not be saved!!!');
+  }
 };
 
 const publishAndGotoBlog = async function (story) {
@@ -42,20 +51,18 @@ const publishAndGotoBlog = async function (story) {
     return;
   }
 
-  const { blogID } = await response.json();
-  window.location = `/blogPage/${blogID}`;
+  window.location = response.url;
 };
 
-const publishBlog = function () {
-  const title = articleTitle.innerText.trim();
+const publishBlog = async function () {
+  const story = await getStory();
 
-  if (!title) {
+  if (!story.articleTitle.trim()) {
     alert('A story without a title does not seem cool right...');
+    return;
   }
 
-  editor.save().then((data) => {
-    publishAndGotoBlog(Object.assign(data, { articleTitle: title }));
-  });
+  publishAndGotoBlog(story);
 };
 
 const togglePublishedOnTitle = function () {
