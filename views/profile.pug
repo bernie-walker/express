@@ -1,15 +1,27 @@
-mixin storyCard(id, title, content, lastModified)
-  div.card(id=id) 
-    div(class= 'card-content')
-      div.title= title
-      - const [,month,date,year] = new Date(lastModified).toString().split(' ');
-      .date= `${month} ${date}, ${year}`
+mixin  generateSubContent(content)
+  - let miniContent = content.replace(/<\/?(b|i|a)>/g, '').replace(/<a.*>/g,'').slice(0,150) 
+  - miniContent += miniContent.length < 150 ? '...' : ''
+  p !{miniContent}
 
-mixin stories(list)
+mixin storyCard(id, title, content, author, createdAt, imageUrl)
+  div.card(id=id) 
+    - className = imageUrl ? 'card-content' : '';
+      div(class= className)
+        div.title= title
+        div.content
+          +generateSubContent(content)
+        a.author(href="")= author
+        - const [,month,date,year] = new Date(createdAt).toString().split(' ');
+        .date= `${month} ${date}, ${year}`
+      if imageUrl
+        .card-image
+          img(src= imageUrl, alt="blogImage")
+
+mixin stories(list,authorInfo)
   each story in list
     - const paragraph = story.content.find(data=> data.type ==='paragraph')
-    - const text = paragraph ? paragraph.data.text.slice(0, 150) + '...' : ''
-    +storyCard(story.storyID,story.title,text,story.lastModified)
+    - const content = paragraph ? paragraph.data.text : ''
+    +storyCard(story.id, story.title, content, authorInfo.display_name, story.lastModified, story.cover_image)
 
 html
   head
@@ -21,3 +33,17 @@ html
     script(src="/js/profile.js")
   body 
     include ./includes/header.pug
+    div.container
+      .profile-div
+        .info
+          #name #{authorInfo.display_name}
+          .bio #{authorInfo.bio}
+        .profile-icon
+          img.author-avatar(src= authorInfo.avatar_url)
+      .optionBar
+        div profile
+      .card-container
+       if publishedStories.length==0
+         .emptyMessage #{authorInfo.display_name} author hasn’t been active on Medium yet. Check back later to see their stories, claps, and highlights.
+       else
+         +stories(publishedStories,authorInfo)

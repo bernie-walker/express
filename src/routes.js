@@ -35,7 +35,7 @@ app.get('/blog_image/:imageID', serveBlogImage);
 app.get('/dashboard', serveDashboard);
 app.get('/newStory', createNewStory);
 app.get('/yourStories', serveYourStoriesPage);
-app.get('/profile/:userID', serveProfilePage);
+app.get('/profile/:authorID', serveProfilePage);
 
 app.post('/publishStory', publishStory);
 

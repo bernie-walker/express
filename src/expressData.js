@@ -18,8 +18,8 @@ const generateGetStoryQuery = function (storyID) {
 };
 
 const generateUserStoriesQuery = function (userId, state) {
-  return `SELECT title,content,id as storyID,date(last_modified) as lastModified
-  FROM stories 
+  return `SELECT title,content,id as storyID,date(last_modified) 
+  as lastModified,cover_image FROM stories 
   WHERE written_by = '${userId}' AND state='${state}';`;
 };
 

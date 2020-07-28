@@ -1,40 +1,31 @@
 .container {
-  width: 70%;
-  margin: 10vh 15.5vw;
+  width: 60%;
+  margin: auto;
+  margin-top: 10vh;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-.heading {
-  width: 100%;
-  height: 7vh;
+.profile-div {
   display: flex;
-  justify-content: space-between;
+  height: 19vh;
 }
 
-.page-title {
-  font-size: 6vh;
+.info {
+  width: 70%;
+}
+
+#name {
+  font-size: 4.7vh;
   width: fit-content;
-  justify-content: left;
+  font-weight: 500;
+  padding-left: 3vh;
 }
 
-#writeBtn {
-  border: 1px solid green;
-  font-size: 3vh;
-  height: 3.5vh;
-  text-align: center;
-  margin-right: 5vh;
-  margin-top: 1.5vh;
-  padding-left: 1.5vh;
-  padding-right: 1.5vh;
-  justify-content: center;
-  cursor: pointer;
-}
-
-#writeBtn a {
-  text-decoration: none;
-  color: green;
-  font-weight: -0.5vh;
+.profile-icon img {
+  height: 20vh;
+  width: 11vw;
+  border-radius: 50%;
 }
 
 .optionBar {
@@ -57,7 +48,7 @@
   color: rgba(53, 48, 48, 1);
 }
 
-#Drafts {
+.optionBar div {
   border-bottom: 1px solid black;
 }
 
@@ -79,27 +70,19 @@
   }
 }
 
-.emptyMessage {
-  color: rgb(135, 127, 127);
-  font-family: sans-serif;
-  font-size: 3vh;
-  font-weight: 50;
-  margin-top: 25vh;
-  text-align: center;
-}
 .card {
   display: flex;
   justify-content: space-between;
-  padding: 1vw 0;
-  margin-top: 1vw;
-  border-bottom: 1px solid #eee;
+  padding: 2vw;
+  margin: 1vw;
+  border: 1px solid #eee;
   transition: 0.4s;
   cursor: pointer;
 }
 .card:hover {
   transition: 0.4s;
-  border-bottom: 1px solid #ccc;
-  box-shadow: 0 0 1px #ccc;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 3px #ccc;
 }
 @media (max-width: 420px) {
   .card {
@@ -111,16 +94,31 @@
 .card-content {
   display: flex;
   flex-direction: column;
+  width: 72%;
+}
+
+.card-image {
+  display: flex;
+  width: 25%;
+  align-items: center;
+}
+
+.card-image img {
+  color: #aaa;
   width: 100%;
 }
+
+@media (max-width: 420px) {
+  .card-image img {
+    height: 60%;
+  }
+}
 .title {
-  font-size: 3vh;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 24px;
 }
 @media (max-width: 420px) {
   .title {
-    font-size: 16px;
+    font-size: 18px;
   }
 }
 
@@ -132,8 +130,4 @@
   .date {
     font-size: 12px;
   }
-}
-
-.hidden {
-  display: none;
 }

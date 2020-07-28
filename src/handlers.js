@@ -81,14 +81,18 @@ const serveYourStoriesPage = async function (req, res) {
 
 const serveProfilePage = async function (req, res) {
   const users = req.app.locals.users;
-  const userID = req.params.userID;
-  const userInfo = await users.getUserInfo(userID);
-  if (!userInfo) {
+  const userInfo = await users.getUserInfo('palpriyanshu');
+  const authorID = req.params.authorID;
+  const authorInfo = await users.getUserInfo(authorID);
+  if (!authorInfo) {
     res.status(statusCodes.notFound).send('user not found');
     return;
   }
-  const publishedStories = await users.getUserStories(userInfo.id, 'published');
-  res.render('profile', Object.assign({ publishedStories }, userInfo));
+  const publishedStories = await users.getUserStories(authorID, 'published');
+  res.render(
+    'profile',
+    Object.assign({ publishedStories, authorInfo }, userInfo)
+  );
 };
 
 module.exports = {
