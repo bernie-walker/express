@@ -66,6 +66,13 @@ const serveYourStoriesPage = async function (req, res) {
   );
 };
 
+const serveProfilePage = async function (req, res) {
+  const users = req.app.locals.users;
+  const userID = req.params.userID;
+  const userInfo = await users.getUserInfo(userID);
+  res.render('profile', userInfo);
+};
+
 module.exports = {
   logRequest,
   serveDashboard,
@@ -74,4 +81,5 @@ module.exports = {
   serveEditorPage,
   publishStory,
   serveYourStoriesPage,
+  serveProfilePage,
 };

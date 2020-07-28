@@ -10,10 +10,19 @@ const attachGotoDashboardToLogo = function () {
   );
 };
 
+const attachToGoToProfile = function () {
+  const $userName = getElement('#username');
+  const userID = $userName.innerText;
+  $userName.addEventListener('click', () => {
+    window.location = `/profile/${userID}`;
+  });
+};
+
 const attachHeadListener = function () {
   const $profile = getElement('#profile');
   $profile.addEventListener('click', () => {
     getElement('.profile-modal').classList.toggle('hidden');
   });
   attachGotoDashboardToLogo();
+  attachToGoToProfile();
 };

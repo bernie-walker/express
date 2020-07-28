@@ -138,21 +138,22 @@
   color: rgba(10, 10, 10, 0.8);
 }
 
-.profile-section {
+#profile-section {
   display: flex;
   justify-content: space-evenly;
 }
 
-.username {
+#username {
   color: #555;
   font-weight: 200;
 }
 
-.username:hover {
+#username:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
 
-.username::before {
+#username::before {
   content: '@';
 }
 ::-webkit-scrollbar {
