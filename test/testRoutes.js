@@ -180,7 +180,7 @@ describe('GET', () => {
 
 describe('POST', function () {
   context('/publishStory', function () {
-    before(() => setUpDatabase(app.locals.dbClientReference, ['stories']));
+    beforeEach(() => setUpDatabase(app.locals.dbClientReference, ['stories']));
     after(() => cleanDatabase(app.locals.dbClientReference));
 
     it('should respond with a blogID for a valid story', function (done) {
@@ -188,11 +188,11 @@ describe('POST', function () {
         .post('/publishStory')
         .send({
           articleTitle: 'validTitle',
-          content: [],
-          time: 1595688605709,
+          blocks: [],
+          storyID: '2',
         })
-        .expect(200)
-        .expect(JSON.stringify({ blogID: 3 }))
+        .expect(302)
+        .expect('Location', '/blogPage/2')
         .end((err) => {
           if (err) {
             done(err);
@@ -206,8 +206,8 @@ describe('POST', function () {
       request(app)
         .post('/publishStory')
         .send({
-          content: [],
-          time: 1595688605709,
+          blocks: [],
+          storyID: '2',
         })
         .expect(422)
         .end((err) => {
@@ -224,8 +224,8 @@ describe('POST', function () {
         .post('/publishStory')
         .send({
           articleTitle: '     ',
-          content: [],
-          time: 1595688605709,
+          blocks: [],
+          storyID: '2',
         })
         .expect(422)
         .end((err) => {
@@ -247,7 +247,7 @@ describe('POST', function () {
         .post('/saveStory')
         .send({
           articleTitle: 'validTitle',
-          block: [],
+          blocks: [],
           storyID: '1',
         })
         .expect(200)
@@ -265,7 +265,7 @@ describe('POST', function () {
         .post('/saveStory')
         .send({
           articleTitle: 'validTitle',
-          block: [],
+          blocks: [],
           storyID: '3',
         })
         .expect(422)

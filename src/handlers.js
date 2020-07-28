@@ -72,20 +72,18 @@ const saveStory = async function (req, res) {
   res.end();
 };
 
-const publishStory = function (req, res) {
+const publishStory = async function (req, res) {
   const author = 'palpriyanshu';
-  const { articleTitle, blocks } = req.body;
+  const { stories } = req.app.locals;
+  const { articleTitle: title, blocks: content, storyID: id } = req.body;
 
-  if (!(articleTitle && articleTitle.trim())) {
+  if (!(title && title.trim())) {
     res.sendStatus(statusCodes.unprocessableEntity);
     return;
   }
 
-  req.app.locals.stories
-    .addStory(articleTitle, author, 'published', blocks)
-    .then((blogID) => {
-      res.json({ blogID });
-    });
+  await stories.updateStory({ title, content, state: 'published', author, id });
+  res.redirect(`/blogPage/${id}`);
 };
 
 const serveYourStoriesPage = async function (req, res) {
