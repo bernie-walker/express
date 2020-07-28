@@ -149,7 +149,6 @@ a {
   letter-spacing: 1px;
   word-spacing: 1px;
   color: rgba(10, 10, 10, 0.8);
-  text-align: justify;
 }
 
 @media (max-width: 45rem) {
