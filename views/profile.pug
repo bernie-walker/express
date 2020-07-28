@@ -3,25 +3,28 @@ mixin  generateSubContent(content)
   - miniContent += miniContent.length < 150 ? '...' : ''
   p !{miniContent}
 
-mixin storyCard(id, title, content, author, createdAt, imageUrl)
+mixin storyCard(id, title, content, authorInfo, createdAt, imageUrl)
   div.card(id=id) 
-    - className = imageUrl ? 'card-content' : '';
-      div(class= className)
-        div.title= title
-        div.content
-          +generateSubContent(content)
-        a.author(href="")= author
+    .author-profile-div
+      .author-profile-icon
+        img.author-avatar(src= authorInfo.avatar_url)
+      .author-info
+        #author-name #{authorInfo.display_name}
         - const [,month,date,year] = new Date(createdAt).toString().split(' ');
-        .date= `${month} ${date}, ${year}`
-      if imageUrl
-        .card-image
-          img(src= imageUrl, alt="blogImage")
+        -timeStamp= `${month} ${date}, ${year}`
+        .story-date #{timeStamp}
+    if imageUrl    
+      div#coverImage
+        img(src= imageUrl, alt="coverImage")
+    .story-title= title
+    div.content
+      +generateSubContent(content)
 
 mixin stories(list,authorInfo)
   each story in list
     - const paragraph = story.content.find(data=> data.type ==='paragraph')
     - const content = paragraph ? paragraph.data.text : ''
-    +storyCard(story.id, story.title, content, authorInfo.display_name, story.lastModified, story.cover_image)
+    +storyCard(story.id, story.title, content, authorInfo, story.lastModified, story.cover_image)
 
 html
   head

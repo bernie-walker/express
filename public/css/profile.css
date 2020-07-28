@@ -1,5 +1,5 @@
 .container {
-  width: 60%;
+  width: 50%;
   margin: auto;
   margin-top: 10vh;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
@@ -71,8 +71,6 @@
 }
 
 .card {
-  display: flex;
-  justify-content: space-between;
   padding: 2vw;
   margin: 1vw;
   border: 1px solid #eee;
@@ -91,43 +89,58 @@
   }
 }
 
-.card-content {
+.author-profile-div {
+  height: 5vh;
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  width: 72%;
 }
 
-.card-image {
-  display: flex;
-  width: 25%;
-  align-items: center;
+.author-profile-icon {
+  height: 4vh;
+  width: 2.7vw;
 }
 
-.card-image img {
-  color: #aaa;
+.author-profile-icon img {
+  height: inherit;
+  width: inherit;
+  border-radius: 50%;
+}
+
+.author-info {
+  padding-left: 2vh;
+}
+
+#author-name {
+  font-size: 2vh;
+  color: black;
+}
+
+.story-date {
+  color: #888;
+  font-size: 1.5vh;
+}
+
+#coverImage {
+  height: 20vh;
+}
+
+#coverImage img {
+  object-fit: cover;
+  height: inherit;
   width: 100%;
 }
 
-@media (max-width: 420px) {
-  .card-image img {
-    height: 60%;
-  }
-}
-.title {
-  font-size: 24px;
-}
-@media (max-width: 420px) {
-  .title {
-    font-size: 18px;
-  }
+.story-title {
+  font-size: 3vh;
+  font-weight: 500;
 }
 
-.date {
-  font-size: 1.5vh;
-  color: #aaa;
+.content {
+  font-size: 2vh;
+  color: #555;
 }
 @media (max-width: 420px) {
-  .date {
-    font-size: 12px;
+  .story-title {
+    font-size: 18px;
   }
 }
