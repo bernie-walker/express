@@ -9,7 +9,7 @@ mixin storyCard(id, title, content, authorInfo, createdAt, imageUrl)
       .author-profile-icon
         img.author-avatar(src= authorInfo.avatar_url)
       .author-info
-        #author-name #{authorInfo.display_name}
+        a(href="/profile/"+authorInfo.id)#author-name #{authorInfo.display_name}
         - const [,month,date,year] = new Date(createdAt).toString().split(' ');
         -timeStamp= `${month} ${date}, ${year}`
         .story-date #{timeStamp}

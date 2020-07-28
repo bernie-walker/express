@@ -43,7 +43,7 @@ html
             img(src=avatar_url class="icon-image")
           .blog-info
             .author-name
-              a(href="")= authorName
+              a(href="/profile/"+authorID)= authorName
             - const [,month,date,year] = new Date(lastModified).toString().split(' ');
             .blog-date= `${month} ${date}, ${year}`
         #shareSection
