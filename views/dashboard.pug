@@ -5,14 +5,14 @@ mixin  generateSubContent(content)
 
 
 
-mixin storyCard(id, title, content, author, createdAt, imageUrl)
+mixin storyCard(id, title, content, author,authorID, createdAt, imageUrl)
     div.card(id=id) 
       - className = imageUrl ? 'card-content' : '';
         div(class= className)
             div.title= title
             div.content
               +generateSubContent(content)
-            a.author(href="")= author
+            a.author(href= "/profile/"+authorID)= author
             - const dateFormat = moment(createdAt, 'YYYY-MM-DD HH:mm:ss').utc('Asia/Kolkata').fromNow()
             .date 
               i Last modified #{dateFormat}
@@ -35,4 +35,4 @@ html(lang="en")
       each value in recentStories
         - const paragraph = value.content.find(data=> data.type ==='paragraph')
         - const content = paragraph ? paragraph.data.text : ''
-        +storyCard(value.id, value.title, content, value.authorName, value.last_modified, value.cover_image)(onclick='visitBlog')
+        +storyCard(value.id, value.title, content, value.authorName,value.written_by, value.last_modified, value.cover_image)(onclick='visitBlog')
