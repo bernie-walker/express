@@ -166,6 +166,11 @@ p b {
   outline: none;
   background: none;
   transform: scale(1.4);
+  opacity: 0.7;
+}
+
+#shareSection:hover {
+  opacity: 1;
 }
 
 #shareSection #linkCopiedMsg {

@@ -60,10 +60,10 @@ body {
 #saveConfirmation {
   display: flex;
   margin-left: 2vw;
-  align-items: flex-end;
-  padding-bottom: 0.5vh;
+  align-items: center;
   letter-spacing: 0.05vw;
   word-spacing: 1.2vw;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .searchAndProfile {

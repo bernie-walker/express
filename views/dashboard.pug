@@ -32,7 +32,7 @@ html(lang="en")
   body 
     include ./includes/header.pug
     div.card-container
-      each value in recentStories
-        - const paragraph = value.content.find(data=> data.type ==='paragraph')
+      each story in recentStories
+        - const paragraph = story.content.find(data=> data.type ==='paragraph')
         - const content = paragraph ? paragraph.data.text : ''
-        +storyCard(value.id, value.title, content, value.authorName,value.written_by, value.last_modified, value.cover_image)(onclick='visitBlog')
+        +storyCard(story.id, story.title, content, story.authorName,story.written_by, story.last_modified, story.cover_image)
