@@ -8,8 +8,6 @@ body {
 }
 
 .header {
-  border-bottom: 1px solid #fff;
-  box-shadow: 0 5px 2px #efefef;
   display: flex;
   justify-content: center;
   padding: 4px;
@@ -45,7 +43,6 @@ body {
 #logo > div {
   justify-content: center;
   transform: scale(1.4);
-  width: 132px;
   align-items: center;
   position: relative;
   margin-left: 28px;
