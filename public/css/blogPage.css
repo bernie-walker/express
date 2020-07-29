@@ -167,6 +167,11 @@ p b {
   background: none;
   transform: scale(1.4);
   opacity: 0.7;
+  pointer-events: none;
+}
+
+#shareSection #shareBtn {
+  pointer-events: all;
 }
 
 #shareSection:hover {

@@ -11,7 +11,7 @@ const shareBlog = function () {
   textArea.select();
   document.execCommand('copy');
   document.body.removeChild(textArea);
-  linkCopiedMsg.innerHTML = 'Link copied.';
+  linkCopiedMsg.innerHTML = 'Link copied';
 };
 
 const main = function () {
