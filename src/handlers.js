@@ -92,13 +92,13 @@ const publishStory = async function (req, res) {
   res.redirect(`/blogPage/${id}`);
 };
 
-const serveYourStoriesPage = async function (req, res) {
+const serveUserStoriesPage = async function (req, res) {
   const users = req.app.locals.users;
   const userInfo = await users.getUserInfo('palpriyanshu');
   const publishedStories = await users.getUserStories(userInfo.id, 'published');
   const draftedStories = await users.getUserStories(userInfo.id, 'drafted');
   res.render(
-    'yourStories',
+    'userStories',
     Object.assign({ publishedStories, draftedStories }, userInfo)
   );
 };
@@ -129,6 +129,6 @@ module.exports = {
   checkIfUserIsTheAuthor,
   saveStory,
   publishStory,
-  serveYourStoriesPage,
+  serveUserStoriesPage,
   serveProfilePage,
 };

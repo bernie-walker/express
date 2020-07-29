@@ -12,7 +12,7 @@ const {
   checkIfUserIsTheAuthor,
   saveStory,
   publishStory,
-  serveYourStoriesPage,
+  serveUserStoriesPage,
   serveProfilePage,
 } = require('./handlers');
 
@@ -38,7 +38,7 @@ app.get('/blog_image/:imageID', serveBlogImage);
 app.get('/dashboard', serveDashboard);
 app.get('/newStory', createNewStory);
 app.get('/editor/:storyID', renderEditor);
-app.get('/yourStories', serveYourStoriesPage);
+app.get('/userStories', serveUserStoriesPage);
 app.get('/profile/:authorID', serveProfilePage);
 
 app.post('/saveStory', checkIfUserIsTheAuthor, saveStory);

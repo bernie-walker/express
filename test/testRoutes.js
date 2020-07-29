@@ -141,15 +141,15 @@ describe('GET', () => {
     });
   });
 
-  context('/yourStories', () => {
+  context('/userStories', () => {
     before(() =>
       setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
     );
     after(() => cleanDatabase(app.locals.dbClientReference));
 
-    it('should serve the yourStories page', async () => {
+    it('should serve the userStories page', async () => {
       await request(app)
-        .get('/yourStories')
+        .get('/userStories')
         .expect(200)
         .expect(/Express/);
     });
