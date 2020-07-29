@@ -27,7 +27,8 @@ const generateGetStoryContentQuery = function (storyID, userID) {
 const generateUserStoriesQuery = function (userId, state) {
   return `SELECT title,content,id as storyID,date(last_modified) 
   as lastModified,cover_image FROM stories 
-  WHERE written_by = '${userId}' AND state='${state}';`;
+  WHERE written_by = '${userId}' AND state='${state}' 
+  ORDER BY last_modified DESC`;
 };
 
 class Stories {
