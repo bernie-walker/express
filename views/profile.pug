@@ -4,7 +4,7 @@ mixin  generateSubContent(content)
   p !{miniContent}
 
 mixin storyCard(id, title, content, authorInfo, createdAt, imageUrl)
-  div.card(id=id) 
+  div.card(target_url=`/blogPage/${id}`) 
     .author-profile-div
       .author-profile-icon
         img.author-avatar(src= authorInfo.avatar_url)
@@ -24,7 +24,7 @@ mixin stories(list,authorInfo)
   each story in list
     - const paragraph = story.content.find(data=> data.type ==='paragraph')
     - const content = paragraph ? paragraph.data.text : ''
-    +storyCard(story.id, story.title, content, authorInfo, story.lastModified, story.cover_image)
+    +storyCard(story.storyID, story.title, content, authorInfo, story.lastModified, story.cover_image)
 
 doctype html
 html

@@ -19,9 +19,13 @@ const attachToGoToProfile = function () {
 };
 
 const attachHeadListener = function () {
-  const $profile = getElement('#profile');
-  $profile.addEventListener('click', () => {
+  profile.addEventListener('click', () => {
     getElement('.profile-modal').classList.toggle('hidden');
+  });
+  getElement('body').addEventListener('click', (event) => {
+    if (!event.target.id) {
+      getElement('.profile-modal').classList.add('hidden');
+    }
   });
   attachGotoDashboardToLogo();
   attachToGoToProfile();

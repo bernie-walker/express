@@ -18,7 +18,7 @@ button:disabled {
 a {
   color: inherit;
 }
-
+/* 
 .header {
   border-bottom: 1px solid #fff;
   box-shadow: 0 5px 2px #efefef;
@@ -54,7 +54,7 @@ a {
   #logo {
     padding: 0 2px;
   }
-}
+} */
 
 .blog {
   width: 800px;

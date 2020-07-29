@@ -18,6 +18,7 @@ const shareBlog = function () {
 };
 
 const main = function () {
+  attachHeadListener();
   logo.addEventListener('click', () => {
     window.location = '/dashboard';
   });

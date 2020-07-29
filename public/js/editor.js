@@ -80,9 +80,9 @@ const handleTitleKeypress = function () {
   togglePublishedOnTitle();
 };
 
-const gotoDashboard = function () {
-  window.location = '/dashboard';
-};
+// const gotoDashboard = function () {
+//   window.location = '/dashboard';
+// };
 
 const createEditor = async function () {
   const content = JSON.parse(localStorage.getItem('storyContent'));
@@ -101,9 +101,7 @@ const createEditor = async function () {
 };
 
 const main = function () {
-  document
-    .querySelector('#logo > svg')
-    .addEventListener('click', gotoDashboard);
+  attachHeadListener();
   articleTitle.addEventListener('keypress', handleTitleKeypress);
   articleTitle.addEventListener('keyup', togglePublishedOnTitle);
   publishBtn.addEventListener('click', publishBlog);

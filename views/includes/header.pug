@@ -6,21 +6,22 @@
       svg&attributes({width:103, height:26})
         text&attributes({y:25.72, x:4, style:{"font-size": "1.48em", "font-weight": 700, color: "white", "font-family": "'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif"}}) XPRESS
   .searchAndProfile
-    .profile
-      img#profile(src= avatar_url, alt="avatar")
-      .arrow
-      .profile-modal.hidden
-        .section#profile-section
-          .avatar
-            img(src= avatar_url, alt="avatar")
-          .name
-            .display_name= display_name
-            #username= id
-        .section
-          div 
-            a(href="/newStory") write a story
-          div 
-            a(href="/userStories") stories
-        //- .section
-          div help
-          div sign out
+    if(id)
+      .profile
+        img#profile(src= avatar_url, alt="avatar")
+        .arrow
+        .profile-modal.hidden
+          .section#profile-section
+            .avatar
+              img(src= avatar_url, alt="avatar")
+            .name
+              .display_name= display_name
+              #username= id
+          .section
+            div 
+              a(href="/newStory") write a story
+            div 
+              a(href="/userStories") stories
+          //- .section
+            div help
+            div sign out

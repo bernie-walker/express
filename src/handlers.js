@@ -28,8 +28,11 @@ const serveBlogImage = function (req, res) {
 
 const serveBlogPage = async function (req, res) {
   const blog = await req.app.locals.stories.getStory(req.params.storyID);
+  const users = req.app.locals.users;
+  const userInfo = await users.getUserInfo('palpriyanshu');
+
   if (blog) {
-    res.render('blogPage', blog);
+    res.render('blogPage', Object.assign(blog, userInfo));
   } else {
     res.sendStatus(statusCodes.notFound);
   }
@@ -48,8 +51,12 @@ const renderEditor = async function (req, res) {
     req.params.storyID,
     'palpriyanshu'
   );
+
+  const users = req.app.locals.users;
+  const userInfo = await users.getUserInfo('palpriyanshu');
+
   if (storyContent) {
-    res.render('editor', storyContent);
+    res.render('editor', Object.assign(storyContent, userInfo));
   } else {
     res.sendStatus(statusCodes.notFound);
   }

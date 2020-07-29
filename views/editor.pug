@@ -8,6 +8,7 @@ head
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/marker@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/inline-code@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/delimiter@latest')
+  script(src='/js/header.js')
   script(src='/js/editor.js')
   link(href='https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap' rel='stylesheet')
   link(rel='stylesheet' href='/css/normalize.css')
@@ -17,21 +18,53 @@ head
       localStorage.setItem('storyContent', JSON.stringify(content));
   title Express | Editor
 body
-  #editorHeader
-    #logo
-      svg(width='30' height='36' style='border: 1px solid; background-color: black;')
-        text(y='32' x='1.5' style='\
-        font-family: sans-serif;\
-        font-size: 2.4em;\
-        font-weight: 600;\
-        fill: white;\
-        ')
-          | E
+  .header
+    #editorHeader
+      #logo
+        div
+          svg&attributes({width:21, height:26, style:{border:"1px solid", "background-color": 'black'}})
+            text&attributes({y:24, style:{"font-family": 'sans-serif', "font-size": '1.9em', "font-weight": 600, fill: 'white'}}) E
+          svg&attributes({width:103, height:26})
+            text&attributes({y:25.72, x:4, style:{"font-size": "1.48em", "font-weight": 700, color: "white", "font-family": "'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif"}}) XPRESS
       #saveConfirmation Draft
-    .actions
-      if state === 'drafted'
-        #saveAsDraft.btn Save As Draft
-      #publishBtn.btn Publish
+    .searchAndProfile
+      .actions
+        if state === 'drafted'
+          #saveAsDraft.btn Save As Draft
+        #publishBtn.btn Publish
+      .profile
+        img#profile(src= avatar_url, alt="avatar")
+        .arrow
+        .profile-modal.hidden
+          .section#profile-section
+            .avatar
+              img(src= avatar_url, alt="avatar")
+            .name
+              .display_name= display_name
+              #username= id
+          .section
+            div 
+              a(href="/newStory") write a story
+            div 
+              a(href="/userStories") stories
+          //- .section
+            div help
+            div sign out
+  //- #editorHeader
+  //-   #logo
+  //-     svg(width='30' height='36' style='border: 1px solid; background-color: black;')
+  //-       text(y='32' x='1.5' style='\
+  //-       font-family: sans-serif;\
+  //-       font-size: 2.4em;\
+  //-       font-weight: 600;\
+  //-       fill: white;\
+  //-       ')
+  //-         | E
+  //-     #saveConfirmation Draft
+    //- .actions
+    //-   if state === 'drafted'
+    //-     #saveAsDraft.btn Save As Draft
+    //-   #publishBtn.btn Publish
   #editor
     - const storyTitle = title === 'Untitled Story' ?  '' : title;
     #articleTitle(contenteditable='true',storyid=storyID)= storyTitle
