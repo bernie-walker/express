@@ -16,8 +16,8 @@ CREATE TABLE users (
 CREATE TABLE stories (
 	id integer PRIMARY KEY AUTOINCREMENT,
 	written_by varchar(42) NOT NULL,
-	state varchar(9) NOT NULL,
-	title text NOT NULL,
+	state varchar(9) NOT NULL DEFAULT 'drafted',
+	title text NOT NULL DEFAULT 'Untitled Story',
 	content text,
 	cover_image text,
 	last_modified timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
