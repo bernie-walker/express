@@ -1,8 +1,10 @@
+body {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
 .container {
   width: 70%;
-  margin: 10vh 15.5vw;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  margin: 5vh 15.5vw;
 }
 
 .heading {
@@ -13,20 +15,20 @@
 }
 
 .page-title {
-  font-size: 6vh;
+  font-size: 5.5vh;
+  font-weight: 600;
   width: fit-content;
   justify-content: left;
 }
 
 #writeBtn {
   border: 1px solid green;
+  border-radius: 4px;
   font-size: 3vh;
   height: 3.5vh;
   text-align: center;
-  margin-right: 5vh;
-  margin-top: 1.5vh;
-  padding-left: 1.5vh;
-  padding-right: 1.5vh;
+  margin: 1.5vh;
+  padding: 0.5vh 2.5vh;
   justify-content: center;
   cursor: pointer;
 }
@@ -34,7 +36,7 @@
 #writeBtn a {
   text-decoration: none;
   color: green;
-  font-weight: -0.5vh;
+  font-weight: 350;
 }
 
 .optionBar {
@@ -57,8 +59,8 @@
   color: rgba(53, 48, 48, 1);
 }
 
-#Drafts {
-  border-bottom: 1px solid black;
+.active {
+  border-bottom: 1.5px solid black;
 }
 
 .card-container {
@@ -101,6 +103,7 @@
   border-bottom: 1px solid #ccc;
   box-shadow: 0 0 1px #ccc;
 }
+
 @media (max-width: 420px) {
   .card {
     padding: 8px;

@@ -34,12 +34,12 @@ app.use(express.json());
 
 app.get('/blogPage/:storyID', serveBlogPage);
 app.get('/blog_image/:imageID', serveBlogImage);
+app.get('/profile/:authorID', serveProfilePage);
 
 app.get('/dashboard', serveDashboard);
 app.get('/newStory', createNewStory);
 app.get('/editor/:storyID', renderEditor);
 app.get('/userStories', serveUserStoriesPage);
-app.get('/profile/:authorID', serveProfilePage);
 
 app.post('/saveStory', checkIfUserIsTheAuthor, saveStory);
 app.post('/publishStory', checkIfUserIsTheAuthor, publishStory);

@@ -12,8 +12,11 @@ mixin stories(list, path)
     - const targetUrl = path + story.storyID;
     +storyCard(story.title,text,story.lastModified, targetUrl)
 
+doctype html
 html
   head
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
     title Express | Stories
     link(rel="stylesheet", href="/css/normalize.css")
     link(rel="stylesheet", href="/css/header.css")
@@ -28,14 +31,14 @@ html
         div#writeBtn
           a(href="/newStory") write a story
       .optionBar
-        div#Drafts Drafts #{draftedStories.length}
-        div#Published Published #{publishedStories.length}
-      #DraftsList.card-container
+        div#drafts.active Drafts #{draftedStories.length}
+        div#published Published #{publishedStories.length}
+      #draftsList.card-container
         if draftedStories.length==0
           .emptyMessage You have no drafts
         else
           +stories(draftedStories, '/editor/')
-      #PublishedList.card-container.hidden
+      #publishedList.card-container.hidden
         if publishedStories.length==0
           .emptyMessage You haven’t published any public stories yet.
         else

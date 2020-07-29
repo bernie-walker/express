@@ -1,20 +1,17 @@
 const showList = function (toShow, toHide) {
-  const showingDiv = document.getElementById(toShow).classList.remove('hidden');
-  const hiddenDiv = document.getElementById(toHide).classList.add('hidden');
+  getElement(`#${toShow}List`).classList.remove('hidden');
+  getElement(`#${toHide}List`).classList.add('hidden');
+
+  getElement(`#${toShow}`).classList.add('active');
+  getElement(`#${toHide}`).classList.remove('active');
 };
 
 const attachOptionListeners = function () {
-  Drafts.addEventListener('click', function () {
-    document.getElementById('Drafts').style['border-bottom'] =
-      '1.5px solid black';
-    document.getElementById('Published').style['border-bottom'] = '0';
-    showList('DraftsList', 'PublishedList');
+  drafts.addEventListener('click', function () {
+    showList('drafts', 'published');
   });
-  Published.addEventListener('click', function () {
-    document.getElementById('Drafts').style['border-bottom'] = '0';
-    document.getElementById('Published').style['border-bottom'] =
-      '1.5px solid black';
-    showList('PublishedList', 'DraftsList');
+  published.addEventListener('click', function () {
+    showList('published', 'drafts');
   });
 };
 
