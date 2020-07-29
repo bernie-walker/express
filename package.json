@@ -24,11 +24,13 @@
   "homepage": "https://github.com/bernie-walker/express#readme",
   "devDependencies": {
     "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "eslint": "^7.5.0",
     "mocha": "^8.0.1",
+    "nodemon": "^2.0.4",
     "nyc": "^15.1.0",
-    "supertest": "^4.0.2",
-    "nodemon": "^2.0.4"
+    "sinon": "^9.0.2",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
     "express": "^4.17.1",
