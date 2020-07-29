@@ -8,12 +8,16 @@ const logRequest = function (req, res, next) {
   next();
 };
 
+const attachUser = async function (req, res, next) {
+  const users = req.app.locals.users;
+  req.user = await users.getUserInfo('palpriyanshu');
+  next();
+};
+
 const serveDashboard = async function (req, res) {
   const blogsNeeded = 10;
-  const users = req.app.locals.users;
-  const userInfo = await users.getUserInfo('palpriyanshu');
   const recentStories = await req.app.locals.stories.get(blogsNeeded);
-  res.render('dashboard', Object.assign({ recentStories, moment }, userInfo));
+  res.render('dashboard', Object.assign({ recentStories, moment }, req.user));
 };
 
 const serveBlogImage = function (req, res) {
@@ -28,11 +32,9 @@ const serveBlogImage = function (req, res) {
 
 const serveBlogPage = async function (req, res) {
   const blog = await req.app.locals.stories.getStory(req.params.storyID);
-  const users = req.app.locals.users;
-  const userInfo = await users.getUserInfo('palpriyanshu');
 
   if (blog) {
-    res.render('blogPage', Object.assign(blog, userInfo));
+    res.render('blogPage', Object.assign(blog, req.user));
   } else {
     res.sendStatus(statusCodes.notFound);
   }
@@ -40,7 +42,7 @@ const serveBlogPage = async function (req, res) {
 
 const createNewStory = async function (req, res) {
   const Stories = req.app.locals.stories;
-  const newStoryParams = ['Untitled Story', 'palpriyanshu', 'drafted', []];
+  const newStoryParams = ['Untitled Story', req.user.id, 'drafted', []];
   const storyID = await Stories.addStory(...newStoryParams);
   res.redirect(`/editor/${storyID}`);
 };
@@ -49,14 +51,11 @@ const renderEditor = async function (req, res) {
   const { stories } = req.app.locals;
   const storyContent = await stories.getStoryContent(
     req.params.storyID,
-    'palpriyanshu'
+    req.user.id
   );
 
-  const users = req.app.locals.users;
-  const userInfo = await users.getUserInfo('palpriyanshu');
-
   if (storyContent) {
-    res.render('editor', Object.assign(storyContent, userInfo));
+    res.render('editor', Object.assign(storyContent, req.user));
   } else {
     res.sendStatus(statusCodes.notFound);
   }
@@ -128,6 +127,7 @@ const serveProfilePage = async function (req, res) {
 
 module.exports = {
   logRequest,
+  attachUser,
   serveDashboard,
   serveBlogImage,
   serveBlogPage,

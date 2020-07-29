@@ -4,6 +4,7 @@ const { Users, Stories } = require('./expressData');
 
 const {
   logRequest,
+  attachUser,
   serveDashboard,
   serveBlogImage,
   serveBlogPage,
@@ -32,10 +33,12 @@ app.use(logRequest);
 app.use(express.static('public'));
 app.use(express.json());
 
-app.get('/blogPage/:storyID', serveBlogPage);
 app.get('/blog_image/:imageID', serveBlogImage);
 app.get('/profile/:authorID', serveProfilePage);
 
+app.use(attachUser);
+
+app.get('/blogPage/:storyID', serveBlogPage);
 app.get('/dashboard', serveDashboard);
 app.get('/newStory', createNewStory);
 app.get('/editor/:storyID', renderEditor);
