@@ -1,8 +1,8 @@
 INSERT INTO	users
 	(id, display_name, avatar_url, bio)
 VALUES
-	('bernie-walker', 'Bernard Nehal Dcunha', 'https://avatars3.githubusercontent.com/u/583231?v=4', 'Take New Zealand. With its fancy curve and life back to normal. Why can’t we? Not fair, you say. It’s an island nation. Okay. What about Germany? Not an island nation, large, growing diversity. Don’t like that comparison? What about countries that have been in big trouble? There’s Italy, France, and Spain. Those countries had it reasonably bad the same time we did. In fact, pick virtually any country you want.'),
-	('palpriyanshu', 'Priyanshu Pal', 'https://avatars3.githubusercontent.com/u/583231?v=4', ''),
+	('bernie-walker', 'Bernard Nehal Dcunha', 'https://avatars3.githubusercontent.com/u/583231?v=4', ''),
+	('palpriyanshu', 'Priyanshu Pal', 'https://avatars3.githubusercontent.com/u/583231?v=4', 'Take New Zealand. With its fancy curve and life back to normal. Why can’t we? Not fair, you say. It’s an island nation. Okay. What about Germany? Not an island nation, large, growing diversity. Don’t like that comparison? What about countries that have been in big trouble? There’s Italy, France, and Spain.'),
 	('shiviraj', 'Shivam Rajputh', 'https://avatars3.githubusercontent.com/u/583231?v=4', ''),
 	('lazyhackerthani', 'Thanya Cherumanalil', 'https://avatars3.githubusercontent.com/u/583231?v=4', ''),
 	('bugdriver', 'Rajath Kushawaha', 'https://avatars3.githubusercontent.com/u/583231?v=4', '');

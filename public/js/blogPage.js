@@ -1,7 +1,5 @@
-const MESSAGE_APPEARANCE_TIME = 3000;
-
-const hideLinkCopiedMsg = function () {
-  linkCopiedMsg.classList.add('hidden');
+const showOnHoverMsg = function () {
+  linkCopiedMsg.innerHTML = 'Copy to clipboard';
 };
 
 const shareBlog = function () {
@@ -13,8 +11,7 @@ const shareBlog = function () {
   textArea.select();
   document.execCommand('copy');
   document.body.removeChild(textArea);
-  linkCopiedMsg.classList.remove('hidden');
-  setTimeout(hideLinkCopiedMsg, MESSAGE_APPEARANCE_TIME);
+  linkCopiedMsg.innerHTML = 'Link copied.';
 };
 
 const main = function () {
@@ -23,7 +20,8 @@ const main = function () {
     window.location = '/dashboard';
   });
 
-  shareBtn.addEventListener('click', shareBlog);
+  shareSection.addEventListener('click', shareBlog);
+  shareSection.addEventListener('mouseout', showOnHoverMsg);
 };
 
 window.onload = main;

@@ -39,8 +39,8 @@ html
               a(href="/profile/"+authorID)= authorName
             - const [,month,date,year] = new Date(lastModified).toString().split(' ');
             .blog-date= `${month} ${date}, ${year}`
-        #shareSection
-          #linkCopiedMsg.hidden link copied 
+        button#shareSection
+          #linkCopiedMsg link copied.
           img#shareBtn(src="/images/share_icon.svg", alt="share icon")
       .blog-content
         -const contentBlocks = content

@@ -161,27 +161,47 @@ p b {
 }
 
 #shareSection {
-  margin: -1vw 0.7vw auto;
-  display: grid;
-}
-
-#shareBtn {
-  cursor: pointer;
-  margin: 1vh auto;
-  opacity: 70%;
+  position: relative;
+  border: 0;
+  outline: none;
+  background: none;
   transform: scale(1.4);
 }
 
-#shareBtn:hover {
-  opacity: 100%;
+#shareSection #linkCopiedMsg {
+  visibility: hidden;
+  width: 7vw;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 0.8vh 1vw;
+  position: absolute;
+  z-index: 1;
+  bottom: 90%;
+  left: 50%;
+  margin-left: -4.5vw;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#shareSection #linkCopiedMsg::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
 }
 
 #linkCopiedMsg {
-  background-color: greenyellow;
-  color: green;
-  padding: 0.2vw;
+  font-size: calc(0.4vw + 0.4em);
+  visibility: hidden;
 }
 
-.hidden {
-  visibility: hidden;
+#shareSection:hover #linkCopiedMsg {
+  visibility: visible;
+  opacity: 1;
 }

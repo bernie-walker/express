@@ -23,8 +23,11 @@ body {
   font-weight: 600;
 }
 .bio {
+  margin-top: 2vh;
   font-size: calc(0.6vw + 0.5em);
   color: #888;
+  font-weight: 300;
+  letter-spacing: 0.1vh;
 }
 .profile-icon {
   display: flex;
