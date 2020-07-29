@@ -3,7 +3,8 @@ mixin storyCard(title, content, lastModified, target)
     div(class= 'card-content')
       div.title= title
       - const [,month,date,year] = new Date(lastModified).toString().split(' ');
-      .date= `${month} ${date}, ${year}`
+      .date
+        i= `Last modified on ${month} ${date}, ${year}`
 
 mixin stories(list, path)
   each story in list
