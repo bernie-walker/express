@@ -1,17 +1,19 @@
-mixin storyCard(title, content, lastModified, target)
-  div.card(target_url=target) 
+mixin storyCard(title, content, lastModified, id, path)
+  - const targetUrl = path + id;
+  div.card(target_url=targetUrl) 
     div.card-content
       div.title= title
       - const [,month,date,year] = new Date(lastModified).toString().split(' ');
       .date
         i= `Last modified on ${month} ${date}, ${year}`
+      .story-actions
+        a(href=`/editor/${id}`).edit edit
 
 mixin stories(list, path)
   each story in list
     - const paragraph = story.content.find(data=> data.type ==='paragraph')
     - const text = paragraph ? paragraph.data.text.slice(0, 150) + '...' : ''
-    - const targetUrl = path + story.storyID;
-    +storyCard(story.title,text,story.lastModified, targetUrl)
+    +storyCard(story.title,text,story.lastModified, story.storyID, path)
 
 doctype html
 html

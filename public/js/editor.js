@@ -80,10 +80,6 @@ const handleTitleKeypress = function () {
   togglePublishedOnTitle();
 };
 
-// const gotoDashboard = function () {
-//   window.location = '/dashboard';
-// };
-
 const createEditor = async function () {
   const content = JSON.parse(localStorage.getItem('storyContent'));
   editor = new EditorJS({
@@ -94,6 +90,7 @@ const createEditor = async function () {
       Marker: { class: Marker, shortcut: 'CMD+SHIFT+M' },
       delimiter: { class: Delimiter },
       inlineCode: { class: InlineCode, shortcut: 'OPTION+CMD+SHIFT+C' },
+      image: { class: ImageTool, shortcut: 'CMD+SHIFT+I' },
     },
     data: { blocks: content },
   });
@@ -105,7 +102,8 @@ const main = function () {
   articleTitle.addEventListener('keypress', handleTitleKeypress);
   articleTitle.addEventListener('keyup', togglePublishedOnTitle);
   publishBtn.addEventListener('click', publishBlog);
-  saveAsDraft.addEventListener('click', saveDraft);
+  const $saveAsDraft = getElement('#saveAsDraft');
+  $saveAsDraft && $saveAsDraft.addEventListener('click', saveDraft);
   createEditor();
 };
 
