@@ -1,11 +1,6 @@
-/* eslint-disable handle-callback-err */
-
 const groupStories = function (profileRows) {
   return profileRows.reduce((stories, row) => {
     const { storyID, title, content, coverImage, lastModified } = row;
-    if (!storyID) {
-      return stories;
-    }
 
     const story = {
       storyID,

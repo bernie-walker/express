@@ -91,7 +91,7 @@ describe('Users', function () {
       const fakeGetProfileData = sinon.stub();
       fakeGetProfileData.withArgs('noStory').resolves(resolutionWithoutStory);
       fakeGetProfileData.withArgs('withStory').resolves(resolutionWithStory);
-      fakeGetProfileData.withArgs('invalid').rejects();
+      fakeGetProfileData.withArgs('invalid').resolves([]);
       fakeDbClient.getProfileData = fakeGetProfileData;
     });
     after(() => {
