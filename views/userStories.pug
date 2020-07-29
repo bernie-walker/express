@@ -1,6 +1,6 @@
 mixin storyCard(title, content, lastModified, target)
   div.card(target_url=target) 
-    div(class= 'card-content')
+    div.card-content
       div.title= title
       - const [,month,date,year] = new Date(lastModified).toString().split(' ');
       .date
@@ -29,8 +29,7 @@ html
     div.container
       div.heading
         div.page-title Your Stories
-        div#writeBtn
-          a(href="/newStory") write a story
+        a#writeBtn(href="/newStory") write a story
       .optionBar
         div#drafts.active Drafts #{draftedStories.length}
         div#published Published #{publishedStories.length}

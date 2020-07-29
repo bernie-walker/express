@@ -144,3 +144,19 @@ template {
 [hidden] {
   display: none;
 }
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(117, 117, 121, 0.8);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(117, 117, 121, 0.8);
+}
