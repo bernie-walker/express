@@ -26,7 +26,8 @@ body
           svg&attributes({width:21, height:26, style:{border:"1px solid", "background-color": 'black'}})
             text&attributes({y:24, style:{"font-family": 'sans-serif', "font-size": '1.9em', "font-weight": 600, fill: 'white'}}) E
          
-      #saveConfirmation Draft
+      - const status = state === 'drafted' ? 'Draft': ''
+      #saveConfirmation= status
     .searchAndProfile
       .actions
         if state === 'drafted'
