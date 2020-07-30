@@ -166,14 +166,12 @@ describe('GET', () => {
         .get('/profile/palpriyanshu')
         .expect(200)
         .expect(/Express/)
-        .expect(/palpriyanshu/);
+        .expect(/palpriyanshu/)
+        .expect(/Priyanshu/);
     });
 
     it('should not serve the profile page when user does not exists', async () => {
-      await request(app)
-        .get('/profile/wrongUserId')
-        .expect(404)
-        .expect(/user not found/);
+      await request(app).get('/profile/wrongUserId').expect(404);
     });
   });
 });

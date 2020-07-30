@@ -1,6 +1,8 @@
 const express = require('express');
 const Sqlite3 = require('sqlite3').verbose();
-const { Users, Stories } = require('./expressData');
+const { ExpressDB } = require('./expressData');
+const { Users } = require('./users');
+const { Stories } = require('./stories');
 
 const {
   logRequest,
@@ -10,7 +12,6 @@ const {
   serveBlogPage,
   createNewStory,
   renderEditor,
-  checkIfUserIsTheAuthor,
   saveStory,
   publishStory,
   serveUserStoriesPage,
@@ -24,8 +25,10 @@ app.locals.blogImagePath = process.env.BLOG_IMAGE_PATH;
 
 const dbClient = new Sqlite3.Database(process.env.DB_PATH);
 app.locals.dbClientReference = dbClient;
-app.locals.users = new Users(dbClient);
-app.locals.stories = new Stories(dbClient);
+
+const expressDB = new ExpressDB(dbClient);
+app.locals.users = new Users(expressDB);
+app.locals.stories = new Stories(expressDB);
 
 app.set('view engine', 'pug');
 
@@ -33,18 +36,17 @@ app.use(logRequest);
 app.use(express.static('public'));
 app.use(express.json());
 
-app.get('/blog_image/:imageID', serveBlogImage);
-app.get('/profile/:authorID', serveProfilePage);
-
 app.use(attachUser);
 
+app.get('/blog_image/:imageID', serveBlogImage);
+app.get('/profile/:profileID', serveProfilePage);
 app.get('/blogPage/:storyID', serveBlogPage);
 app.get('/dashboard', serveDashboard);
 app.get('/newStory', createNewStory);
 app.get('/editor/:storyID', renderEditor);
 app.get('/userStories', serveUserStoriesPage);
 
-app.post('/saveStory', checkIfUserIsTheAuthor, saveStory);
-app.post('/publishStory', checkIfUserIsTheAuthor, publishStory);
+app.post('/saveStory', saveStory);
+app.post('/publishStory', publishStory);
 
 module.exports = { app };

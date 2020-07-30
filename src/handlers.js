@@ -9,8 +9,8 @@ const logRequest = function (req, res, next) {
 };
 
 const attachUser = async function (req, res, next) {
-  const users = req.app.locals.users;
-  req.user = await users.getUserInfo('palpriyanshu');
+  const { users } = req.app.locals;
+  req.user = await users.getUser('palpriyanshu');
   next();
 };
 
@@ -31,7 +31,7 @@ const serveBlogImage = function (req, res) {
 };
 
 const serveBlogPage = async function (req, res) {
-  const blog = await req.app.locals.stories.getStory(req.params.storyID);
+  const blog = await req.app.locals.stories.getStoryPage(req.params.storyID);
 
   if (blog) {
     res.render('blogPage', Object.assign(blog, req.user));
@@ -41,18 +41,14 @@ const serveBlogPage = async function (req, res) {
 };
 
 const createNewStory = async function (req, res) {
-  const Stories = req.app.locals.stories;
-  const newStoryParams = ['Untitled Story', req.user.id, 'drafted', []];
-  const storyID = await Stories.addStory(...newStoryParams);
+  const { stories } = req.app.locals;
+  const storyID = await stories.createStory(req.user.id);
   res.redirect(`/editor/${storyID}`);
 };
 
 const renderEditor = async function (req, res) {
   const { stories } = req.app.locals;
-  const storyContent = await stories.getStoryContent(
-    req.params.storyID,
-    req.user.id
-  );
+  const storyContent = await stories.getStory(req.params.storyID, req.user.id);
 
   if (storyContent) {
     res.render('editor', Object.assign(storyContent, req.user));
@@ -61,27 +57,18 @@ const renderEditor = async function (req, res) {
   }
 };
 
-const checkIfUserIsTheAuthor = async function (req, res, next) {
-  const { stories } = req.app.locals;
-  const author = 'palpriyanshu';
-
-  const story = await stories.getStoryContent(req.body.storyID, author);
-
-  if (!story) {
-    res.sendStatus(statusCodes.unprocessableEntity);
-  } else {
-    next();
-  }
-};
-
-const saveStory = async function (req, res) {
+const saveStory = function (req, res) {
   const { stories } = req.app.locals;
   const author = 'palpriyanshu';
   const { storyTitle, blocks: content, storyID: id } = req.body;
   const title = storyTitle.trim() || 'Untitled Story';
 
-  await stories.updateStory({ title, content, state: 'drafted', author, id });
-  res.end();
+  stories
+    .updateStory({ title, content, state: 'drafted', author, id })
+    .then(res.end.bind(res))
+    .catch(() => {
+      res.sendStatus(statusCodes.unprocessableEntity);
+    });
 };
 
 const publishStory = async function (req, res) {
@@ -94,35 +81,40 @@ const publishStory = async function (req, res) {
     return;
   }
 
-  await stories.updateStory({ title, content, state: 'published', author, id });
-  res.redirect(`/blogPage/${id}`);
+  stories
+    .updateStory({ title, content, state: 'published', author, id })
+    .then(() => {
+      res.redirect(`/blogPage/${id}`);
+    })
+    .catch(() => {
+      res.sendStatus(statusCodes.unprocessableEntity);
+    });
 };
 
 const serveUserStoriesPage = async function (req, res) {
-  const users = req.app.locals.users;
-  const userInfo = await users.getUserInfo('palpriyanshu');
-  const publishedStories = await users.getUserStories(userInfo.id, 'published');
-  const draftedStories = await users.getUserStories(userInfo.id, 'drafted');
+  const { users } = req.app.locals;
+  const publishedStories = await users.getUserStoryList(
+    req.user.id,
+    'published'
+  );
+  const draftedStories = await users.getUserStoryList(req.user.id, 'drafted');
   res.render(
     'userStories',
-    Object.assign({ publishedStories, draftedStories }, userInfo)
+    Object.assign({ publishedStories, draftedStories }, req.user)
   );
 };
 
 const serveProfilePage = async function (req, res) {
-  const users = req.app.locals.users;
-  const userInfo = await users.getUserInfo('palpriyanshu');
-  const authorID = req.params.authorID;
-  const authorInfo = await users.getUserInfo(authorID);
-  if (!authorInfo) {
-    res.status(statusCodes.notFound).send('user not found');
-    return;
-  }
-  const publishedStories = await users.getUserStories(authorID, 'published');
-  res.render(
-    'profile',
-    Object.assign({ publishedStories, authorInfo }, userInfo)
-  );
+  const { users } = req.app.locals;
+  const profileID = req.params.profileID;
+  users
+    .getUserProfile(profileID)
+    .then((userProfile) => {
+      res.render('profile', Object.assign(userProfile, req.user));
+    })
+    .catch(() => {
+      res.sendStatus(statusCodes.notFound);
+    });
 };
 
 module.exports = {
@@ -133,7 +125,6 @@ module.exports = {
   serveBlogPage,
   createNewStory,
   renderEditor,
-  checkIfUserIsTheAuthor,
   saveStory,
   publishStory,
   serveUserStoriesPage,

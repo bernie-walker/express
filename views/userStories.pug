@@ -1,4 +1,4 @@
-mixin storyCard(title, content, lastModified, id, path)
+mixin storyListRow(title, lastModified, id, path)
   - const targetUrl = path + id;
   div.card(target_url=targetUrl) 
     div.card-content
@@ -9,11 +9,12 @@ mixin storyCard(title, content, lastModified, id, path)
       .story-actions
         a(href=`/editor/${id}`).edit edit
 
-mixin stories(list, path)
+mixin storyList(list, path, emptyMessage)
   each story in list
-    - const paragraph = story.content.find(data=> data.type ==='paragraph')
-    - const text = paragraph ? paragraph.data.text.slice(0, 150) + '...' : ''
-    +storyCard(story.title,text,story.lastModified, story.storyID, path)
+    +storyListRow(story.title, story.lastModified, story.storyID, path)
+  else 
+    .emptyMessage= emptyMessage
+
 
 doctype html
 html
@@ -36,12 +37,6 @@ html
         div#drafts.active Drafts #{draftedStories.length}
         div#published Published #{publishedStories.length}
       #draftsList.card-container
-        if draftedStories.length==0
-          .emptyMessage You have no drafts
-        else
-          +stories(draftedStories, '/editor/')
+        +storyList(draftedStories, '/editor/', 'You have no drafts')
       #publishedList.card-container.hidden
-        if publishedStories.length==0
-          .emptyMessage You haven’t published any public stories yet.
-        else
-          +stories(publishedStories, '/blogPage/')
+        +storyList(publishedStories, '/blogPage/', 'You haven’t published any public stories yet')

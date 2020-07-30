@@ -1,4 +1,7 @@
-const generateGetNStoriesQuery = function (offset, count) {
+/* eslint-disable no-invalid-this */
+/* eslint-disable no-magic-numbers */
+/* eslint-disable handle-callback-err */
+const latestNStoriesQuery = function (count, offset) {
   return `SELECT usr.display_name as authorName, str.*
   FROM stories AS str
   JOIN users AS usr 
@@ -8,7 +11,7 @@ const generateGetNStoriesQuery = function (offset, count) {
   LIMIT ${offset},${count};`;
 };
 
-const generateGetStoryQuery = function (storyID) {
+const publishedStoryQuery = function (storyID) {
   return `SELECT usr.display_name as authorName,usr.avatar_url,
   str.title,str.content,str.id as storyID,str.written_by as authorID,
   date(str.last_modified) as lastModified
@@ -18,115 +21,112 @@ const generateGetStoryQuery = function (storyID) {
   WHERE state='published' AND str.id='${storyID}';`;
 };
 
-const generateGetStoryContentQuery = function (storyID, userID) {
-  return `SELECT title, content, state, id as  storyID 
+const storyOfUserQuery = function (storyID, userID) {
+  return `SELECT title, content, state, id as storyID 
           FROM stories 
           WHERE id='${storyID}' AND written_by='${userID}';`;
 };
 
-const generateUserStoriesQuery = function (userId, state) {
-  return `SELECT title,content,id as storyID,date(last_modified) 
-  as lastModified,cover_image FROM stories 
-  WHERE written_by = '${userId}' AND state='${state}' 
-  ORDER BY last_modified DESC`;
+const userProfileQuery = function (userID) {
+  return `
+  SELECT usr.id as profileID, usr.display_name as profileName, 
+  usr.avatar_url as profileAvatar, usr.bio,
+  str.id as storyID, str.title, str.content, 
+  str.cover_image as coverImage, date(str.last_modified) as lastModified
+  FROM users as usr 
+  LEFT JOIN stories as str ON usr.id=str.written_by 
+  WHERE usr.id='${userID}' AND (str.state='published' OR str.state IS NULL);
+  `;
 };
 
-class Stories {
-  constructor(db) {
-    this.db = db;
+class ExpressDB {
+  constructor(dbClient) {
+    this.dbClient = dbClient;
   }
 
-  get(count = -1, offset = 0) {
-    const query = generateGetNStoriesQuery(offset, count);
+  getLatestNStories(count = -1, offset = 0) {
     return new Promise((resolve) => {
-      this.db.all(query, (err, rows) => {
-        rows.forEach((row) => {
-          row.content = JSON.parse(row.content);
-        });
+      this.dbClient.all(latestNStoriesQuery(count, offset), (err, rows) => {
         resolve(rows);
       });
     });
   }
 
-  getStory(storyID) {
-    const query = generateGetStoryQuery(storyID);
+  getPublishedStory(storyID) {
     return new Promise((resolve) => {
-      this.db.get(query, (err, row) => {
-        if (row && row.content) {
-          row.content = JSON.parse(row.content);
-        }
+      this.dbClient.get(publishedStoryQuery(storyID), (err, row) => {
         resolve(row);
       });
     });
   }
 
-  getStoryContent(storyID, userId) {
-    const query = generateGetStoryContentQuery(storyID, userId);
+  getStoryOfUser(storyID, userID) {
     return new Promise((resolve) => {
-      this.db.get(query, (err, row) => {
-        if (row) {
-          row.content = JSON.parse(row.content);
-        }
+      this.dbClient.get(storyOfUserQuery(storyID, userID), (err, row) => {
         resolve(row);
       });
     });
   }
 
-  addStory(title, author, state, content) {
+  createStoryByUser(userID) {
     const query = `
-    INSERT INTO stories(title, written_by, state, content) 
-    VALUES(?,?,?,?)`;
+    INSERT INTO stories(written_by, content) 
+    VALUES(?, '[]')`;
 
     return new Promise((resolve) => {
-      this.db.run(
-        query,
-        [title, author, state, JSON.stringify(content)],
-        function () {
-          resolve(this.lastID);
-        }
-      );
+      this.dbClient.run(query, [userID], function () {
+        resolve(this.lastID);
+      });
     });
   }
 
-  updateStory(updateParams) {
-    const { title, content, state, id, author } = updateParams;
+  updateStory(modifiedStory) {
+    const { title, content, state, id, author } = modifiedStory;
     const query = `UPDATE stories SET title=?, content=?, state=?, 
-                   last_modified=CURRENT_TIMESTAMP
-                   WHERE id=? AND written_by=?`;
+    last_modified=CURRENT_TIMESTAMP
+    WHERE id=? AND written_by=?`;
 
     return new Promise((resolve) => {
-      this.db.run(
+      this.dbClient.run(
         query,
         [title, JSON.stringify(content), state, id, author],
         resolve
       );
     });
   }
-}
 
-class Users {
-  constructor(db) {
-    this.db = db;
-  }
-  getUserInfo(userId) {
-    const query = `SELECT * FROM users WHERE id='${userId}'`;
+  getUserInfo(userID) {
+    const query = `
+    SELECT id, display_name, avatar_url 
+    FROM users WHERE id='${userID}'`;
     return new Promise((resolve) => {
-      this.db.get(query, (err, row) => {
+      this.dbClient.get(query, (err, row) => {
         resolve(row);
       });
     });
   }
-  getUserStories(userId, state) {
-    const query = generateUserStoriesQuery(userId, state);
+
+  getUserStories(userID, state) {
+    const query = `
+    SELECT title, id as storyID, date(last_modified) as lastModified
+    FROM stories 
+    WHERE written_by='${userID}' AND state='${state}' 
+    ORDER BY last_modified DESC;`;
+
     return new Promise((resolve) => {
-      this.db.all(query, (err, rows) => {
-        rows.forEach((row) => {
-          row.content = JSON.parse(row.content);
-        });
+      this.dbClient.all(query, (err, rows) => {
+        resolve(rows);
+      });
+    });
+  }
+
+  getProfileData(userID) {
+    return new Promise((resolve) => {
+      this.dbClient.all(userProfileQuery(userID), (err, rows) => {
         resolve(rows);
       });
     });
   }
 }
 
-module.exports = { Users, Stories };
+module.exports = { ExpressDB };
