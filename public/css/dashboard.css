@@ -6,7 +6,7 @@ body {
   width: 800px;
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
+  margin: 2vh auto;
   color: rgba(10, 10, 10, 0.8);
 }
 @media (max-width: 800px) {

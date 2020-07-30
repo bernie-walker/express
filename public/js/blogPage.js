@@ -16,10 +16,6 @@ const shareBlog = function () {
 
 const main = function () {
   attachHeadListener();
-  logo.addEventListener('click', () => {
-    window.location = '/dashboard';
-  });
-
   shareSection.addEventListener('click', shareBlog);
   shareSection.addEventListener('mouseover', showOnHoverMsg);
 };
