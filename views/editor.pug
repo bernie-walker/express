@@ -54,3 +54,26 @@ body
     - const storyTitle = title === 'Untitled Story' ?  '' : title;
     #articleTitle(contenteditable='true',storyid=storyID)= storyTitle
     #editorjs
+  .modal-container.hidden
+    div.modal
+      p Add or change tags (up to 5) so readers know what your story is about
+      div.tags(contenteditable="true")
+        .tag
+          #tag1
+          .cross 
+        .tag
+          #tag2
+          .cross 
+        .tag
+          #tag3
+          .cross  
+        .tag
+          #tag4
+          .cross 
+        .tag
+          #tag5
+          .cross 
+      div.button
+        button.btn Publish Now
+      div.close 
+        img(src="/images/close.png", alt="X")

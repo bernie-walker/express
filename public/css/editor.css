@@ -242,3 +242,65 @@ body {
 #editorjs a {
   color: inherit;
 }
+
+.modal-container {
+  width: 94%;
+  height: 88%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  backdrop-filter: blur(1px);
+}
+
+.modal {
+  position: relative;
+  width: 40vw;
+  margin: 10% auto;
+  padding: 4vw;
+  z-index: 1;
+  background-color: #fff;
+  border: 1px solid #555;
+}
+
+.tags {
+  border: 1px solid blue;
+  display: flex;
+  justify-content: space-between;
+  padding: 2vh;
+  margin: 1vh 0;
+}
+.tag {
+  border: 1px solid red;
+  width: 15%;
+  height: 32px;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+}
+
+.button .btn {
+  padding: 1.5vh 1.5vw;
+  height: auto;
+  font-size: calc(0.8vw + 0.6em);
+}
+
+.close {
+  position: absolute;
+  top: -2.4vh;
+  right: -2.2vh;
+  background-color: red;
+  border-radius: 50%;
+  height: 5vh;
+  width: 5vh;
+  cursor: pointer;
+}
+.close:hover {
+  transform: scale(1.1);
+}
+.close > img {
+  height: inherit;
+  width: inherit;
+}

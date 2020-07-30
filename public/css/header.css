@@ -88,6 +88,7 @@
   border: 1px solid #ddd;
   right: 80px;
   font-family: sans-serif;
+  z-index: 1;
 }
 
 .profile-modal::before {
