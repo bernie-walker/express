@@ -63,7 +63,7 @@ class ExpressDB {
 
   getUserInfo(userID) {
     const query = `
-    SELECT id, display_name, avatar_url 
+    SELECT id, display_name, avatar_url, github_id as githubID 
     FROM users WHERE id='${userID}'`;
     return new Promise((resolve) => {
       this.dbClient.get(query, (err, row) => {

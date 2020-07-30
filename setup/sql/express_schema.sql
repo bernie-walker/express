@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS comments;
 
 CREATE TABLE users (
 	id varchar(42) PRIMARY KEY,
+	github_id integer NOT NULL,
 	display_name text NOT NULL DEFAULT 'Expresser',
 	avatar_url text NOT NULL,
 	bio text

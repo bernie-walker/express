@@ -1,11 +1,11 @@
 INSERT INTO	users
-	(id, display_name, avatar_url, bio)
+	(id, github_id, display_name, avatar_url, bio)
 VALUES
-	('bernie-walker', 'Bernard Nehal Dcunha', 'https://avatars3.githubusercontent.com/u/583231?v=4', ''),
-	('palpriyanshu', 'Priyanshu Pal', 'https://avatars3.githubusercontent.com/u/583231?v=4', 'Take New Zealand. With its fancy curve and life back to normal. Why can’t we? Not fair, you say. It’s an island nation. Okay. What about Germany? Not an island nation, large, growing diversity. Don’t like that comparison? What about countries that have been in big trouble? There’s Italy, France, and Spain.'),
-	('shiviraj', 'Shivam Rajputh', 'https://avatars3.githubusercontent.com/u/583231?v=4', ''),
-	('lazyhackerthani', 'Thanya Cherumanalil', 'https://avatars3.githubusercontent.com/u/583231?v=4', ''),
-	('bugdriver', 'Rajath Kushawaha', 'https://avatars3.githubusercontent.com/u/583231?v=4', '');
+	('bernie-walker', '58025656', 'Bernard Nehal Dcunha', 'https://avatars3.githubusercontent.com/u/583231?v=4', ''),
+	('palpriyanshu', '58025838', 'Priyanshu Pal', 'https://avatars3.githubusercontent.com/u/583231?v=4', 'Take New Zealand. With its fancy curve and life back to normal. Why can’t we? Not fair, you say. It’s an island nation. Okay. What about Germany? Not an island nation, large, growing diversity. Don’t like that comparison? What about countries that have been in big trouble? There’s Italy, France, and Spain.'),
+	('shiviraj', '58025059','Shivam Rajputh', 'https://avatars3.githubusercontent.com/u/583231?v=4', ''),
+	('lazyhackerthani', '32271882', 'Thanya Cherumanalil', 'https://avatars3.githubusercontent.com/u/583231?v=4', ''),
+	('bugdriver', '41767214','Rajath Kushawaha', 'https://avatars3.githubusercontent.com/u/583231?v=4', '');
 
 INSERT INTO stories
 	(written_by, state, title, content, cover_image, last_modified)

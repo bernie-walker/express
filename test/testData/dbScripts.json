@@ -1,7 +1,7 @@
 {
   "users": {
-    "tableSchema": "CREATE TABLE users (id varchar(42) PRIMARY KEY,display_name text NOT NULL DEFAULT 'Expresser',avatar_url text NOT NULL,bio text);",
-    "insertionScript": "INSERT INTO users(id, display_name, avatar_url) VALUES('palpriyanshu','Priyanshu','avatar_url')"
+    "tableSchema": "CREATE TABLE users (id varchar(42) PRIMARY KEY, github_id integer NOT NULL, display_name text NOT NULL DEFAULT 'Expresser',avatar_url text NOT NULL,bio text);",
+    "insertionScript": "INSERT INTO users(id, github_id, display_name, avatar_url) VALUES('palpriyanshu', '58025838','Priyanshu','avatar_url')"
   },
   "stories": {
     "tableSchema": "CREATE TABLE stories (id integer PRIMARY KEY AUTOINCREMENT,written_by varchar(42) NOT NULL,state varchar(9) NOT NULL DEFAULT 'drafted',title text NOT NULL DEFAULT 'Untitled Story',content text,cover_image text,last_modified timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,  FOREIGN KEY (written_by) REFERENCES users(id),  CHECK (state IN ('drafted','published')));",
