@@ -21,7 +21,7 @@ const main = function () {
   });
 
   shareSection.addEventListener('click', shareBlog);
-  shareSection.addEventListener('mouseout', showOnHoverMsg);
+  shareSection.addEventListener('mouseover', showOnHoverMsg);
 };
 
 window.onload = main;
