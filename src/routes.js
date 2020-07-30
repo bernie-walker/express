@@ -3,6 +3,7 @@ const Sqlite3 = require('sqlite3').verbose();
 const { ExpressDB } = require('./expressData');
 const { Users } = require('./users');
 const { Stories } = require('./stories');
+const { NO_LOG, BLOG_IMAGE_PATH, DB_PATH } = process.env;
 
 const {
   logRequest,
@@ -20,13 +21,13 @@ const {
 
 const app = express();
 
-app.locals.noLog = process.env.NO_LOG;
-app.locals.blogImagePath = process.env.BLOG_IMAGE_PATH;
+app.locals.noLog = NO_LOG;
+app.locals.blogImagePath = BLOG_IMAGE_PATH;
 
-const dbClient = new Sqlite3.Database(process.env.DB_PATH);
-app.locals.dbClientReference = dbClient;
-
+const dbClient = new Sqlite3.Database(DB_PATH);
 const expressDB = new ExpressDB(dbClient);
+
+app.locals.dbClientReference = dbClient;
 app.locals.users = new Users(expressDB);
 app.locals.stories = new Stories(expressDB);
 
