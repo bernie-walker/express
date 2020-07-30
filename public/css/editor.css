@@ -264,16 +264,27 @@ body {
 }
 
 .tags {
-  border: 1px solid blue;
+  border: 1px solid #ccc;
+  background-color: #eee;
   display: flex;
   justify-content: space-between;
   padding: 2vh;
-  margin: 1vh 0;
+  margin: 2vh 0;
 }
-.tag {
-  border: 1px solid red;
+
+.tagBox {
+  border: 1px solid blue;
   width: 15%;
-  height: 32px;
+  height: 5vh;
+  display: flex;
+}
+
+.tag {
+  min-width: 70%;
+}
+
+.cross {
+  width: 30%;
 }
 
 .button {
@@ -287,7 +298,7 @@ body {
   font-size: calc(0.8vw + 0.6em);
 }
 
-.close {
+#closeBtn {
   position: absolute;
   top: -2.4vh;
   right: -2.2vh;
@@ -297,10 +308,10 @@ body {
   width: 5vh;
   cursor: pointer;
 }
-.close:hover {
+#closeBtn:hover {
   transform: scale(1.1);
 }
-.close > img {
+#closeBtn > img {
   height: inherit;
   width: inherit;
 }

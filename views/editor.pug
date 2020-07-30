@@ -57,23 +57,23 @@ body
   .modal-container.hidden
     div.modal
       p Add or change tags (up to 5) so readers know what your story is about
-      div.tags(contenteditable="true")
-        .tag
-          #tag1
-          .cross 
-        .tag
-          #tag2
-          .cross 
-        .tag
-          #tag3
-          .cross  
-        .tag
-          #tag4
-          .cross 
-        .tag
-          #tag5
-          .cross 
+      div.tags
+        .tagBox
+          .tag#tag1(contenteditable="true")
+          .cross X
+        .tagBox
+          .tag#tag2(contenteditable="true")
+          .cross X
+        .tagBox
+          .tag#tag3(contenteditable="true")
+          .cross X
+        .tagBox
+          .tag#tag4(contenteditable="true")
+          .cross X
+        .tagBox
+          .tag#tag5(contenteditable="true")
+          .cross X
       div.button
-        button.btn Publish Now
-      div.close 
+        button.btn#publishNowBtn Publish Now
+      div#closeBtn
         img(src="/images/close.png", alt="X")

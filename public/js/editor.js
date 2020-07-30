@@ -97,11 +97,21 @@ const createEditor = async function () {
   togglePublishedOnTitle();
 };
 
+const openPopUp = function () {
+  getElement('.modal-container').classList.remove('hidden');
+};
+
+const closePopUp = function () {
+  getElement('.modal-container').classList.add('hidden');
+};
+
 const main = function () {
   attachHeadListener();
   articleTitle.addEventListener('keypress', handleTitleKeypress);
   articleTitle.addEventListener('keyup', togglePublishedOnTitle);
-  publishBtn.addEventListener('click', publishBlog);
+  publishBtn.addEventListener('click', openPopUp);
+  publishNowBtn.addEventListener('click', publishBlog);
+  closeBtn.addEventListener('click', closePopUp);
   const $saveAsDraft = getElement('#saveAsDraft');
   $saveAsDraft && $saveAsDraft.addEventListener('click', saveDraft);
   createEditor();
