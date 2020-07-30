@@ -24,6 +24,26 @@ const storyOfUserQuery = function (storyID, userID) {
           WHERE id='${storyID}' AND written_by='${userID}';`;
 };
 
+const updateStoryQuery = function () {
+  return `UPDATE stories SET title=?, content=?, state=?, 
+  last_modified=CURRENT_TIMESTAMP
+  WHERE id=? AND written_by=?`;
+};
+
+const userInfoQuery = function (userID) {
+  return `
+  SELECT id, display_name, avatar_url, github_id as githubID 
+  FROM users WHERE id='${userID}'`;
+};
+
+const userStoriesQuery = function (userID, state) {
+  return `
+SELECT title, id as storyID, date(last_modified) as lastModified
+FROM stories 
+WHERE written_by='${userID}' AND state='${state}' 
+ORDER BY last_modified DESC;`;
+};
+
 const userProfileQuery = function (userID) {
   return `
   SELECT usr.id as profileID, usr.display_name as profileName, 
@@ -40,5 +60,8 @@ module.exports = {
   latestNStoriesQuery,
   publishedStoryQuery,
   storyOfUserQuery,
+  updateStoryQuery,
+  userInfoQuery,
+  userStoriesQuery,
   userProfileQuery,
 };

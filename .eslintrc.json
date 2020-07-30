@@ -78,11 +78,17 @@
   },
   "overrides": [
     {
-      "files": ["test*.js", "server.js", "test/*/*.js"],
+      "files": [
+        "test*.js",
+        "server.js",
+        "test/*/*.js",
+        "src/expressResourceFetcher.js"
+      ],
       "rules": {
         "max-len": "warn",
         "no-magic-numbers": "off",
-        "max-statements": "off"
+        "max-statements": "off",
+        "camelcase": "off"
       }
     },
     {

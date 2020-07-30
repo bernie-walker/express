@@ -2,6 +2,9 @@ const {
   latestNStoriesQuery,
   publishedStoryQuery,
   storyOfUserQuery,
+  updateStoryQuery,
+  userInfoQuery,
+  userStoriesQuery,
   userProfileQuery,
 } = require('./expressDBQueries');
 
@@ -48,13 +51,10 @@ class ExpressDB {
 
   updateStory(modifiedStory) {
     const { title, content, state, id, author } = modifiedStory;
-    const query = `UPDATE stories SET title=?, content=?, state=?, 
-    last_modified=CURRENT_TIMESTAMP
-    WHERE id=? AND written_by=?`;
 
     return new Promise((resolve) => {
       this.dbClient.run(
-        query,
+        updateStoryQuery(),
         [title, JSON.stringify(content), state, id, author],
         resolve
       );
@@ -62,25 +62,16 @@ class ExpressDB {
   }
 
   getUserInfo(userID) {
-    const query = `
-    SELECT id, display_name, avatar_url, github_id as githubID 
-    FROM users WHERE id='${userID}'`;
     return new Promise((resolve) => {
-      this.dbClient.get(query, (err, row) => {
+      this.dbClient.get(userInfoQuery(userID), (err, row) => {
         resolve(row);
       });
     });
   }
 
   getUserStories(userID, state) {
-    const query = `
-    SELECT title, id as storyID, date(last_modified) as lastModified
-    FROM stories 
-    WHERE written_by='${userID}' AND state='${state}' 
-    ORDER BY last_modified DESC;`;
-
     return new Promise((resolve) => {
-      this.dbClient.all(query, (err, rows) => {
+      this.dbClient.all(userStoriesQuery(userID, state), (err, rows) => {
         resolve(rows);
       });
     });
@@ -111,7 +102,9 @@ class ExpressDS {
   createSession(userName) {
     return new Promise((resolve) => {
       this.incrID('expSesID').then((sesID) =>
-        this.dsClient.set(`expSes_${sesID}`, userName, 'EX', 2592000, resolve)
+        this.dsClient.set(`expSes_${sesID}`, userName, 'EX', 2592000, () => {
+          resolve(sesID);
+        })
       );
     });
   }
@@ -121,6 +114,30 @@ class ExpressDS {
       this.dsClient.get(`expSes_${sesID}`, (err, userName) => {
         resolve(userName);
       });
+    });
+  }
+
+  createTempToken(value) {
+    return new Promise((resolve) => {
+      this.incrID('tempToken').then((token) =>
+        this.dsClient.hset('tempTable', `temp_${token}`, value, () => {
+          resolve(token);
+        })
+      );
+    });
+  }
+
+  getTempTokenValue(token) {
+    return new Promise((resolve) => {
+      this.dsClient.hget('tempTable', `temp_${token}`, (err, value) => {
+        resolve(value);
+      });
+    });
+  }
+
+  deleteTempToken(token) {
+    return new Promise((resolve) => {
+      this.dsClient.hdel('tempTable', `temp_${token}`, resolve);
     });
   }
 
