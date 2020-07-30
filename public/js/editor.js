@@ -105,6 +105,34 @@ const closePopUp = function () {
   getElement('.modal-container').classList.add('hidden');
 };
 
+const removeTagListener = function () {
+  const getAllElements = (selector) => document.querySelectorAll(selector);
+  const $allTags = Array.from(getAllElements('.cross'));
+  $allTags.forEach((tag) => {
+    tag.addEventListener('click', () => {
+      tag.parentElement.classList.add('hidden');
+      tag.parentElement.firstChild.innerText = '';
+    });
+  });
+};
+
+const addTag = function () {
+  const $tagBox = getElement('.tags .hidden');
+  const tagValue = tagInput.innerText.trim();
+  tagInput.innerText = '';
+  $tagBox.querySelector('.tag').innerText = tagValue;
+  $tagBox.classList.remove('hidden');
+};
+
+const attachTagListener = function () {
+  tagInput.addEventListener('keypress', (event) => {
+    event.key === 'Enter' && addTag();
+    const isTagBoxAvailable = getElement('.tags .hidden');
+    !isTagBoxAvailable && (tagInput.style.display = 'none');
+  });
+  removeTagListener();
+};
+
 const main = function () {
   attachHeadListener();
   articleTitle.addEventListener('keypress', handleTitleKeypress);
@@ -115,6 +143,7 @@ const main = function () {
   const $saveAsDraft = getElement('#saveAsDraft');
   $saveAsDraft && $saveAsDraft.addEventListener('click', saveDraft);
   createEditor();
+  attachTagListener();
 };
 
 window.onload = main;

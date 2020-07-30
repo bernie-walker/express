@@ -58,21 +58,11 @@ body
     div.modal
       p Add or change tags (up to 5) so readers know what your story is about
       div.tags
-        .tagBox
-          .tag#tag1(contenteditable="true")
-          .cross X
-        .tagBox
-          .tag#tag2(contenteditable="true")
-          .cross X
-        .tagBox
-          .tag#tag3(contenteditable="true")
-          .cross X
-        .tagBox
-          .tag#tag4(contenteditable="true")
-          .cross X
-        .tagBox
-          .tag#tag5(contenteditable="true")
-          .cross X
+        each time in [1,2,3,4,5]
+          .tagBox.hidden
+            .tag
+            .cross &#215;
+        div#tagInput(contenteditable="true", placeholder="Add a tag...")
       div.button
         button.btn#publishNowBtn Publish Now
       div#closeBtn
