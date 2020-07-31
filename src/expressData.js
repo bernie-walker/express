@@ -133,6 +133,12 @@ class ExpressDS {
     });
   }
 
+  deleteSession(sesID) {
+    return new Promise((resolve) => {
+      this.dsClient.del(`expSes_${sesID}`, resolve);
+    });
+  }
+
   closeClient() {
     this.dsClient.quit();
   }

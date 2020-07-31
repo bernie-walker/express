@@ -29,6 +29,14 @@ const redirectToGithub = function (req, res) {
   );
 };
 
+const closeSession = function (req, res) {
+  const { sesID } = req.cookies;
+  req.app.locals.expressDS.deleteSession(sesID).then(() => {
+    res.clearCookie('sesID');
+    res.redirect('/');
+  });
+};
+
 const authorizeUser = function (req, res, next) {
   const { fetch } = req.app.locals;
 
@@ -183,6 +191,7 @@ module.exports = {
   logRequest,
   attachUser,
   redirectToGithub,
+  closeSession,
   authorizeUser,
   redirectAuthorized,
   serveDashboard,

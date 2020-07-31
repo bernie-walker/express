@@ -265,6 +265,39 @@ describe('GET', () => {
         });
     });
   });
+
+  context('/signOut', function () {
+    let fakeDelete;
+
+    before(() => {
+      fakeDelete = sinon.stub(ExpressDS.prototype, 'deleteSession');
+      fakeDelete.resolves();
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('should remove the session Id and redirect to main page', function (done) {
+      request(app)
+        .get('/signOut')
+        .set('cookie', 'sesID=1')
+        .expect(302)
+        .expect('Location', '/')
+        .expect(
+          'set-cookie',
+          'sesID=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT'
+        )
+        .end((err) => {
+          sinon.assert.calledWith(fakeDelete, '1');
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+  });
 });
 
 describe('POST', function () {

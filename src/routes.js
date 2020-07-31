@@ -2,6 +2,7 @@ const express = require('express');
 const redis = require('redis');
 const Sqlite3 = require('sqlite3').verbose();
 const axios = require('axios');
+const cookieParser = require('cookie-parser');
 const { ExpressDB, ExpressDS } = require('./expressData');
 const { Users } = require('./users');
 const { Stories } = require('./stories');
@@ -21,6 +22,7 @@ const {
   logRequest,
   attachUser,
   redirectToGithub,
+  closeSession,
   authorizeUser,
   redirectAuthorized,
   serveDashboard,
@@ -59,12 +61,14 @@ app.set('view engine', 'pug');
 
 app.use(logRequest);
 app.use(express.static('public'));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/authorize', redirectToGithub);
 app.get('/gitOauth/authCode', authorizeUser, redirectAuthorized);
 app.get('/blog_image/:imageID', serveBlogImage);
+app.get('/signOut', closeSession);
 
 app.use(attachUser);
 
