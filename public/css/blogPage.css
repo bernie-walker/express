@@ -215,3 +215,23 @@ p b {
   visibility: visible;
   opacity: 1;
 }
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tag {
+  padding: 1vh 2vw;
+  background-color: #fff;
+  margin: 0 1vw 1vw 0;
+  color: #888;
+  background-color: #eee;
+  border: 1px solid #ddd;
+}
+
+.tag:hover {
+  background-color: #f8f8f8;
+  border-color: #ccc;
+  color: #666;
+}

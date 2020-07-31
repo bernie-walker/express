@@ -25,7 +25,7 @@ class ExpressDB {
 
   getPublishedStory(storyID) {
     return new Promise((resolve) => {
-      this.dbClient.get(publishedStoryQuery(storyID), (err, row) => {
+      this.dbClient.all(publishedStoryQuery(storyID), (err, row) => {
         resolve(row);
       });
     });

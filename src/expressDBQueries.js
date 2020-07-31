@@ -11,10 +11,12 @@ const latestNStoriesQuery = function (count, offset) {
 const publishedStoryQuery = function (storyID) {
   return `SELECT usr.display_name as authorName,usr.avatar_url,
   str.title,str.content,str.id as storyID,str.written_by as authorID,
-  date(str.last_modified) as lastModified
+  date(str.last_modified) as lastModified, tag
   FROM stories AS str
   JOIN users AS usr 
   ON str.written_by = usr.id
+  LEFT JOIN tags
+  ON str.id = tags.tag_on
   WHERE state='published' AND str.id='${storyID}';`;
 };
 

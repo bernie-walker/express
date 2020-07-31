@@ -55,4 +55,7 @@ html
             +generateListBLock(block.data.style, JSON.stringify(block.data.items))
           if block.type == 'delimiter'
             p.content-block(style="text-align:center") * * *
-            
+      
+      .tags 
+        each tag in tags
+          .tag= tag     

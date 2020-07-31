@@ -85,11 +85,10 @@ const serveBlogImage = function (req, res) {
 };
 
 const serveBlogPage = async function (req, res) {
-  const blog = await req.app.locals.stories.getStoryPage(req.params.storyID);
-
-  if (blog) {
+  try {
+    const blog = await req.app.locals.stories.getStoryPage(req.params.storyID);
     res.render('blogPage', Object.assign(blog, req.user));
-  } else {
+  } catch (error) {
     res.sendStatus(statusCodes.notFound);
   }
 };

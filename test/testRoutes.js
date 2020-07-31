@@ -18,7 +18,7 @@ describe('GET', () => {
 
   context('/newStory', function () {
     before(() =>
-      setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
+      setUpDatabase(app.locals.dbClientReference, ['users', 'stories', 'tags'])
     );
     after(() => cleanDatabase(app.locals.dbClientReference));
     it('should create a new story redirect to the editor', function (done) {
@@ -86,7 +86,7 @@ describe('GET', () => {
 
   context('/blogPage', function () {
     before(() =>
-      setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
+      setUpDatabase(app.locals.dbClientReference, ['users', 'stories', 'tags'])
     );
     after(() => cleanDatabase(app.locals.dbClientReference));
 
@@ -303,7 +303,7 @@ describe('GET', () => {
 describe('POST', function () {
   context('/publishStory', function () {
     beforeEach(() =>
-      setUpDatabase(app.locals.dbClientReference, ['stories', 'users'])
+      setUpDatabase(app.locals.dbClientReference, ['stories', 'users', 'tags'])
     );
     afterEach(() => cleanDatabase(app.locals.dbClientReference));
 

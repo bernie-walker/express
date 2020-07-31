@@ -6,5 +6,9 @@
   "stories": {
     "tableSchema": "CREATE TABLE stories (id integer PRIMARY KEY AUTOINCREMENT,written_by varchar(42) NOT NULL,state varchar(9) NOT NULL DEFAULT 'drafted',title text NOT NULL DEFAULT 'Untitled Story',content text,cover_image text,last_modified timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,  FOREIGN KEY (written_by) REFERENCES users(id),  CHECK (state IN ('drafted','published')));",
     "insertionScript": "INSERT INTO stories(written_by, state, title, content, last_modified) VALUES  ('palpriyanshu', 'published', 'title1','[{\"type\":\"paragraph\",\"data\":{\"text\":\"You might be wondering where the REST attribute comes in.\"}}]','2020-07-23 09:24:18'),('palpriyanshu', 'drafted', 'title2','[{\"type\":\"paragraph\",\"data\":{\"text\":\"You might be wondering where the REST attribute comes in.\"}}]','2020-07-23 09:24:18')"
+  },
+  "tags": {
+    "tableSchema": " CREATE TABLE tags ( id integer PRIMARY KEY AUTOINCREMENT, tag_on integer NOT NULL, tag varchar(50) NOT NULL, FOREIGN KEY (tag_on) REFERENCES stories(id) );",
+    "insertionScript": "INSERT INTO tags (tag_on, tag) VALUES (3, 'go green'), (5, 'romance'), (6, 'love kills'), (8, 'hacking');"
   }
 }

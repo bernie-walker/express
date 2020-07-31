@@ -27,8 +27,10 @@ describe('Stories', function () {
   context('.getStoryPage', function () {
     before(() => {
       const fakeGetPublishedStory = sinon.stub();
-      fakeGetPublishedStory.withArgs(1).resolves({ content: '{"txt":"samp"}' });
-      fakeGetPublishedStory.withArgs(2).resolves();
+      fakeGetPublishedStory
+        .withArgs(1)
+        .resolves([{ content: '{"txt":"samp"}' }]);
+      fakeGetPublishedStory.withArgs(2).resolves([]);
       fakeDbClient.getPublishedStory = fakeGetPublishedStory;
     });
 
@@ -39,6 +41,7 @@ describe('Stories', function () {
     it('should resolve the story page if exists', function () {
       return expect(stories.getStoryPage(1)).to.eventually.deep.equal({
         content: { txt: 'samp' },
+        tags: [],
       });
     });
 
