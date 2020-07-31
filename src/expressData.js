@@ -3,6 +3,7 @@ const {
   publishedStoryQuery,
   storyOfUserQuery,
   updateStoryQuery,
+  findAccountQuery,
   userInfoQuery,
   userStoriesQuery,
   userProfileQuery,
@@ -61,6 +62,14 @@ class ExpressDB {
     });
   }
 
+  findUserAccount(gitID) {
+    return new Promise((resolve) => {
+      this.dbClient.get(findAccountQuery(gitID), (err, row) => {
+        resolve(row);
+      });
+    });
+  }
+
   getUserInfo(userID) {
     return new Promise((resolve) => {
       this.dbClient.get(userInfoQuery(userID), (err, row) => {
@@ -114,30 +123,6 @@ class ExpressDS {
       this.dsClient.get(`expSes_${sesID}`, (err, userName) => {
         resolve(userName);
       });
-    });
-  }
-
-  createTempToken(value) {
-    return new Promise((resolve) => {
-      this.incrID('tempToken').then((token) =>
-        this.dsClient.hset('tempTable', `temp_${token}`, value, () => {
-          resolve(token);
-        })
-      );
-    });
-  }
-
-  getTempTokenValue(token) {
-    return new Promise((resolve) => {
-      this.dsClient.hget('tempTable', `temp_${token}`, (err, value) => {
-        resolve(value);
-      });
-    });
-  }
-
-  deleteTempToken(token) {
-    return new Promise((resolve) => {
-      this.dsClient.hdel('tempTable', `temp_${token}`, resolve);
     });
   }
 

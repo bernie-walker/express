@@ -30,9 +30,15 @@ const updateStoryQuery = function () {
   WHERE id=? AND written_by=?`;
 };
 
+const findAccountQuery = function (gitID) {
+  return `
+  SELECT id as userID 
+  FROM users WHERE github_id='${gitID}'`;
+};
+
 const userInfoQuery = function (userID) {
   return `
-  SELECT id, display_name, avatar_url, github_id as githubID 
+  SELECT id, display_name, avatar_url
   FROM users WHERE id='${userID}'`;
 };
 
@@ -62,6 +68,7 @@ module.exports = {
   storyOfUserQuery,
   updateStoryQuery,
   userInfoQuery,
+  findAccountQuery,
   userStoriesQuery,
   userProfileQuery,
 };

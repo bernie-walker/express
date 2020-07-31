@@ -25,6 +25,12 @@ class Users {
     this.db = db;
   }
 
+  findAccount(gitID) {
+    return this.db
+      .findUserAccount(gitID)
+      .then((userID) => Promise.resolve(userID));
+  }
+
   getUser(userID) {
     return this.db.getUserInfo(userID).then((user) => Promise.resolve(user));
   }

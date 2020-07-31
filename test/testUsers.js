@@ -7,10 +7,37 @@ describe('Users', function () {
   const fakeDbClient = {};
   const users = new Users(fakeDbClient);
 
+  context('.findAccount', function () {
+    before(() => {
+      const fakeFindUserAccount = sinon.stub();
+      fakeFindUserAccount.withArgs('valid').resolves({ userID: 'valid' });
+      fakeFindUserAccount.withArgs('invalid').resolves();
+      fakeDbClient.findUserAccount = fakeFindUserAccount;
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('should resolve with the user id if account exists', function (done) {
+      users.findAccount('valid').then((userInfo) => {
+        assert.deepStrictEqual(userInfo, { userID: 'valid' });
+        done();
+      });
+    });
+
+    it('should resolve undefined if account does not exist', function (done) {
+      users.findAccount('invalid').then((userInfo) => {
+        assert.isUndefined(userInfo);
+        done();
+      });
+    });
+  });
+
   context('.getUser', function () {
     before(() => {
       const fakeGetUserInfo = sinon.stub();
-      fakeGetUserInfo.withArgs('valid').resolves({ userID: 'valid' });
+      fakeGetUserInfo.withArgs('valid').resolves({ id: 'valid' });
       fakeGetUserInfo.withArgs('invalid').resolves();
       fakeDbClient.getUserInfo = fakeGetUserInfo;
     });
@@ -21,7 +48,7 @@ describe('Users', function () {
 
     it('should resolve with the user info  for valid  userID', function (done) {
       users.getUser('valid').then((userInfo) => {
-        assert.deepStrictEqual(userInfo, { userID: 'valid' });
+        assert.deepStrictEqual(userInfo, { id: 'valid' });
         done();
       });
     });
