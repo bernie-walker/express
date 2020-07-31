@@ -71,24 +71,40 @@ const saveStory = function (req, res) {
     });
 };
 
-const publishStory = async function (req, res) {
-  const author = 'palpriyanshu';
-  const { stories } = req.app.locals;
-  const { storyTitle: title, blocks: content, storyID: id } = req.body;
+const validateTags = function (tags = []) {
+  const MAX_TAG_LENGTH = 26;
+  return tags.reduce((tags, tagValue) => {
+    const tag = tagValue.trim();
+    if (tag && tag.length < MAX_TAG_LENGTH && !tags.includes(tag)) {
+      tags.push(tag);
+    }
+    return tags;
+  }, []);
+};
 
-  if (!(title && title.trim())) {
-    res.sendStatus(statusCodes.unprocessableEntity);
-    return;
+const isStoryValid = function (title, allTags) {
+  const MAX_TAGS_ALLOWED = 5;
+  return title && allTags.length <= MAX_TAGS_ALLOWED;
+};
+
+const publishStory = async function (req, res) {
+  const author = req.user.id;
+  const { stories } = req.app.locals;
+  const { storyTitle = '', blocks: content, storyID: id, tags } = req.body;
+
+  const title = storyTitle.trim();
+  const allTags = validateTags(tags);
+
+  if (!isStoryValid(title, allTags)) {
+    return res.sendStatus(statusCodes.unprocessableEntity);
   }
+
+  req.app.locals.tags.addTags(allTags, id);
 
   stories
     .updateStory({ title, content, state: 'published', author, id })
-    .then(() => {
-      res.redirect(`/blogPage/${id}`);
-    })
-    .catch(() => {
-      res.sendStatus(statusCodes.unprocessableEntity);
-    });
+    .then(() => res.redirect(`/blogPage/${id}`))
+    .catch(() => res.sendStatus(statusCodes.unprocessableEntity));
 };
 
 const serveUserStoriesPage = async function (req, res) {

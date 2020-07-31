@@ -178,7 +178,9 @@ describe('GET', () => {
 
 describe('POST', function () {
   context('/publishStory', function () {
-    beforeEach(() => setUpDatabase(app.locals.dbClientReference, ['stories']));
+    beforeEach(() =>
+      setUpDatabase(app.locals.dbClientReference, ['stories', 'users'])
+    );
     afterEach(() => cleanDatabase(app.locals.dbClientReference));
 
     it('should publish the story and redirect to the blogPage for a valid story', function (done) {
@@ -188,6 +190,7 @@ describe('POST', function () {
           storyTitle: 'validTitle',
           blocks: [],
           storyID: '2',
+          tags: ['tag1', 'tag2'],
         })
         .expect(302)
         .expect('Location', '/blogPage/2')
@@ -224,6 +227,7 @@ describe('POST', function () {
           storyTitle: '     ',
           blocks: [],
           storyID: '2',
+          tags: ['tag1', 'tag2'],
         })
         .expect(422)
         .end((err) => {
@@ -242,6 +246,7 @@ describe('POST', function () {
           storyTitle: 'valid',
           blocks: [],
           storyID: '3',
+          tags: ['tag1', 'tag2'],
         })
         .expect(422)
         .end((err) => {

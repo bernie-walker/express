@@ -62,6 +62,12 @@ const userProfileQuery = function (userID) {
   `;
 };
 
+const addTagsQuery = function (tags, storyID) {
+  const tagsAndStoryID = tags.map((tag) => `('${storyID}', '${tag}')`);
+  return `INSERT INTO tags(tag_on, tag)
+          VALUES ${tagsAndStoryID.join(',')};`;
+};
+
 module.exports = {
   latestNStoriesQuery,
   publishedStoryQuery,
@@ -71,4 +77,5 @@ module.exports = {
   findAccountQuery,
   userStoriesQuery,
   userProfileQuery,
+  addTagsQuery,
 };

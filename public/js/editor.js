@@ -1,4 +1,5 @@
 let editor;
+const getAllElements = (selector) => document.querySelectorAll(selector);
 
 const confirmSaveAndClearMessage = function () {
   setTimeout(() => {
@@ -19,15 +20,23 @@ const updateStory = function (url, story) {
   });
 };
 
+const getAllTags = function () {
+  const $tags = Array.from(getAllElements('.tags .tag'));
+  return $tags.reduce((tags, $tag) => {
+    const tag = $tag.innerText;
+    tag && tags.push(tag);
+    return tags;
+  }, []);
+};
+
 const getEditorContent = async function () {
   const storyTitle = articleTitle.innerText;
   const storyID = articleTitle.getAttribute('storyid');
 
   const content = await editor.save();
-  return Object.assign(content, {
-    storyTitle,
-    storyID,
-  });
+  const tags = getAllTags();
+
+  return Object.assign(content, { storyTitle, storyID, tags });
 };
 
 const saveDraft = async function () {
@@ -61,7 +70,6 @@ const publishBlog = async function () {
     alert('A story without a title does not seem cool right...');
     return;
   }
-
   publishAndGotoBlog(editorContent);
 };
 
@@ -106,7 +114,6 @@ const closePopUp = function () {
 };
 
 const removeTagListener = function () {
-  const getAllElements = (selector) => document.querySelectorAll(selector);
   const $allTags = Array.from(getAllElements('.cross'));
   $allTags.forEach((tag) => {
     tag.addEventListener('click', () => {
@@ -138,12 +145,12 @@ const main = function () {
   articleTitle.addEventListener('keypress', handleTitleKeypress);
   articleTitle.addEventListener('keyup', togglePublishedOnTitle);
   publishBtn.addEventListener('click', openPopUp);
-  publishNowBtn.addEventListener('click', publishBlog);
   closeBtn.addEventListener('click', closePopUp);
   const $saveAsDraft = getElement('#saveAsDraft');
   $saveAsDraft && $saveAsDraft.addEventListener('click', saveDraft);
   createEditor();
   attachTagListener();
+  publishNowBtn.addEventListener('click', publishBlog);
 };
 
 window.onload = main;

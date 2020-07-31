@@ -7,6 +7,7 @@ const {
   userInfoQuery,
   userStoriesQuery,
   userProfileQuery,
+  addTagsQuery,
 } = require('./expressDBQueries');
 
 class ExpressDB {
@@ -91,6 +92,12 @@ class ExpressDB {
       this.dbClient.all(userProfileQuery(userID), (err, rows) => {
         resolve(rows);
       });
+    });
+  }
+
+  addTags(tags, storyID) {
+    return new Promise((resolve) => {
+      this.dbClient.run(addTagsQuery(tags, storyID), resolve);
     });
   }
 }

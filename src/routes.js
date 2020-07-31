@@ -3,6 +3,7 @@ const Sqlite3 = require('sqlite3').verbose();
 const { ExpressDB } = require('./expressData');
 const { Users } = require('./users');
 const { Stories } = require('./stories');
+const { Tags } = require('./tags');
 const { NO_LOG, BLOG_IMAGE_PATH, DB_PATH } = process.env;
 
 const {
@@ -30,6 +31,7 @@ const expressDB = new ExpressDB(dbClient);
 app.locals.dbClientReference = dbClient;
 app.locals.users = new Users(expressDB);
 app.locals.stories = new Stories(expressDB);
+app.locals.tags = new Tags(expressDB);
 
 app.set('view engine', 'pug');
 
