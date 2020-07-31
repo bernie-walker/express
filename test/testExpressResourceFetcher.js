@@ -15,7 +15,7 @@ describe('Fetch', function () {
       const expectedConfig = {
         method: 'post',
         url:
-          'https://github.com/login/oauth/access_toke?client_id=myID&client_secret=mySecret&code=validCode',
+          'https://github.com/login/oauth/access_token?client_id=myID&client_secret=mySecret&code=validCode',
         headers: {
           accept: 'application/json',
         },

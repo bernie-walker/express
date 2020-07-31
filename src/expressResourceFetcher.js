@@ -18,7 +18,7 @@ const generateUserInfoConfig = function (accessToken) {
 const generateAccessTokenConfig = function (code, clientID, clientSecret) {
   return {
     method: 'post',
-    url: `https://github.com/login/oauth/access_toke?client_id=${clientID}&client_secret=${clientSecret}&code=${code}`,
+    url: `https://github.com/login/oauth/access_token?client_id=${clientID}&client_secret=${clientSecret}&code=${code}`,
     headers: {
       accept: 'application/json',
     },

@@ -29,6 +29,26 @@ const redirectToGithub = function (req, res) {
   );
 };
 
+const authorizeUser = function (req, res, next) {
+  const { fetch } = req.app.locals;
+
+  fetch
+    .getAccessToken(req.query.code)
+    .then((accessToken) => {
+      fetch.getUserInfo(accessToken).then((userInfo) => {
+        req.body.gitUserInfo = userInfo;
+        next();
+      });
+    })
+    .catch(() => {
+      res.sendStatus(statusCodes.unauthorized);
+    });
+};
+
+const redirectAuthorized = async function (req, res) {
+  res.redirect('/dashboard');
+};
+
 const serveDashboard = async function (req, res) {
   const blogsNeeded = 10;
   const recentStories = await req.app.locals.stories.get(blogsNeeded);
@@ -152,6 +172,9 @@ module.exports = {
   logRequest,
   attachUser,
   redirectToGithub,
+  authorizeUser,
+  redirectAuthorized,
+  // sendUnauthorized,
   serveDashboard,
   serveBlogImage,
   serveBlogPage,

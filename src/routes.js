@@ -1,9 +1,11 @@
 const express = require('express');
 const Sqlite3 = require('sqlite3').verbose();
+const axios = require('axios');
 const { ExpressDB } = require('./expressData');
 const { Users } = require('./users');
 const { Stories } = require('./stories');
 const { Tags } = require('./tags');
+const { Fetch } = require('./expressResourceFetcher');
 const {
   NO_LOG,
   BLOG_IMAGE_PATH,
@@ -16,6 +18,9 @@ const {
   logRequest,
   attachUser,
   redirectToGithub,
+  authorizeUser,
+  redirectAuthorized,
+  // sendUnauthorized,
   serveDashboard,
   serveBlogImage,
   serveBlogPage,
@@ -32,7 +37,8 @@ const app = express();
 app.locals.noLog = NO_LOG;
 app.locals.blogImagePath = BLOG_IMAGE_PATH;
 app.locals.gitClientID = GIT_CLIENT_ID || 'myId123';
-app.locals.gitClientSecret = GIT_CLIENT_SECRET || 'mySecret1234';
+
+app.locals.fetch = new Fetch(axios, GIT_CLIENT_ID, GIT_CLIENT_SECRET);
 
 const dbClient = new Sqlite3.Database(DB_PATH || ':memory:');
 const expressDB = new ExpressDB(dbClient);
@@ -46,8 +52,10 @@ app.set('view engine', 'pug');
 app.use(logRequest);
 app.use(express.static('public'));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/authorize', redirectToGithub);
+app.get('/gitOauth/authCode', authorizeUser, redirectAuthorized);
 app.get('/blog_image/:imageID', serveBlogImage);
 
 app.use(attachUser);

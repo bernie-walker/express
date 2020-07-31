@@ -1,5 +1,7 @@
 const request = require('supertest');
+const sinon = require('sinon');
 const { app } = require('../src/routes');
+const { Fetch } = require('../src/expressResourceFetcher');
 const { setUpDatabase, cleanDatabase } = require('./fixture/databaseSetUp');
 
 describe('GET', () => {
@@ -184,6 +186,48 @@ describe('GET', () => {
           'Location',
           'https://github.com/login/oauth/authorize?client_id=myId123&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2FgitOauth%2FauthCode'
         )
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+  });
+
+  context('/gitOauth/authCode', function () {
+    before(() => {
+      const fakeGetAccessToken = sinon.stub(Fetch.prototype, 'getAccessToken');
+      fakeGetAccessToken.withArgs('goodCode').resolves('token');
+      fakeGetAccessToken.rejects();
+
+      const fakeGetUserInfo = sinon.stub(Fetch.prototype, 'getUserInfo');
+      fakeGetUserInfo.withArgs('token').resolves({ githubID: 1 });
+      fakeGetUserInfo.rejects();
+    });
+    after(() => {
+      sinon.restore();
+    });
+
+    it('should redirect to dashboard when the code is valid', function (done) {
+      request(app)
+        .get('/gitOauth/authCode?code=goodCode')
+        .expect(302)
+        .expect('Location', '/dashboard')
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should send unauthorized for a bad code', function (done) {
+      request(app)
+        .get('/gitOauth/authCode')
+        .expect(401)
         .end((err) => {
           if (err) {
             done(err);
