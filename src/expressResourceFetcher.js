@@ -1,3 +1,10 @@
+const querystring = require('querystring');
+
+const generateUrl = function (urlObject) {
+  const { url, path, queryParams } = urlObject;
+  return `${url}${path}?${querystring.stringify(queryParams)}`;
+};
+
 const generateUserInfoConfig = function (accessToken) {
   return {
     url: 'https://api.github.com/user',
@@ -59,4 +66,4 @@ class Fetch {
   }
 }
 
-module.exports = { Fetch };
+module.exports = { Fetch, generateUrl };

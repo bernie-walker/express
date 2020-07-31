@@ -1,3 +1,4 @@
+const { generateUrl } = require('./expressResourceFetcher');
 const moment = require('moment');
 const statusCodes = require('./statusCodes.json');
 
@@ -12,6 +13,20 @@ const attachUser = async function (req, res, next) {
   const { users } = req.app.locals;
   req.user = await users.getUser('palpriyanshu');
   next();
+};
+
+const redirectToGithub = function (req, res) {
+  const { gitClientID } = req.app.locals;
+  res.redirect(
+    generateUrl({
+      url: 'https://github.com',
+      path: '/login/oauth/authorize',
+      queryParams: {
+        client_id: gitClientID,
+        redirect_uri: 'http://localhost:3000/gitOauth/authCode',
+      },
+    })
+  );
 };
 
 const serveDashboard = async function (req, res) {
@@ -136,6 +151,7 @@ const serveProfilePage = async function (req, res) {
 module.exports = {
   logRequest,
   attachUser,
+  redirectToGithub,
   serveDashboard,
   serveBlogImage,
   serveBlogPage,

@@ -29,7 +29,7 @@ describe('Fetch', function () {
     });
 
     it('should reject when the code is invalid', function () {
-      fakeHttpClient.rejects();
+      fakeHttpClient.resolves({ data: {} });
       return expect(fetch.getAccessToken('someCode')).to.be.eventually.rejected;
     });
   });
@@ -63,7 +63,7 @@ describe('Fetch', function () {
     });
 
     it('should reject when the access token is invalid', function () {
-      fakeHttpClient.rejects();
+      fakeHttpClient.resolves({ data: {} });
       return expect(fetch.getUserInfo('wrong')).to.be.eventually.rejected;
     });
   });

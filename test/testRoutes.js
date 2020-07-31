@@ -174,6 +174,25 @@ describe('GET', () => {
       await request(app).get('/profile/wrongUserId').expect(404);
     });
   });
+
+  context('/authorize', function () {
+    it('should redirect to github authorization page', function (done) {
+      request(app)
+        .get('/authorize')
+        .expect(302)
+        .expect(
+          'Location',
+          'https://github.com/login/oauth/authorize?client_id=myId123&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2FgitOauth%2FauthCode'
+        )
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+  });
 });
 
 describe('POST', function () {
