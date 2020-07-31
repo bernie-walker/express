@@ -114,28 +114,30 @@ const closePopUp = function () {
 };
 
 const removeTagListener = function () {
-  const $allTags = Array.from(getAllElements('.cross'));
-  $allTags.forEach((tag) => {
-    tag.addEventListener('click', () => {
-      tag.parentElement.classList.add('hidden');
-      tag.parentElement.firstChild.innerText = '';
-    });
+  getElement('.tags').addEventListener('click', (event) => {
+    if (event.target.className === 'cross') {
+      event.target.parentElement.remove();
+    }
+    if (getElement('.tags').childElementCount < 5) {
+      tagInput.removeAttribute('disabled');
+    }
   });
 };
 
 const addTag = function () {
-  const $tagBox = getElement('.tags .hidden');
-  const tagValue = tagInput.innerText.trim();
-  tagInput.innerText = '';
-  $tagBox.querySelector('.tag').innerText = tagValue;
-  $tagBox.classList.remove('hidden');
+  getElement('.tags').innerHTML += `<div class="tagBox">
+      <div class="tag">${tagInput.value.trim()}</div>
+      <div class="cross">&#215;</div>
+    </div>`;
+  tagInput.value = '';
 };
 
 const attachTagListener = function () {
   tagInput.addEventListener('keypress', (event) => {
     event.key === 'Enter' && addTag();
-    const isTagBoxAvailable = getElement('.tags .hidden');
-    !isTagBoxAvailable && (tagInput.style.display = 'none');
+    if (getElement('.tags').childElementCount >= 5) {
+      tagInput.setAttribute('disabled', true);
+    }
   });
   removeTagListener();
 };

@@ -55,15 +55,12 @@ body
     - const storyTitle = title === 'Untitled Story' ?  '' : title;
     #articleTitle(contenteditable='true',storyid=storyID)= storyTitle
     #editorjs
-  .modal-container.hidden
+  .modal-container
     div.modal
-      p Add or change tags (up to 5) so readers know what your story is about
-      div.tags
-        each time in [1,2,3,4,5]
-          .tagBox.hidden
-            .tag
-            .cross &#215;
-        div#tagInput(contenteditable="true", placeholder="Add a tag...")
+      p Add tags (up to 5) so readers know what your story is about
+      p.notification Max 25 characters are allowed
+      input#tagInput(placeholder="Add a tag..." maxlength="25" title="max 25 alphaNumeric characters only")
+      .tags
       div.button
         button.btn#publishNowBtn Publish Now
       div#closeBtn
