@@ -56,8 +56,8 @@ class ExpressDB {
 
     return new Promise((resolve) => {
       this.dbClient.run(
-        updateStoryQuery(),
-        [title, JSON.stringify(content), state, id, author],
+        updateStoryQuery(state),
+        [title, JSON.stringify(content), id, author],
         resolve
       );
     });

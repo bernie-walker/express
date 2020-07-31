@@ -99,7 +99,7 @@ const saveStory = function (req, res) {
   const title = storyTitle.trim() || 'Untitled Story';
 
   stories
-    .updateStory({ title, content, state: 'drafted', author, id })
+    .updateStory({ title, content, author, id })
     .then(res.end.bind(res))
     .catch(() => {
       res.sendStatus(statusCodes.unprocessableEntity);

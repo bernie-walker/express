@@ -32,7 +32,11 @@ body
       .actions
         if state === 'drafted'
           #saveAsDraft.btn Save As Draft
-        #publishBtn.btn Publish
+        if state === 'published'  
+          .btn#publishPublished Save and Publish
+        else
+          .btn#publishBtn Publish
+
       .profile
         img#profile(src= avatar_url, alt="avatar")
         .arrow
@@ -55,7 +59,7 @@ body
     - const storyTitle = title === 'Untitled Story' ?  '' : title;
     #articleTitle(contenteditable='true',storyid=storyID)= storyTitle
     #editorjs
-  .modal-container
+  .modal-container.hidden
     div.modal
       p Add tags (up to 5) so readers know what your story is about
       p.notification Max 25 characters are allowed

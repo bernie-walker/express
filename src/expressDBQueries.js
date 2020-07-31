@@ -24,8 +24,10 @@ const storyOfUserQuery = function (storyID, userID) {
           WHERE id='${storyID}' AND written_by='${userID}';`;
 };
 
-const updateStoryQuery = function () {
-  return `UPDATE stories SET title=?, content=?, state=?, 
+const updateStoryQuery = function (state) {
+  const status = state ? `state='${state}',` : '';
+  return `UPDATE stories SET title=?, content=?,
+   ${status} 
   last_modified=CURRENT_TIMESTAMP
   WHERE id=? AND written_by=?`;
 };

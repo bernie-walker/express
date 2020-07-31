@@ -52,6 +52,17 @@ const saveDraft = async function () {
   }
 };
 
+const saveAndPublish = async function () {
+  const editorContent = await getEditorContent();
+  const response = await updateStory('/saveStory', editorContent);
+
+  if (response.ok) {
+    window.location = `/blogPage/${editorContent.storyID}`;
+  } else {
+    alert('Story could not be saved!!!');
+  }
+};
+
 const publishAndGotoBlog = async function (editorContent) {
   const response = await updateStory('/publishStory', editorContent);
 
@@ -65,7 +76,6 @@ const publishAndGotoBlog = async function (editorContent) {
 
 const publishBlog = async function () {
   const editorContent = await getEditorContent();
-
   if (!editorContent.storyTitle.trim()) {
     alert('A story without a title does not seem cool right...');
     return;
@@ -142,17 +152,27 @@ const attachTagListener = function () {
   removeTagListener();
 };
 
+const attachSaveOrPublishStory = function () {
+  if (getElement('#publishBtn')) {
+    publishBtn.addEventListener('click', openPopUp);
+    saveAsDraft.addEventListener('click', saveDraft);
+  }
+  const $publishNowBtn = getElement('#publishNowBtn');
+  $publishNowBtn && $publishNowBtn.addEventListener('click', publishBlog);
+  const $publishPublished = getElement('#publishPublished');
+  $publishPublished &&
+    $publishPublished.addEventListener('click', saveAndPublish);
+};
+
 const main = function () {
   attachHeadListener();
   articleTitle.addEventListener('keypress', handleTitleKeypress);
   articleTitle.addEventListener('keyup', togglePublishedOnTitle);
-  publishBtn.addEventListener('click', openPopUp);
   closeBtn.addEventListener('click', closePopUp);
-  const $saveAsDraft = getElement('#saveAsDraft');
-  $saveAsDraft && $saveAsDraft.addEventListener('click', saveDraft);
+
   createEditor();
+  attachSaveOrPublishStory();
   attachTagListener();
-  publishNowBtn.addEventListener('click', publishBlog);
 };
 
 window.onload = main;
