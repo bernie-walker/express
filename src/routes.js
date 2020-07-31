@@ -1,7 +1,8 @@
 const express = require('express');
+const redis = require('redis');
 const Sqlite3 = require('sqlite3').verbose();
 const axios = require('axios');
-const { ExpressDB } = require('./expressData');
+const { ExpressDB, ExpressDS } = require('./expressData');
 const { Users } = require('./users');
 const { Stories } = require('./stories');
 const { Tags } = require('./tags');
@@ -12,6 +13,8 @@ const {
   DB_PATH,
   GIT_CLIENT_ID,
   GIT_CLIENT_SECRET,
+  REDIS_URL,
+  REDIS_DB,
 } = process.env;
 
 const {
@@ -20,7 +23,6 @@ const {
   redirectToGithub,
   authorizeUser,
   redirectAuthorized,
-  // sendUnauthorized,
   serveDashboard,
   serveBlogImage,
   serveBlogPage,
@@ -46,6 +48,12 @@ app.locals.dbClientReference = dbClient;
 app.locals.users = new Users(expressDB);
 app.locals.stories = new Stories(expressDB);
 app.locals.tags = new Tags(expressDB);
+
+const dsClient = redis.createClient({
+  url: REDIS_URL || 'redis://127.0.0.1:6379',
+  db: REDIS_DB,
+});
+app.locals.expressDS = new ExpressDS(dsClient);
 
 app.set('view engine', 'pug');
 

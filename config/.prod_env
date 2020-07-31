@@ -1,3 +1,4 @@
 . tokens/.oauth_tokens
 export BLOG_IMAGE_PATH=data/images/
 export DB_PATH=data/express.db
+export REDIS_DB=0

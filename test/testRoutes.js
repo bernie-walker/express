@@ -2,7 +2,9 @@ const request = require('supertest');
 const sinon = require('sinon');
 const { app } = require('../src/routes');
 const { Fetch } = require('../src/expressResourceFetcher');
+const { ExpressDS } = require('../src/expressData');
 const { setUpDatabase, cleanDatabase } = require('./fixture/databaseSetUp');
+app.locals.expressDS.closeClient();
 
 describe('GET', () => {
   context('/', () => {
@@ -199,22 +201,48 @@ describe('GET', () => {
   context('/gitOauth/authCode', function () {
     before(() => {
       const fakeGetAccessToken = sinon.stub(Fetch.prototype, 'getAccessToken');
-      fakeGetAccessToken.withArgs('goodCode').resolves('token');
+      fakeGetAccessToken.withArgs('goodCode1').resolves('token1');
+      fakeGetAccessToken.withArgs('goodCode2').resolves('token2');
       fakeGetAccessToken.rejects();
 
       const fakeGetUserInfo = sinon.stub(Fetch.prototype, 'getUserInfo');
-      fakeGetUserInfo.withArgs('token').resolves({ githubID: 1 });
+      fakeGetUserInfo.withArgs('token1').resolves({ githubID: 58025838 });
+      fakeGetUserInfo.withArgs('token2').resolves({ githubID: 1234 });
       fakeGetUserInfo.rejects();
-    });
-    after(() => {
-      sinon.restore();
+
+      const fakeCreateSession = sinon.stub(
+        ExpressDS.prototype,
+        'createSession'
+      );
+      fakeCreateSession.withArgs('palpriyanshu').resolves(1);
+      return setUpDatabase(app.locals.dbClientReference, ['users', 'stories']);
     });
 
-    it('should redirect to dashboard when the code is valid', function (done) {
+    after(() => {
+      sinon.restore();
+      return cleanDatabase(app.locals.dbClientReference);
+    });
+
+    it('should redirect to dashboard when the code is valid and the user has an account', function (done) {
       request(app)
-        .get('/gitOauth/authCode?code=goodCode')
+        .get('/gitOauth/authCode?code=goodCode1')
         .expect(302)
         .expect('Location', '/dashboard')
+        .expect('set-cookie', /sesID=1/)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should redirect to mainPage when the code is valid but user has no account', function (done) {
+      request(app)
+        .get('/gitOauth/authCode?code=goodCode2')
+        .expect(302)
+        .expect('Location', '/')
         .end((err) => {
           if (err) {
             done(err);

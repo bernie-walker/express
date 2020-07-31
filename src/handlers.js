@@ -46,6 +46,17 @@ const authorizeUser = function (req, res, next) {
 };
 
 const redirectAuthorized = async function (req, res) {
+  const { users, expressDS } = req.app.locals;
+  const { githubID } = req.body.gitUserInfo;
+  const account = await users.findAccount(githubID);
+
+  if (!account) {
+    res.redirect('/');
+    return;
+  }
+
+  const sesID = await expressDS.createSession(account.userID);
+  res.cookie('sesID', sesID);
   res.redirect('/dashboard');
 };
 
@@ -174,7 +185,6 @@ module.exports = {
   redirectToGithub,
   authorizeUser,
   redirectAuthorized,
-  // sendUnauthorized,
   serveDashboard,
   serveBlogImage,
   serveBlogPage,

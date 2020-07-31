@@ -1,9 +1,11 @@
 language: node_js
 node_js:
-- 14.5.0
+  - 14.5.0
 branches:
   only:
-  - master
+    - master
+services:
+  - redis-server
 notifications:
   slack:
     secure: bHSX+fJScpK6+nAT/03O9NAkttdnYOu4G874z3ta5/Xx7AkT6f2UHJh9lp0ZRPQzyiw0nSOWbyXWfucrT/gxccN/VM/VXWSoGTMgzPEt/OcFZTXjEa3HnctpKsZ5SrxQb23iaRASUHVVjrwblWyNH/RrX6DIHDhDEVJojK7fmP0QmHImc6vi2No3KqAbskq78mcZMgv/v9yraydnReJlSKYrCds4otwZw0FlVEU2EcnZHNWZ/pywM8Zo7QWOlDqhNmHCgh3L+abTr2z17IOukdGoh8J4FFE/hkm9sW4Q05lElL9PlmtY2RNtvjoEoo3s7HxLhK8RV4zWjFeMorLGGxTlMnfppenRCYIKb9LG6yl2vNVa0TqkGbqqdDhY3tuRrQfcN9L5PtqaNa8xtCNk6/7vfPeFV16JsxewnV8ewFqzPsFd1jYZRDfxT7AvajkuxZwAUZUwtmjs2GAGvHCSBDZpzSZeIZJg2v6SPLkR/ndFGE9mN469d/O9McNP36FEXxcfi6sQ+KjQ/L+2zTrVh5A0h4MCpvbcukK+iEbXl14U+Yg+r+SEfNzEmY6fj6dnwb35mOM4scTo+rRrCNJyZZfZOWGdJ9KvWhfWgDjocd4JpKZsC2YsFY0dzgsGl97rEeRCTCsHmZrL87V95Y8oW2yHzrQC0Jm8RvEliuAjRfY=
