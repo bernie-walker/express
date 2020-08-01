@@ -23,11 +23,16 @@ html
     link(rel='stylesheet' href='/css/normalize.css')
     link(rel='stylesheet' href='/css/header.css')
     link(rel='stylesheet' href='/css/blogPage.css')
+    if !id 
+      link(rel="stylesheet", href="/css/signIn.css")
+      script(src="/js/signIn.js")
     script(src="/js/header.js")
     script(src="/js/blogPage.js")
     title Express | Blog
   body
     include includes/header.pug
+    if !id 
+      include includes/signInPrompt.pug
     .blog
       #blogTitle(storyid=storyID)= title
       .blog-meta

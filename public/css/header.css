@@ -55,6 +55,7 @@
   padding: 0.1vw 1.4vw 0.4vw;
   font-size: 1.5vw;
   font-weight: 400;
+  cursor: pointer;
 }
 
 #signIn:hover {
@@ -62,9 +63,13 @@
   color: green;
 }
 
-#signInAnchor {
-  text-decoration: none;
-  color: inherit;
+@media (max-width: 420px) {
+  #signIn {
+    height: 24px;
+    font-size: 16px;
+    line-height: 24px;
+    padding: 2px 8px;
+  }
 }
 
 .searchAndProfile {

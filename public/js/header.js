@@ -19,14 +19,7 @@ const attachToGoToProfile = function () {
   });
 };
 
-const attachHeadListener = function () {
-  attachGotoDashboardToLogo();
-  const profile = getElement('#profile');
-
-  if (!profile) {
-    return;
-  }
-
+const attachProfileIconListeners = function () {
   profile.addEventListener('click', () => {
     getElement('.profile-modal').classList.toggle('hidden');
   });
@@ -38,4 +31,16 @@ const attachHeadListener = function () {
   });
 
   attachToGoToProfile();
+};
+
+const attachHeadListener = function () {
+  attachGotoDashboardToLogo();
+  const profile = getElement('#profile');
+
+  if (!profile) {
+    attachSignInListeners();
+    return;
+  }
+
+  attachProfileIconListeners();
 };

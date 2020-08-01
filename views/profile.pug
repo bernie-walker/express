@@ -29,10 +29,15 @@ html
     link(rel="stylesheet", href="/css/normalize.css")
     link(rel="stylesheet", href="/css/header.css")
     link(rel="stylesheet", href="/css/profile.css")
+    if !id 
+      link(rel="stylesheet", href="/css/signIn.css")
+      script(src="/js/signIn.js")
     script(src="/js/header.js")
     script(src="/js/profile.js")
   body 
     include ./includes/header.pug
+    if !id 
+      include includes/signInPrompt.pug
     div.container
       .profile-div
         .info
