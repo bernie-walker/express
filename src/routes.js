@@ -20,11 +20,12 @@ const {
 
 const {
   logRequest,
-  attachUser,
+  attachUserIfSignedIn,
   redirectToGithub,
   closeSession,
+  authenticateUser,
   authorizeUser,
-  redirectAuthorized,
+  redirectAuthenticated,
   serveDashboard,
   serveBlogImage,
   serveBlogPage,
@@ -60,20 +61,23 @@ app.locals.expressDS = new ExpressDS(dsClient);
 app.set('view engine', 'pug');
 
 app.use(logRequest);
-app.use(express.static('public'));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 app.get('/authorize', redirectToGithub);
-app.get('/gitOauth/authCode', authorizeUser, redirectAuthorized);
+app.get('/gitOauth/authCode', authenticateUser, redirectAuthenticated);
 app.get('/blog_image/:imageID', serveBlogImage);
 app.get('/signOut', closeSession);
 
-app.use(attachUser);
+app.use(attachUserIfSignedIn);
 
 app.get('/profile/:profileID', serveProfilePage);
 app.get('/blogPage/:storyID', serveBlogPage);
+
+app.use(authorizeUser);
+
 app.get('/dashboard', serveDashboard);
 app.get('/newStory', createNewStory);
 app.get('/editor/:storyID', renderEditor);

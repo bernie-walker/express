@@ -9,9 +9,25 @@ const logRequest = function (req, res, next) {
   next();
 };
 
-const attachUser = async function (req, res, next) {
-  const { users } = req.app.locals;
-  req.user = await users.getUser('palpriyanshu');
+const attachUserIfSignedIn = async function (req, res, next) {
+  const { users, expressDS } = req.app.locals;
+  req.isSignedIn = false;
+
+  const userID = await expressDS.getSession(req.cookies.sesID);
+
+  if (userID) {
+    req.user = await users.getUser(userID);
+    req.isSignedIn = true;
+  }
+
+  next();
+};
+
+const authorizeUser = function (req, res, next) {
+  if (!req.isSignedIn) {
+    res.sendStatus(statusCodes.unauthorized);
+    return;
+  }
   next();
 };
 
@@ -37,7 +53,7 @@ const closeSession = function (req, res) {
   });
 };
 
-const authorizeUser = function (req, res, next) {
+const authenticateUser = function (req, res, next) {
   const { fetch } = req.app.locals;
 
   fetch
@@ -53,7 +69,7 @@ const authorizeUser = function (req, res, next) {
     });
 };
 
-const redirectAuthorized = async function (req, res) {
+const redirectAuthenticated = async function (req, res) {
   const { users, expressDS } = req.app.locals;
   const { githubID } = req.body.gitUserInfo;
   const account = await users.findAccount(githubID);
@@ -188,11 +204,12 @@ const serveProfilePage = async function (req, res) {
 
 module.exports = {
   logRequest,
-  attachUser,
+  attachUserIfSignedIn,
+  authorizeUser,
   redirectToGithub,
   closeSession,
-  authorizeUser,
-  redirectAuthorized,
+  authenticateUser,
+  redirectAuthenticated,
   serveDashboard,
   serveBlogImage,
   serveBlogPage,

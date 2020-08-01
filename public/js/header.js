@@ -1,12 +1,13 @@
 const getElement = (selector) => document.querySelector(selector);
 
-const gotoDashboard = () => {
-  window.location = '/dashboard';
+const gotoHome = () => {
+  const homeLocation = getElement('#profile') ? '/dashboard' : '/';
+  window.location = homeLocation;
 };
 
 const attachGotoDashboardToLogo = function () {
   Array.from(document.querySelectorAll('#logo  svg'), (el) =>
-    el.addEventListener('click', gotoDashboard)
+    el.addEventListener('click', gotoHome)
   );
 };
 
@@ -19,14 +20,22 @@ const attachToGoToProfile = function () {
 };
 
 const attachHeadListener = function () {
+  attachGotoDashboardToLogo();
+  const profile = getElement('#profile');
+
+  if (!profile) {
+    return;
+  }
+
   profile.addEventListener('click', () => {
     getElement('.profile-modal').classList.toggle('hidden');
   });
+
   getElement('body').addEventListener('click', (event) => {
     if (!event.target.id) {
       getElement('.profile-modal').classList.add('hidden');
     }
   });
-  attachGotoDashboardToLogo();
+
   attachToGoToProfile();
 };

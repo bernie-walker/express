@@ -7,6 +7,17 @@ const { setUpDatabase, cleanDatabase } = require('./fixture/databaseSetUp');
 app.locals.expressDS.closeClient();
 
 describe('GET', () => {
+  let fakeGetSession;
+
+  beforeEach(() => {
+    fakeGetSession = sinon.stub(ExpressDS.prototype, 'getSession');
+    fakeGetSession.resolves('palpriyanshu');
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
   context('/', () => {
     it('should serve the home page', async () => {
       await request(app)
@@ -20,12 +31,28 @@ describe('GET', () => {
     before(() =>
       setUpDatabase(app.locals.dbClientReference, ['users', 'stories', 'tags'])
     );
+
     after(() => cleanDatabase(app.locals.dbClientReference));
-    it('should create a new story redirect to the editor', function (done) {
+
+    it('should create a new story redirect to the editor for authorized user', function (done) {
       request(app)
         .get('/newStory')
         .expect(302)
         .expect('Location', '/editor/3')
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond with 401 for unauthorized user', function (done) {
+      fakeGetSession.resolves(null);
+      request(app)
+        .get('/newStory')
+        .expect(401)
         .end((err) => {
           if (err) {
             done(err);
@@ -40,6 +67,7 @@ describe('GET', () => {
     before(() =>
       setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
     );
+
     after(() => cleanDatabase(app.locals.dbClientReference));
 
     it('should render the editor when story exists for given user', function (done) {
@@ -68,32 +96,34 @@ describe('GET', () => {
           done();
         });
     });
+
+    it('should respond with 401 for unauthorized user', function (done) {
+      fakeGetSession.resolves(null);
+      request(app)
+        .get('/editor/1')
+        .expect(401)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
   });
 
   context('/dashboard', () => {
     before(() =>
       setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
     );
+
     after(() => cleanDatabase(app.locals.dbClientReference));
 
-    it('should serve the dashboard', async () => {
-      await request(app)
+    it('should serve the dashboard for an authorized user', function (done) {
+      request(app)
         .get('/dashboard')
         .expect(200)
-        .expect(/Express/);
-    });
-  });
-
-  context('/blogPage', function () {
-    before(() =>
-      setUpDatabase(app.locals.dbClientReference, ['users', 'stories', 'tags'])
-    );
-    after(() => cleanDatabase(app.locals.dbClientReference));
-
-    it('should serve the blog page when exists', function (done) {
-      request(app)
-        .get('/blogPage/1')
-        .expect(200)
+        .expect(/Express/)
         .end((err) => {
           if (err) {
             done(err);
@@ -103,7 +133,58 @@ describe('GET', () => {
         });
     });
 
-    it('should respond NOT FOUND if blog does not exists', function (done) {
+    it('should respond with 401 for unauthorized user', function (done) {
+      fakeGetSession.resolves(null);
+      request(app)
+        .get('/dashboard')
+        .expect(401)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+  });
+
+  context('/blogPage', function () {
+    before(() =>
+      setUpDatabase(app.locals.dbClientReference, ['users', 'stories', 'tags'])
+    );
+
+    after(() => cleanDatabase(app.locals.dbClientReference));
+
+    it('should serve the blog page when exists, for an authorized user', function (done) {
+      request(app)
+        .get('/blogPage/1')
+        .expect(200)
+        .expect(/palpriyanshu/)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should serve the blog page when exists, for an unauthorized user', function (done) {
+      fakeGetSession.resolves(null);
+      request(app)
+        .get('/blogPage/1')
+        .expect(200)
+        .expect(/Sign in/)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond NOT FOUND if blog does not exist', function (done) {
       request(app)
         .get('/blogPage/2')
         .expect(404)
@@ -149,13 +230,35 @@ describe('GET', () => {
     before(() =>
       setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
     );
+
     after(() => cleanDatabase(app.locals.dbClientReference));
 
-    it('should serve the userStories page', async () => {
-      await request(app)
+    it('should serve the userStories page for authorized user', function (done) {
+      request(app)
         .get('/userStories')
         .expect(200)
-        .expect(/Express/);
+        .expect(/Express/)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond with 401 for an unauthorized user', function (done) {
+      fakeGetSession.resolves(null);
+      request(app)
+        .get('/userStories')
+        .expect(401)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
     });
   });
 
@@ -163,19 +266,53 @@ describe('GET', () => {
     before(() =>
       setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
     );
+
     after(() => cleanDatabase(app.locals.dbClientReference));
 
-    it('should serve the profile page when user exists', async () => {
-      await request(app)
+    it('should serve the profile page when user exists, for an authorized user', function (done) {
+      request(app)
         .get('/profile/palpriyanshu')
         .expect(200)
         .expect(/Express/)
         .expect(/palpriyanshu/)
-        .expect(/Priyanshu/);
+        .expect(/Priyanshu/)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
     });
 
-    it('should not serve the profile page when user does not exists', async () => {
-      await request(app).get('/profile/wrongUserId').expect(404);
+    it('should serve the profile page when user exists, for an unauthorized user', function (done) {
+      fakeGetSession.resolves(null);
+      request(app)
+        .get('/profile/palpriyanshu')
+        .expect(200)
+        .expect(/Express/)
+        .expect(/Priyanshu/)
+        .expect(/Sign in/)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should not serve the profile page when user does not exists', function (done) {
+      request(app)
+        .get('/profile/wrongUserId')
+        .expect(404)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
     });
   });
 
@@ -199,31 +336,28 @@ describe('GET', () => {
   });
 
   context('/gitOauth/authCode', function () {
-    before(() => {
-      const fakeGetAccessToken = sinon.stub(Fetch.prototype, 'getAccessToken');
-      fakeGetAccessToken.withArgs('goodCode1').resolves('token1');
-      fakeGetAccessToken.withArgs('goodCode2').resolves('token2');
+    let fakeGetAccessToken, fakeGetUserInfo;
+
+    before(() =>
+      setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
+    );
+
+    after(() => cleanDatabase(app.locals.dbClientReference));
+
+    beforeEach(() => {
+      fakeGetAccessToken = sinon.stub(Fetch.prototype, 'getAccessToken');
+      fakeGetUserInfo = sinon.stub(Fetch.prototype, 'getUserInfo');
       fakeGetAccessToken.rejects();
-
-      const fakeGetUserInfo = sinon.stub(Fetch.prototype, 'getUserInfo');
-      fakeGetUserInfo.withArgs('token1').resolves({ githubID: 58025838 });
-      fakeGetUserInfo.withArgs('token2').resolves({ githubID: 1234 });
-      fakeGetUserInfo.rejects();
-
-      const fakeCreateSession = sinon.stub(
-        ExpressDS.prototype,
-        'createSession'
-      );
-      fakeCreateSession.withArgs('palpriyanshu').resolves(1);
-      return setUpDatabase(app.locals.dbClientReference, ['users', 'stories']);
-    });
-
-    after(() => {
-      sinon.restore();
-      return cleanDatabase(app.locals.dbClientReference);
     });
 
     it('should redirect to dashboard when the code is valid and the user has an account', function (done) {
+      fakeGetAccessToken.withArgs('goodCode1').resolves('token1');
+      fakeGetUserInfo.withArgs('token1').resolves({ githubID: 58025838 });
+      sinon
+        .stub(ExpressDS.prototype, 'createSession')
+        .withArgs('palpriyanshu')
+        .resolves(1);
+
       request(app)
         .get('/gitOauth/authCode?code=goodCode1')
         .expect(302)
@@ -239,6 +373,8 @@ describe('GET', () => {
     });
 
     it('should redirect to mainPage when the code is valid but user has no account', function (done) {
+      fakeGetAccessToken.withArgs('goodCode2').resolves('token2');
+      fakeGetUserInfo.withArgs('token2').resolves({ githubID: 1234 });
       request(app)
         .get('/gitOauth/authCode?code=goodCode2')
         .expect(302)
@@ -301,6 +437,17 @@ describe('GET', () => {
 });
 
 describe('POST', function () {
+  let fakeGetSession;
+
+  beforeEach(() => {
+    fakeGetSession = sinon.stub(ExpressDS.prototype, 'getSession');
+    fakeGetSession.resolves('palpriyanshu');
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
   context('/publishStory', function () {
     beforeEach(() =>
       setUpDatabase(app.locals.dbClientReference, ['stories', 'users', 'tags'])
@@ -381,6 +528,26 @@ describe('POST', function () {
           done();
         });
     });
+
+    it('should respond with 401 for an unauthorized user', function (done) {
+      fakeGetSession.resolves(null);
+      request(app)
+        .post('/publishStory')
+        .send({
+          storyTitle: 'validTitle',
+          blocks: [],
+          storyID: '2',
+          tags: ['tag1', 'tag2'],
+        })
+        .expect(401)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
   });
 
   context('/saveStory', function () {
@@ -414,6 +581,25 @@ describe('POST', function () {
           storyID: '3',
         })
         .expect(422)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond with a 401 an unauthorized user', function (done) {
+      fakeGetSession.resolves(null);
+      request(app)
+        .post('/saveStory')
+        .send({
+          storyTitle: 'validTitle',
+          blocks: [],
+          storyID: '1',
+        })
+        .expect(401)
         .end((err) => {
           if (err) {
             done(err);
