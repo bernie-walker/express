@@ -551,7 +551,9 @@ describe('POST', function () {
   });
 
   context('/saveStory', function () {
-    before(() => setUpDatabase(app.locals.dbClientReference, ['stories']));
+    before(() =>
+      setUpDatabase(app.locals.dbClientReference, ['stories', 'users'])
+    );
     after(() => cleanDatabase(app.locals.dbClientReference));
 
     it('should respond with a OK for a valid story', function (done) {

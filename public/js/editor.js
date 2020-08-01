@@ -112,7 +112,7 @@ const createEditor = async function () {
     },
     data: { blocks: content },
   });
-  togglePublishedOnTitle();
+  getElement('#publishBtn') && togglePublishedOnTitle();
 };
 
 const openPopUp = function () {

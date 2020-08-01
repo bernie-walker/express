@@ -185,12 +185,11 @@ const renderEditor = async function (req, res) {
 
 const saveStory = function (req, res) {
   const { stories } = req.app.locals;
-  const author = 'palpriyanshu';
   const { storyTitle, blocks: content, storyID: id } = req.body;
   const title = storyTitle.trim() || 'Untitled Story';
 
   stories
-    .updateStory({ title, content, author, id })
+    .updateStory({ title, content, author: req.user.id, id })
     .then(res.end.bind(res))
     .catch(() => {
       res.sendStatus(statusCodes.unprocessableEntity);
