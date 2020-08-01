@@ -9,7 +9,7 @@ const latestNStoriesQuery = function (count, offset) {
 };
 
 const publishedStoryQuery = function (storyID) {
-  return `SELECT usr.display_name as authorName,usr.avatar_url,
+  return `SELECT usr.display_name as authorName,usr.avatar_url as authorAvatar,
   str.title,str.content,str.id as storyID,str.written_by as authorID,
   date(str.last_modified) as lastModified, tag
   FROM stories AS str
