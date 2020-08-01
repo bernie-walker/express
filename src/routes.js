@@ -21,6 +21,7 @@ const {
 const {
   logRequest,
   attachUserIfSignedIn,
+  serveDashboardIfUserSignedIn,
   redirectToGithub,
   closeSession,
   authenticateUser,
@@ -64,20 +65,24 @@ app.use(logRequest);
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
 
+app.get(
+  /(\/|\/index.html)$/,
+  attachUserIfSignedIn,
+  serveDashboardIfUserSignedIn
+);
+
+app.use(express.static('public'));
 app.get('/authorize', redirectToGithub);
 app.get('/gitOauth/authCode', authenticateUser, redirectAuthenticated);
 app.get('/blog_image/:imageID', serveBlogImage);
 app.get('/signOut', closeSession);
 
 app.use(attachUserIfSignedIn);
-
 app.get('/profile/:profileID', serveProfilePage);
 app.get('/blogPage/:storyID', serveBlogPage);
 
 app.use(authorizeUser);
-
 app.get('/dashboard', serveDashboard);
 app.get('/newStory', createNewStory);
 app.get('/editor/:storyID', renderEditor);

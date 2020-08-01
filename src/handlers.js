@@ -11,22 +11,29 @@ const logRequest = function (req, res, next) {
 
 const attachUserIfSignedIn = async function (req, res, next) {
   const { users, expressDS } = req.app.locals;
-  req.isSignedIn = false;
+  req.user = { isSignedIn: false };
 
   const userID = await expressDS.getSession(req.cookies.sesID);
 
   if (userID) {
     req.user = await users.getUser(userID);
-    req.isSignedIn = true;
+    req.user && (req.user.isSignedIn = true);
   }
 
   next();
 };
 
 const authorizeUser = function (req, res, next) {
-  if (!req.isSignedIn) {
+  if (req.user && !req.user.isSignedIn) {
     res.sendStatus(statusCodes.unauthorized);
     return;
+  }
+  next();
+};
+
+const serveDashboardIfUserSignedIn = function (req, res, next) {
+  if (req.user && req.user.isSignedIn) {
+    return res.redirect('/dashboard');
   }
   next();
 };
@@ -206,6 +213,7 @@ module.exports = {
   logRequest,
   attachUserIfSignedIn,
   authorizeUser,
+  serveDashboardIfUserSignedIn,
   redirectToGithub,
   closeSession,
   authenticateUser,
