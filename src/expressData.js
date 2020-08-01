@@ -71,6 +71,37 @@ class ExpressDB {
     });
   }
 
+  createUserAccount(accountInfo) {
+    const { userID, githubID, avatar_url, display_name, bio } = accountInfo;
+    const query = `
+    INSERT INTO users(id, github_id, avatar_url, display_name,  bio) 
+    VALUES (?,?,?,?,?),
+    `;
+
+    return new Promise((resolve, reject) => {
+      this.dbClient.run(
+        query,
+        [userID, githubID, avatar_url, display_name, bio],
+        (err) => {
+          if (err) {
+            reject();
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+  }
+
+  getUsersList() {
+    const query = 'SELECT id FROM users;';
+    return new Promise((resolve) => {
+      this.dbClient.all(query, (err, rows) => {
+        resolve(rows);
+      });
+    });
+  }
+
   getUserInfo(userID) {
     return new Promise((resolve) => {
       this.dbClient.get(userInfoQuery(userID), (err, row) => {
@@ -136,6 +167,39 @@ class ExpressDS {
   deleteSession(sesID) {
     return new Promise((resolve) => {
       this.dsClient.del(`expSes_${sesID}`, resolve);
+    });
+  }
+
+  createTempToken(accountInfo) {
+    const { avatarURL, githubID } = accountInfo;
+    return new Promise((resolve) => {
+      this.incrID('tempToken').then((token) =>
+        this.dsClient.hmset(
+          `newReg_${token}`,
+          'githubID',
+          githubID,
+          'avatarURL',
+          avatarURL,
+          async () => {
+            await this.dsClient.expire(`newReg_${token}`, 86400);
+            resolve(token);
+          }
+        )
+      );
+    });
+  }
+
+  getTokenValue(token) {
+    return new Promise((resolve) => {
+      this.dsClient.hgetall(`newReg_${token}`, (err, userInfo) => {
+        resolve(userInfo);
+      });
+    });
+  }
+
+  deleteTempToken(token) {
+    return new Promise((resolve) => {
+      this.dsClient.del(`newReg_${token}`, resolve);
     });
   }
 

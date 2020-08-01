@@ -31,6 +31,20 @@ class Users {
       .then((userAccount) => Promise.resolve(userAccount));
   }
 
+  registerUser(userInfo) {
+    const { display_name, bio } = userInfo;
+    userInfo.display_name = display_name || null;
+    userInfo.bio = bio || null;
+    return this.db.createUserAccount(userInfo);
+  }
+
+  list() {
+    this.db.getUsersList().then((usersList) => {
+      const userNameList = usersList.map((user) => user.id);
+      return Promise.resolve(userNameList);
+    });
+  }
+
   getUser(userID) {
     return this.db.getUserInfo(userID).then((user) => Promise.resolve(user));
   }
