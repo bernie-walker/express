@@ -72,21 +72,21 @@ class ExpressDB {
   }
 
   createUserAccount(accountInfo) {
-    const { userID, githubID, avatar_url, display_name, bio } = accountInfo;
+    const { userID, githubID, avatarURL, displayName, bio } = accountInfo;
     const query = `
     INSERT INTO users(id, github_id, avatar_url, display_name,  bio) 
-    VALUES (?,?,?,?,?),
+    VALUES (?,?,?,?,?);
     `;
 
     return new Promise((resolve, reject) => {
       this.dbClient.run(
         query,
-        [userID, githubID, avatar_url, display_name, bio],
+        [userID, githubID, avatarURL, displayName, bio],
         (err) => {
           if (err) {
             reject();
           } else {
-            resolve();
+            resolve(userID);
           }
         }
       );

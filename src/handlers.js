@@ -76,19 +76,69 @@ const authenticateUser = function (req, res, next) {
     });
 };
 
-const redirectAuthenticated = async function (req, res) {
+const redirectAuthenticated = async function (req, res, next) {
   const { users, expressDS } = req.app.locals;
   const { githubID } = req.body.gitUserInfo;
   const account = await users.findAccount(githubID);
 
   if (!account) {
-    res.redirect('/');
+    next();
     return;
   }
 
   const sesID = await expressDS.createSession(account.userID);
   res.cookie('sesID', sesID);
   res.redirect('/dashboard');
+};
+
+const takeToSignUp = async function (req, res) {
+  const { expressDS } = req.app.locals;
+  const { userID, userName, githubID, avatarURL } = req.body.gitUserInfo;
+  const registrationToken = await expressDS.createTempToken({
+    githubID,
+    avatarURL,
+  });
+  res.cookie('regT', registrationToken);
+  res.render('signUp', { userID, userName });
+};
+
+const checkUsernameAvailability = async function (req, res) {
+  const { users } = req.app.locals;
+  const usersList = await users.list();
+  let available = true;
+
+  if (usersList.includes(req.params.userName)) {
+    available = false;
+  }
+
+  res.json({ available });
+};
+
+const registerUser = async function (req, res) {
+  const { users, expressDS } = req.app.locals;
+  const registrationInfo = await expressDS.getTokenValue(req.cookies.regT);
+
+  if (!registrationInfo) {
+    res.sendStatus(statusCodes.unauthorized);
+    return;
+  }
+
+  if (!req.body.userID || req.body.userID.match(/\s/)) {
+    res.sendStatus(statusCodes.unprocessableEntity);
+    return;
+  }
+
+  users
+    .registerUser(Object.assign(registrationInfo, req.body))
+    .then((userID) => {
+      expressDS.createSession(userID).then((sesID) => {
+        res.cookie('sesID', sesID);
+        res.redirect('/dashboard');
+      });
+    })
+    .catch(() => {
+      res.sendStatus(statusCodes.unprocessableEntity);
+    });
 };
 
 const serveDashboard = async function (req, res) {
@@ -218,6 +268,9 @@ module.exports = {
   closeSession,
   authenticateUser,
   redirectAuthenticated,
+  takeToSignUp,
+  checkUsernameAvailability,
+  registerUser,
   serveDashboard,
   serveBlogImage,
   serveBlogPage,

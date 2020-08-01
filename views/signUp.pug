@@ -1,0 +1,23 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  link(rel='stylesheet' href='/css/normalize.css')
+  link(rel='stylesheet' href='/css/signup.css')
+  script(src="/js/signUp.js")
+  title Express
+.from
+  form(action='/signUp' method="POST")
+    .title
+      | Sign up for Express
+    .input
+      label(for='userID') Username
+      input#userName(type='text' name='userID' value=userID required) 
+    .input
+      label(for='displayName') Display Name
+      input#displayName(type='text' name='displayName' value=userName required)
+    .input
+      label(for='bio') Bio
+      textarea#bio(name='bio' cols='30' rows='5')
+    .submit
+      input#submitBtn.inactive(type='submit' value='Sign Up')

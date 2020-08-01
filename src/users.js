@@ -32,14 +32,14 @@ class Users {
   }
 
   registerUser(userInfo) {
-    const { display_name, bio } = userInfo;
-    userInfo.display_name = display_name || null;
+    const { displayName, bio } = userInfo;
+    userInfo.displayName = displayName || null;
     userInfo.bio = bio || null;
     return this.db.createUserAccount(userInfo);
   }
 
   list() {
-    this.db.getUsersList().then((usersList) => {
+    return this.db.getUsersList().then((usersList) => {
       const userNameList = usersList.map((user) => user.id);
       return Promise.resolve(userNameList);
     });

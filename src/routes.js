@@ -27,6 +27,9 @@ const {
   authenticateUser,
   authorizeUser,
   redirectAuthenticated,
+  takeToSignUp,
+  checkUsernameAvailability,
+  registerUser,
   serveDashboard,
   serveBlogImage,
   serveBlogPage,
@@ -71,12 +74,20 @@ app.get(
   attachUserIfSignedIn,
   serveDashboardIfUserSignedIn
 );
-
 app.use(express.static('public'));
-app.get('/authorize', redirectToGithub);
-app.get('/gitOauth/authCode', authenticateUser, redirectAuthenticated);
+
+app.get('/authenticate', redirectToGithub);
+app.get(
+  '/gitOauth/authCode',
+  authenticateUser,
+  redirectAuthenticated,
+  takeToSignUp
+);
 app.get('/blog_image/:imageID', serveBlogImage);
 app.get('/signOut', closeSession);
+
+app.get('/checkUsername/:userName', checkUsernameAvailability);
+app.post('/signUp', registerUser);
 
 app.use(attachUserIfSignedIn);
 app.get('/profile/:profileID', serveProfilePage);
