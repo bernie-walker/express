@@ -1,15 +1,6 @@
 let editor;
 const getAllElements = (selector) => document.querySelectorAll(selector);
 
-const confirmSaveAndClearMessage = function () {
-  setTimeout(() => {
-    saveConfirmation.innerText = 'Draft Saved';
-  }, 2000);
-  setTimeout(() => {
-    saveConfirmation.innerText = 'Draft';
-  }, 3500);
-};
-
 const updateStory = function (url, story) {
   return fetch(url, {
     method: 'POST',
@@ -40,15 +31,17 @@ const getEditorContent = async function () {
 };
 
 const saveDraft = async function () {
+  if (!articleTitle.innerText.trim()) {
+    return;
+  }
   saveConfirmation.innerText = 'Draft Saving...';
-
   const editorContent = await getEditorContent();
   const response = await updateStory('/saveStory', editorContent);
 
   if (response.ok) {
-    confirmSaveAndClearMessage();
-  } else {
-    alert('Story could not be saved!!!');
+    setTimeout(() => {
+      saveConfirmation.innerText = 'Draft Saved';
+    }, 1000);
   }
 };
 
@@ -151,26 +144,24 @@ const attachTagListener = function () {
     }
   });
   removeTagListener();
+  closeBtn.addEventListener('click', closePopUp);
 };
 
 const attachSaveOrPublishStory = function () {
   if (getElement('#publishBtn')) {
+    editorjs.addEventListener('keyup', saveDraft);
     publishBtn.addEventListener('click', openPopUp);
-    saveAsDraft.addEventListener('click', saveDraft);
   }
   const $publishNowBtn = getElement('#publishNowBtn');
   $publishNowBtn && $publishNowBtn.addEventListener('click', publishBlog);
-  const $publishPublished = getElement('#publishPublished');
-  $publishPublished &&
-    $publishPublished.addEventListener('click', saveAndPublish);
+  const $saveAndPublish = getElement('#saveAndPublish');
+  $saveAndPublish && $saveAndPublish.addEventListener('click', saveAndPublish);
 };
 
 const main = function () {
   attachHeadListener();
   articleTitle.addEventListener('keypress', handleTitleKeypress);
   articleTitle.addEventListener('keyup', togglePublishedOnTitle);
-  closeBtn.addEventListener('click', closePopUp);
-
   createEditor();
   attachSaveOrPublishStory();
   attachTagListener();
