@@ -69,11 +69,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get(
-  /(\/|\/index.html)$/,
-  attachUserIfSignedIn,
-  serveDashboardIfUserSignedIn
-);
 app.use(express.static('public'));
 
 app.get('/authenticate', redirectToGithub);
@@ -90,6 +85,7 @@ app.get('/checkUsername/:userName', checkUsernameAvailability);
 app.post('/signUp', registerUser);
 
 app.use(attachUserIfSignedIn);
+app.get('/', serveDashboardIfUserSignedIn);
 app.get('/profile/:profileID', serveProfilePage);
 app.get('/blogPage/:storyID', serveBlogPage);
 

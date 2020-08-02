@@ -31,11 +31,11 @@ const authorizeUser = function (req, res, next) {
   next();
 };
 
-const serveDashboardIfUserSignedIn = function (req, res, next) {
+const serveDashboardIfUserSignedIn = function (req, res) {
   if (req.user && req.user.isSignedIn) {
     return res.redirect('/dashboard');
   }
-  next();
+  res.render('index');
 };
 
 const redirectToGithub = function (req, res) {

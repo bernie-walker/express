@@ -19,11 +19,22 @@ describe('GET', () => {
   });
 
   context('/', () => {
+    before(() =>
+      setUpDatabase(app.locals.dbClientReference, ['users', 'stories', 'tags'])
+    );
+    after(() => cleanDatabase(app.locals.dbClientReference));
+
     it('should serve the home page', async () => {
+      fakeGetSession.resolves(null);
       await request(app)
         .get('/')
         .expect(200)
-        .expect(/Express/);
+        .expect(/Express/)
+        .expect(/sign in/);
+    });
+
+    it('should serve the dashboard if user is already signed in', async () => {
+      await request(app).get('/').expect(302).expect('Location', '/dashboard');
     });
   });
 
