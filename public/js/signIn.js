@@ -15,7 +15,11 @@ const hideIfTargetIsCover = function () {
 const showSignInPopup = () => backCover.classList.remove('hidden-cover');
 
 const attachSignInListeners = function () {
-  signIn.addEventListener('click', showSignInPopup);
+  const getAllElement = (selector) => document.querySelectorAll(selector);
+  Array.from(getAllElement('#signIn')).forEach((signIn) => {
+    signIn.addEventListener('click', showSignInPopup);
+  });
+
   closeIcon.addEventListener('click', hideSignInPopup);
   backCover.addEventListener('click', hideIfTargetIsCover);
   document.querySelector('body').addEventListener('keydown', hideSigInIfEsc);

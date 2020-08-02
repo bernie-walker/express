@@ -159,8 +159,15 @@ const serveBlogImage = function (req, res) {
 
 const serveBlogPage = async function (req, res) {
   try {
-    const blog = await req.app.locals.stories.getStoryPage(req.params.storyID);
-    res.render('blogPage', Object.assign(blog, req.user));
+    const { stories, claps } = req.app.locals;
+    const { storyID } = req.params;
+    const clapsCount = await claps.clapCount(storyID);
+    const isClapped = await claps.isClapped(storyID, req.user.id);
+    const blog = await stories.getStoryPage(storyID);
+    res.render(
+      'blogPage',
+      Object.assign(blog, req.user, clapsCount, { isClapped })
+    );
   } catch (error) {
     res.sendStatus(statusCodes.notFound);
   }

@@ -63,4 +63,10 @@ html
       
       .tags 
         each tag in tags
-          .tag= tag     
+          .tag= tag
+      .story-response
+        -const className = isClapped ? "clapped":""
+        #clap(class= className)
+          -const idName = isSignedIn ? "clap" : "signIn"
+          img(src="/images/clap.png" class="clap-image" id=idName)
+          span #{count} claps

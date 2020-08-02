@@ -228,3 +228,22 @@ p b {
   border-color: #ccc;
   color: #666;
 }
+
+.story-response {
+  display: flex;
+  padding: 1vh 1vw;
+}
+
+.story-response div {
+  align-items: center;
+  display: flex;
+}
+
+.story-response img {
+  height: 5vh;
+  cursor: pointer;
+}
+
+.clapped {
+  opacity: 0.6;
+}
