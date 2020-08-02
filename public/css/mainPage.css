@@ -65,7 +65,7 @@ a {
   }
 }
 
-#signIn {
+.signIn {
   border: 1px solid rgba(0, 128, 0, 0.6);
   color: rgba(0, 128, 0, 0.7);
   border-radius: 0.4vw;
@@ -73,15 +73,16 @@ a {
   font-size: 1.5vw;
   font-weight: 400;
   cursor: pointer;
+  margin-left: 2vh;
 }
 
-#signIn:hover {
+.signIn:hover {
   border: 1px solid green;
   color: green;
 }
 
 @media (max-width: 420px) {
-  #signIn {
+  .signIn {
     height: 24px;
     font-size: 16px;
     line-height: 24px;
