@@ -29,13 +29,13 @@ body
       - const status = state === 'drafted' ? 'Draft': ''
       #saveConfirmation= status
     .searchAndProfile
-      .actions
+      .story-actions
         if state === 'drafted'
-          #saveAsDraft.btn Save As Draft
+          #saveAsDraft.btn save as draft
         if state === 'published'  
-          .btn#publishPublished Save and Publish
+          .btn#publishPublished save and publish
         else
-          .btn#publishBtn Publish
+          .btn#publishBtn publish
 
       .profile
         img#profile(src= avatar_url, alt="avatar")
@@ -54,7 +54,7 @@ body
               a(href="/userStories") stories
           .section
             div 
-              a(href="/signOut") sign out
+              #signOut sign out
             //- div help
   #editor
     - const storyTitle = title === 'Untitled Story' ?  '' : title;
@@ -67,6 +67,14 @@ body
       input#tagInput(placeholder="Add a tag..." maxlength="25" title="max 25 alphaNumeric characters only")
       .tags
       div.button
-        button.btn#publishNowBtn Publish Now
+        button.btn#publishNowBtn publish now
       div#closeBtn
         img(src="/images/close.png", alt="X")
+
+
+  .sign-out-confirmation
+    div
+      .msg Are you sure to sign out?
+    .actions
+      #cancel cancel
+      a(href="/signout") sign out

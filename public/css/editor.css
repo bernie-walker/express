@@ -78,19 +78,21 @@ body {
   }
 }
 
-.actions {
+.story-actions {
   display: flex;
   margin-right: 2vw;
 }
 .btn {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   margin: 1.5vh 0.5vw;
-  border: 1px solid;
+  font-size: calc(0.8vh + 0.7em);
+  border: 1px solid green;
+  color: green;
   height: 3.5vh;
-  border-radius: 0.4em;
-  padding: 0.3vw 0.6vw 0 0.6vw;
+  border-radius: 4px;
+  padding: 0.3vw 0.8vw 0 0.8vw;
+  font-weight: 600;
   align-content: center;
-  background-color: green;
-  color: white;
   cursor: pointer;
 }
 
@@ -352,6 +354,58 @@ body {
 #closeBtn > img {
   height: inherit;
   width: inherit;
+}
+
+.sign-out-confirmation {
+  position: absolute;
+  top: 33vh;
+  left: 33vw;
+  width: 30vw;
+  border: 1px solid #333;
+  padding: 2vw;
+  background-color: #fff;
+  z-index: 1;
+  visibility: hidden;
+  opacity: 0;
+}
+
+body.blur > div {
+  opacity: 0.1;
+}
+.sign-out-confirmation.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.msg {
+  font-size: calc(1vw + 1em);
+  text-align: center;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2vh;
+}
+
+.actions > div,
+.actions > a {
+  font-size: calc(0.7vw + 0.7em);
+  border: 1px solid;
+  margin: 1vh 1vw;
+  padding: 1vh 2vw;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.actions #cancel {
+  border-color: black;
+}
+
+.actions a {
+  border-color: #c33;
+  color: #c33;
 }
 
 .hidden {
