@@ -24,10 +24,11 @@ body {
 }
 .bio {
   margin-top: 2vh;
-  font-size: calc(0.6vw + 0.5em);
-  color: #888;
+  font-size: calc(0.5vw + 0.5em);
+  color: #aaa;
   font-weight: 300;
   letter-spacing: 0.1vh;
+  padding: 0 2vh;
 }
 .profile-icon {
   display: flex;
@@ -37,6 +38,7 @@ body {
   height: 20vh;
   width: 20vh;
   border-radius: 50%;
+  border: 1px solid #555;
 }
 
 .optionBar {
@@ -85,6 +87,7 @@ body {
 .author-profile-icon img {
   height: inherit;
   width: inherit;
+  border: 1px solid #555;
   border-radius: 50%;
 }
 

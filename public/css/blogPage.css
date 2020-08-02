@@ -7,14 +7,6 @@ body {
   margin: 0 auto;
 }
 
-button {
-  cursor: pointer;
-}
-
-button:disabled {
-  cursor: default;
-}
-
 a {
   color: inherit;
 }
@@ -43,7 +35,8 @@ a {
 }
 
 .blog-meta {
-  padding: 1.5vw;
+  margin: 1vh;
+  padding: 0 1.5vw;
   display: flex;
   justify-content: space-between;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
