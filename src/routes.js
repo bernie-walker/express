@@ -3,11 +3,10 @@ const redis = require('redis');
 const Sqlite3 = require('sqlite3').verbose();
 const axios = require('axios');
 const cookieParser = require('cookie-parser');
-const { ExpressDB, ExpressDS } = require('./expressData');
-const { Users } = require('./users');
-const { Stories } = require('./stories');
-const { Tags } = require('./tags');
-const { Fetch } = require('./expressResourceFetcher');
+const { ExpressDB, ExpressDS } = require('./dataProviders');
+const { Users, Stories, Tags } = require('./dataModels');
+const { Fetch } = require('./resourceFetcher');
+
 const {
   NO_LOG,
   BLOG_IMAGE_PATH,

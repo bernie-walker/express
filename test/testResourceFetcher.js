@@ -1,7 +1,7 @@
 const sinon = require('sinon');
 const chaiAsPromised = require('chai-as-promised');
 const { assert, expect } = require('chai').use(chaiAsPromised);
-const { Fetch } = require('../src/expressResourceFetcher');
+const { Fetch } = require('../src/resourceFetcher');
 
 describe('Fetch', function () {
   const fakeHttpClient = sinon.stub();

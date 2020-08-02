@@ -1,8 +1,8 @@
 const request = require('supertest');
 const sinon = require('sinon');
 const { app } = require('../src/routes');
-const { Fetch } = require('../src/expressResourceFetcher');
-const { ExpressDS } = require('../src/expressData');
+const { Fetch } = require('../src/resourceFetcher');
+const { ExpressDS } = require('../src/dataProviders');
 const { setUpDatabase, cleanDatabase } = require('./fixture/databaseSetUp');
 app.locals.expressDS.closeClient();
 

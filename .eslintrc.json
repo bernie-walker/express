@@ -81,7 +81,7 @@
         "test*.js",
         "server.js",
         "test/*/*.js",
-        "src/expressResourceFetcher.js"
+        "src/resourceFetcher.js"
       ],
       "rules": {
         "max-len": "warn",
@@ -99,7 +99,7 @@
       }
     },
     {
-      "files": ["src/expressData.js"],
+      "files": ["src/dataProviders.js"],
       "rules": {
         "handle-callback-err": "off",
         "no-magic-numbers": "off",

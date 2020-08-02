@@ -1,4 +1,4 @@
-const { generateUrl } = require('./expressResourceFetcher');
+const { generateUrl } = require('./resourceFetcher');
 const moment = require('moment');
 const statusCodes = require('./statusCodes.json');
 

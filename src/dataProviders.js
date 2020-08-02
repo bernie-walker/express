@@ -8,7 +8,7 @@ const {
   userStoriesQuery,
   userProfileQuery,
   addTagsQuery,
-} = require('./expressDBQueries');
+} = require('./dbQueries');
 
 class ExpressDB {
   constructor(dbClient) {
