@@ -8,6 +8,10 @@ const {
   userStoriesQuery,
   userProfileQuery,
   addTagsQuery,
+  addClapQuery,
+  removeClapQuery,
+  isClappedQuery,
+  clapCountQuery,
 } = require('./dbQueries');
 
 const setExpirationAndResolve = function (dsClient, token, resolve) {
@@ -213,6 +217,41 @@ class ExpressDB {
   addTags(tags, storyID) {
     return new Promise((resolve) => {
       this.dbClient.run(addTagsQuery(tags, storyID), resolve);
+    });
+  }
+
+  addClap(clappedOn, clappedBy) {
+    return new Promise((resolve) => {
+      this.dbClient.run(addClapQuery(), [clappedOn, clappedBy], resolve);
+    });
+  }
+
+  removeClap(clappedOn, clappedBy) {
+    return new Promise((resolve) => {
+      this.dbClient.run(removeClapQuery(), [clappedOn, clappedBy], resolve);
+    });
+  }
+
+  isClapped(clappedOn, clappedBy) {
+    return new Promise((resolve) => {
+      this.dbClient.get(
+        isClappedQuery(),
+        [clappedOn, clappedBy],
+        (err, row) => {
+          if (row) {
+            return resolve(true);
+          }
+          resolve();
+        }
+      );
+    });
+  }
+
+  clapCount(clappedOn) {
+    return new Promise((resolve) => {
+      this.dbClient.get(clapCountQuery(), [clappedOn], (err, row) => {
+        resolve(row);
+      });
     });
   }
 }

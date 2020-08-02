@@ -72,6 +72,22 @@ const addTagsQuery = function (tags, storyID) {
           VALUES ${tagsAndStoryID.join(',')};`;
 };
 
+const addClapQuery = function () {
+  return 'INSERT INTO claps (clapped_on, clapped_by) VALUES(?,?);';
+};
+
+const removeClapQuery = function () {
+  return 'DELETE FROM claps WHERE clapped_on=? AND clapped_by=?;';
+};
+
+const isClappedQuery = function () {
+  return 'SELECT * FROM claps WHERE clapped_on=? AND clapped_by=?;';
+};
+
+const clapCountQuery = function () {
+  return 'SELECT count(*) as count FROM claps WHERE clapped_on=?;';
+};
+
 module.exports = {
   latestNStoriesQuery,
   publishedStoryQuery,
@@ -82,4 +98,8 @@ module.exports = {
   userStoriesQuery,
   userProfileQuery,
   addTagsQuery,
+  addClapQuery,
+  removeClapQuery,
+  isClappedQuery,
+  clapCountQuery,
 };
