@@ -141,9 +141,6 @@
     margin-left: 90%;
   }
 }
-.hidden {
-  display: none;
-}
 
 .section {
   border-bottom: 1px solid #ddd;
@@ -157,12 +154,15 @@
   text-align: center;
 }
 
-.section a {
+.section a,
+.section div {
   text-decoration: none;
   color: rgba(10, 10, 10, 0.6);
+  cursor: pointer;
 }
 
-.section a:hover {
+.section a:hover,
+.section div:hover {
   color: rgba(10, 10, 10, 0.8);
 }
 
@@ -184,19 +184,59 @@
 #username::before {
   content: '@';
 }
-::-webkit-scrollbar {
-  width: 4px;
-}
-::-webkit-scrollbar-track {
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
+
+.sign-out-confirmation {
+  position: absolute;
+  top: 33vh;
+  left: 33vw;
+  width: 30vw;
+  border: 1px solid #333;
+  padding: 2vw;
+  background-color: #fff;
+  z-index: 1;
+  visibility: hidden;
+  opacity: 0;
 }
 
-::-webkit-scrollbar-thumb {
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-  background: rgba(117, 117, 121, 0.8);
+body.blur > div {
+  opacity: 0.1;
 }
-::-webkit-scrollbar-thumb:window-inactive {
-  background: rgba(117, 117, 121, 0.8);
+.sign-out-confirmation.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.msg {
+  font-size: calc(1vw + 1em);
+  text-align: center;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2vh;
+}
+
+.actions > div,
+.actions > a {
+  font-size: calc(0.7vw + 0.7em);
+  border: 1px solid;
+  margin: 1vh 1vw;
+  padding: 1vh 2vw;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.actions #cancel {
+  border-color: black;
+}
+
+.actions a {
+  border-color: #c33;
+  color: #c33;
+}
+
+.hidden {
+  display: none;
 }

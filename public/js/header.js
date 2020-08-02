@@ -33,6 +33,18 @@ const attachProfileIconListeners = function () {
   attachToGoToProfile();
 };
 
+const attachSignOutListener = function () {
+  const $confirmationBox = getElement('.sign-out-confirmation');
+  signOut.addEventListener('click', () => {
+    $confirmationBox.classList.add('open');
+    getElement('body').classList.add('blur');
+  });
+  cancel.addEventListener('click', () => {
+    $confirmationBox.classList.remove('open');
+    getElement('body').classList.remove('blur');
+  });
+};
+
 const attachHeadListener = function () {
   attachGotoDashboardToLogo();
   const profile = getElement('#profile');
@@ -43,4 +55,5 @@ const attachHeadListener = function () {
   }
 
   attachProfileIconListeners();
+  attachSignOutListener();
 };
