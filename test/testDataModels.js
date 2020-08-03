@@ -213,7 +213,7 @@ describe('Users', function () {
       );
     });
 
-    it('should reject for invlaid userID', function () {
+    it('should reject for invalid userID', function () {
       return expect(users.getUserProfile('invalid')).to.be.eventually.rejected;
     });
   });

@@ -68,7 +68,7 @@ describe('GET', () => {
       request(app)
         .get('/newStory')
         .expect(302)
-        .expect('Location', '/editor/3')
+        .expect('Location', '/editor/4')
         .end((err) => {
           if (err) {
             done(err);
@@ -270,6 +270,22 @@ describe('GET', () => {
         .expect(/Express/)
         .expect(/palpriyanshu/)
         .expect(/Priyanshu/)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should serve the profile page when user exists and has only drafted stories', function (done) {
+      request(app)
+        .get('/profile/shiviraj')
+        .expect(200)
+        .expect(/Express/)
+        .expect(/palpriyanshu/)
+        .expect(/Shivam Rajputh/)
         .end((err) => {
           if (err) {
             done(err);

@@ -1,6 +1,10 @@
 const groupStories = function (profileRows) {
   return profileRows.reduce((stories, row) => {
-    const { storyID, title, content, coverImage, lastModified } = row;
+    const { storyID, title, content, coverImage, lastModified, state } = row;
+
+    if (state === 'drafted') {
+      return stories;
+    }
 
     const story = {
       storyID,
