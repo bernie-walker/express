@@ -22,19 +22,38 @@ describe('GET', () => {
     before(() =>
       setUpDatabase(app.locals.dbClientReference, ['users', 'stories', 'tags'])
     );
+
     after(() => cleanDatabase(app.locals.dbClientReference));
 
-    it('should serve the home page', async () => {
+    it('should serve the home page if user is not signed in', (done) => {
       fakeGetSession.resolves(null);
-      await request(app)
+      request(app)
         .get('/')
         .expect(200)
         .expect(/Express/)
-        .expect(/sign in/);
+        .expect(/sign in/)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
     });
 
-    it('should serve the dashboard if user is already signed in', async () => {
-      await request(app).get('/').expect(302).expect('Location', '/dashboard');
+    it('should serve the dashboard if user is signed in', function (done) {
+      request(app)
+        .get('/')
+        .expect(200)
+        .expect(/Express/)
+        .expect(/palpriyanshu/)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
     });
   });
 
@@ -112,42 +131,6 @@ describe('GET', () => {
       fakeGetSession.resolves(null);
       request(app)
         .get('/editor/1')
-        .expect(401)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
-    });
-  });
-
-  context('/dashboard', () => {
-    before(() =>
-      setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
-    );
-
-    after(() => cleanDatabase(app.locals.dbClientReference));
-
-    it('should serve the dashboard for an authorized user', function (done) {
-      request(app)
-        .get('/dashboard')
-        .expect(200)
-        .expect(/Express/)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
-    });
-
-    it('should respond with 401 for unauthorized user', function (done) {
-      fakeGetSession.resolves(null);
-      request(app)
-        .get('/dashboard')
         .expect(401)
         .end((err) => {
           if (err) {
@@ -371,7 +354,7 @@ describe('GET', () => {
       request(app)
         .get('/gitOauth/authCode?code=goodCode1')
         .expect(302)
-        .expect('Location', '/dashboard')
+        .expect('Location', '/')
         .expect('set-cookie', /sesID=1/)
         .end((err) => {
           if (err) {

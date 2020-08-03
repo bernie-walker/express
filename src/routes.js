@@ -20,7 +20,8 @@ const {
 const {
   logRequest,
   attachUserIfSignedIn,
-  serveDashboardIfUserSignedIn,
+  serveHomepage,
+  serveDashboard,
   redirectToGithub,
   closeSession,
   authenticateUser,
@@ -29,7 +30,6 @@ const {
   takeToSignUp,
   checkUsernameAvailability,
   registerUser,
-  serveDashboard,
   serveBlogImage,
   serveBlogPage,
   createNewStory,
@@ -78,6 +78,7 @@ app.get(
   redirectAuthenticated,
   takeToSignUp
 );
+
 app.get('/blog_image/:imageID', serveBlogImage);
 app.get('/signOut', closeSession);
 
@@ -85,12 +86,11 @@ app.get('/checkUsername/:userName', checkUsernameAvailability);
 app.post('/signUp', registerUser);
 
 app.use(attachUserIfSignedIn);
-app.get('/', serveDashboardIfUserSignedIn);
+app.get('/', serveHomepage, serveDashboard);
 app.get('/profile/:profileID', serveProfilePage);
 app.get('/blogPage/:storyID', serveBlogPage);
 
 app.use(authorizeUser);
-app.get('/dashboard', serveDashboard);
 app.get('/newStory', createNewStory);
 app.get('/editor/:storyID', renderEditor);
 app.get('/userStories', serveUserStoriesPage);

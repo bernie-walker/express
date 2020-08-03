@@ -31,11 +31,18 @@ const authorizeUser = function (req, res, next) {
   next();
 };
 
-const serveDashboardIfUserSignedIn = function (req, res) {
+const serveHomepage = function (req, res, next) {
   if (req.user && req.user.isSignedIn) {
-    return res.redirect('/dashboard');
+    next();
+    return;
   }
   res.render('index');
+};
+
+const serveDashboard = async function (req, res) {
+  const blogsNeeded = 10;
+  const recentStories = await req.app.locals.stories.get(blogsNeeded);
+  res.render('dashboard', Object.assign({ recentStories, moment }, req.user));
 };
 
 const redirectToGithub = function (req, res) {
@@ -76,6 +83,12 @@ const authenticateUser = function (req, res, next) {
     });
 };
 
+const createSessionAndRedirect = async function (res, dataStore, userID) {
+  const sesID = await dataStore.createSession(userID);
+  res.cookie('sesID', sesID);
+  res.redirect('/');
+};
+
 const redirectAuthenticated = async function (req, res, next) {
   const { users, expressDS } = req.app.locals;
   const { githubID } = req.body.gitUserInfo;
@@ -86,9 +99,7 @@ const redirectAuthenticated = async function (req, res, next) {
     return;
   }
 
-  const sesID = await expressDS.createSession(account.userID);
-  res.cookie('sesID', sesID);
-  res.redirect('/dashboard');
+  createSessionAndRedirect(res, expressDS, account.userID);
 };
 
 const takeToSignUp = async function (req, res) {
@@ -131,20 +142,11 @@ const registerUser = async function (req, res) {
   users
     .registerUser(Object.assign(registrationInfo, req.body))
     .then((userID) => {
-      expressDS.createSession(userID).then((sesID) => {
-        res.cookie('sesID', sesID);
-        res.redirect('/dashboard');
-      });
+      createSessionAndRedirect(res, expressDS, userID);
     })
     .catch(() => {
       res.sendStatus(statusCodes.unprocessableEntity);
     });
-};
-
-const serveDashboard = async function (req, res) {
-  const blogsNeeded = 10;
-  const recentStories = await req.app.locals.stories.get(blogsNeeded);
-  res.render('dashboard', Object.assign({ recentStories, moment }, req.user));
 };
 
 const serveBlogImage = function (req, res) {
@@ -269,7 +271,7 @@ module.exports = {
   logRequest,
   attachUserIfSignedIn,
   authorizeUser,
-  serveDashboardIfUserSignedIn,
+  serveHomepage,
   redirectToGithub,
   closeSession,
   authenticateUser,
