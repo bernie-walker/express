@@ -346,7 +346,7 @@ describe('GET', () => {
     });
   });
 
-  context.skip('/gitOauth/authCode', function () {
+  context('/gitOauth/authCode', function () {
     let fakeGetAccessToken, fakeGetUserInfo;
 
     before(() =>
@@ -358,7 +358,6 @@ describe('GET', () => {
     beforeEach(() => {
       fakeGetAccessToken = sinon.stub(Fetch.prototype, 'getAccessToken');
       fakeGetUserInfo = sinon.stub(Fetch.prototype, 'getUserInfo');
-      fakeGetAccessToken.rejects();
     });
 
     it('should redirect to dashboard when the code is valid and the user has an account', function (done) {
@@ -383,13 +382,20 @@ describe('GET', () => {
         });
     });
 
-    it('should redirect to mainPage when the code is valid but user has no account', function (done) {
+    it('should redirect to sign up when the code is valid but user has no account', function (done) {
       fakeGetAccessToken.withArgs('goodCode2').resolves('token2');
-      fakeGetUserInfo.withArgs('token2').resolves({ githubID: 1234 });
+      fakeGetUserInfo
+        .withArgs('token2')
+        .resolves({ githubID: 1234, avatarURL: 'url' });
+      sinon
+        .stub(ExpressDS.prototype, 'createTempToken')
+        .withArgs({ githubID: 1234, avatarURL: 'url' })
+        .resolves(1);
+
       request(app)
         .get('/gitOauth/authCode?code=goodCode2')
-        .expect(302)
-        .expect('Location', '/')
+        .expect(200)
+        .expect('set-cookie', /regT=1/)
         .end((err) => {
           if (err) {
             done(err);
@@ -400,6 +406,7 @@ describe('GET', () => {
     });
 
     it('should send unauthorized for a bad code', function (done) {
+      fakeGetAccessToken.rejects();
       request(app)
         .get('/gitOauth/authCode')
         .expect(401)
@@ -431,10 +438,7 @@ describe('GET', () => {
         .set('cookie', 'sesID=1')
         .expect(302)
         .expect('Location', '/')
-        .expect(
-          'set-cookie',
-          'sesID=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT'
-        )
+        .expect('set-cookie', /sesID=;.*Expires=/)
         .end((err) => {
           sinon.assert.calledWith(fakeDelete, '1');
           if (err) {
