@@ -33,7 +33,7 @@ class Users {
 
   registerUser(userInfo) {
     const { displayName, bio } = userInfo;
-    userInfo.displayName = displayName || null;
+    userInfo.displayName = displayName || 'Expresser';
     userInfo.bio = bio || null;
     return this.db.createUserAccount(userInfo);
   }

@@ -641,4 +641,91 @@ describe('POST', function () {
         });
     });
   });
+
+  context('/signUp', function () {
+    before(() => setUpDatabase(app.locals.dbClientReference, ['users']));
+
+    after(() => cleanDatabase(app.locals.dbClientReference));
+
+    it('should register and redirect the user to / when valid credentials', function (done) {
+      sinon
+        .stub(ExpressDS.prototype, 'getTokenValue')
+        .resolves({ githubID: 1234, avatarURL: 'url' });
+      sinon.stub(ExpressDS.prototype, 'createSession').resolves(1);
+
+      request(app)
+        .post('/signUp')
+        .send({ userID: 'bernie' })
+        .expect(302)
+        .expect('Location', '/')
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond with 422 when there is no user name', function (done) {
+      request(app)
+        .post('/signUp')
+        .expect(422)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond with 422 when the user name has spaces', function (done) {
+      request(app)
+        .post('/signUp')
+        .send({ userID: 'b ernie' })
+        .expect(422)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond with 422 when the user name is already taken', function (done) {
+      sinon
+        .stub(ExpressDS.prototype, 'getTokenValue')
+        .resolves({ githubID: 1234, avatarURL: 'url' });
+
+      request(app)
+        .post('/signUp')
+        .send({ userID: 'palpriyanshu' })
+        .expect(422)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond with 401 when the registration token is invalid', function (done) {
+      sinon.stub(ExpressDS.prototype, 'getTokenValue').resolves(null);
+
+      request(app)
+        .post('/signUp')
+        .send({ userID: 'bernie' })
+        .expect(401)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+  });
 });

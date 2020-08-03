@@ -54,7 +54,7 @@ describe('Users', function () {
 
     it('should assign null for displayName and bio if not available', function (done) {
       const expectedUserInfo = {
-        displayName: null,
+        displayName: 'Expresser',
         bio: null,
       };
 
