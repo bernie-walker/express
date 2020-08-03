@@ -449,6 +449,38 @@ describe('GET', () => {
         });
     });
   });
+
+  context('/checkUsername', function () {
+    before(() => setUpDatabase(app.locals.dbClientReference, ['users']));
+
+    after(() => cleanDatabase(app.locals.dbClientReference));
+
+    it('should respond with available if username is available', function (done) {
+      request(app)
+        .get('/checkUsername/bernie')
+        .expect(JSON.stringify({ available: true }))
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond with unavailable if username is taken', function (done) {
+      request(app)
+        .get('/checkUsername/palpriyanshu')
+        .expect(JSON.stringify({ available: false }))
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+  });
 });
 
 describe('POST', function () {

@@ -64,11 +64,11 @@ describe('Users', function () {
       });
     });
 
-    it('should register the user with unique userID', function () {
-      fakeCreateUserAccount.rejects;
+    it('should not register the user if userID is not unique', function () {
+      fakeCreateUserAccount.rejects();
       return expect(
         users.registerUser({ userID: 'wrong' })
-      ).to.eventually.equal('bernie');
+      ).to.be.eventually.rejected;
     });
   });
 
