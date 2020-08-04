@@ -7,10 +7,13 @@ const {
   userStories,
   userProfile,
   addTag,
+  deleteTag,
+  getAllTags,
   addClap,
   removeClap,
   isClapped,
   clapCount,
+  updateStory,
 } = require('./queries.json');
 
 const setExpirationAndResolve = function (dsClient, token, resolve) {
@@ -140,16 +143,11 @@ class ExpressDB {
 
   updateStory(modifiedStory) {
     const { title, content, state, id, author } = modifiedStory;
-    const status = state ? `state='${state}',` : '';
-    const query = `UPDATE stories SET title=?, content=?,
-                   ${status} 
-                   last_modified=CURRENT_TIMESTAMP
-                   WHERE id=? AND written_by=?`;
 
     return new Promise((resolve) => {
       this.dbClient.run(
-        query,
-        [title, JSON.stringify(content), id, author],
+        updateStory,
+        [title, JSON.stringify(content), state, id, author],
         resolve
       );
     });
@@ -222,6 +220,20 @@ class ExpressDB {
     return new Promise((resolve) => {
       this.dbClient.run(addTag, [tagOn, tag], () => {
         resolve();
+      });
+    });
+  }
+
+  deleteTags(tagOn) {
+    return new Promise((resolve) => {
+      this.dbClient.run(deleteTag, [tagOn], resolve);
+    });
+  }
+
+  getTags(storyID) {
+    return new Promise((resolve) => {
+      this.dbClient.all(getAllTags, [storyID], (err, rows) => {
+        resolve(rows);
       });
     });
   }

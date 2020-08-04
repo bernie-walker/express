@@ -7,8 +7,11 @@
   "userStories": "SELECT title, id as storyID, date(last_modified) as lastModified FROM stories WHERE written_by=? AND state=? ORDER BY last_modified DESC;",
   "userProfile": "SELECT usr.id as profileID, usr.display_name as profileName, usr.avatar_url as profileAvatar, usr.bio,str.id as storyID, str.title, str.content, str.state,str.cover_image as coverImage, date(str.last_modified) as lastModified FROM users as usr LEFT JOIN stories as str ON usr.id=str.written_by WHERE usr.id=? ORDER BY last_modified DESC;",
   "addTag": "INSERT INTO tags(tag_on, tag) VALUES(?,?);",
+  "deleteTag": "DELETE FROM tags WHERE tag_on=?;",
+  "getAllTags": "SELECT * FROM tags WHERE tag_on=?;",
   "addClap": "INSERT INTO claps (clapped_on, clapped_by) VALUES(?,?);",
   "removeClap": "DELETE FROM claps WHERE clapped_on=? AND clapped_by=?;",
   "isClapped": "SELECT * FROM claps WHERE clapped_on=? AND clapped_by=?;",
-  "clapCount": "SELECT count(*) as count FROM claps WHERE clapped_on=?;"
+  "clapCount": "SELECT count(*) as count FROM claps WHERE clapped_on=?;",
+  "updateStory": "UPDATE stories SET title=?, content=?, state=?, last_modified=CURRENT_TIMESTAMP WHERE id=? AND written_by=?"
 }

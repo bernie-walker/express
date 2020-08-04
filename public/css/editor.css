@@ -111,6 +111,7 @@ body {
   cursor: pointer;
   height: inherit;
   width: inherit;
+  border: 1px solid #0a0a0a99;
   border-radius: 50%;
 }
 @media (max-width: 420px) {
@@ -168,12 +169,15 @@ body {
   text-align: center;
 }
 
-.section a {
+.section a,
+.section div {
+  cursor: pointer;
   text-decoration: none;
   color: rgba(10, 10, 10, 0.6);
 }
 
-.section a:hover {
+.section a:hover,
+.section div:hover {
   color: rgba(10, 10, 10, 0.8);
 }
 
@@ -243,9 +247,9 @@ body {
 }
 
 .modal-container {
-  width: 94%;
-  height: 88%;
-  position: absolute;
+  width: 100%;
+  height: 100%;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 1;
@@ -357,24 +361,26 @@ body {
 }
 
 .sign-out-confirmation {
-  position: absolute;
+  position: fixed;
   top: 33vh;
-  left: 33vw;
-  width: 30vw;
-  border: 1px solid #333;
+  left: 30vw;
+  width: 36vw;
   padding: 2vw;
   background-color: #fff;
   z-index: 1;
   visibility: hidden;
   opacity: 0;
+  box-shadow: 0 1px 0.6vw 0.4vw #bbbaba33;
 }
 
 body.blur > div {
-  opacity: 0.1;
+  opacity: 0;
+  pointer-events: none;
 }
 .sign-out-confirmation.open {
   opacity: 1;
   visibility: visible;
+  pointer-events: all;
 }
 
 .msg {

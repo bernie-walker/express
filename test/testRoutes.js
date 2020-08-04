@@ -95,7 +95,7 @@ describe('GET', () => {
 
   context('/editor', function () {
     before(() =>
-      setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
+      setUpDatabase(app.locals.dbClientReference, ['users', 'stories', 'tags'])
     );
 
     after(() => cleanDatabase(app.locals.dbClientReference));

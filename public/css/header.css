@@ -88,7 +88,7 @@
 .avatar {
   height: 48px;
   width: 48px;
-  border: 1px solid rgba(10, 10, 10, 0.6);
+  border: 1px solid #0a0a0a99;
   border-radius: 50%;
 }
 
@@ -186,24 +186,26 @@
 }
 
 .sign-out-confirmation {
-  position: absolute;
+  position: fixed;
   top: 33vh;
-  left: 33vw;
-  width: 30vw;
-  border: 1px solid #333;
+  left: 30vw;
+  width: 36vw;
   padding: 2vw;
   background-color: #fff;
   z-index: 1;
   visibility: hidden;
   opacity: 0;
+  box-shadow: 0 1px 0.6vw 0.4vw #bbbaba33;
 }
 
 body.blur > div {
-  opacity: 0.1;
+  opacity: 0;
+  pointer-events: none;
 }
 .sign-out-confirmation.open {
   opacity: 1;
   visibility: visible;
+  pointer-events: all;
 }
 
 .msg {

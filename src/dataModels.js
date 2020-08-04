@@ -149,11 +149,16 @@ class Tags {
     this.db = db;
   }
 
-  async addTags(storyID, tags) {
+  async updateTags(storyID, tags) {
+    await this.db.deleteTags(storyID);
     for (const tag of tags) {
       await this.db.addTag(storyID, tag);
     }
-    return true;
+  }
+
+  async getAllTags(storyID) {
+    const tags = await this.db.getTags(storyID);
+    return tags.map((tag) => tag.tag);
   }
 }
 

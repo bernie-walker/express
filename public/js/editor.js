@@ -136,13 +136,19 @@ const addTag = function () {
   tagInput.value = '';
 };
 
+const disableInput = function () {
+  if (getElement('.tags').childElementCount >= 5) {
+    tagInput.setAttribute('disabled', true);
+  }
+};
+
 const attachTagListener = function () {
   tagInput.addEventListener('keypress', (event) => {
     event.key === 'Enter' && addTag();
-    if (getElement('.tags').childElementCount >= 5) {
-      tagInput.setAttribute('disabled', true);
-    }
+    disableInput();
   });
+
+  disableInput();
   removeTagListener();
   closeBtn.addEventListener('click', closePopUp);
 };
@@ -155,7 +161,7 @@ const attachSaveOrPublishStory = function () {
   const $publishNowBtn = getElement('#publishNowBtn');
   $publishNowBtn && $publishNowBtn.addEventListener('click', publishBlog);
   const $saveAndPublish = getElement('#saveAndPublish');
-  $saveAndPublish && $saveAndPublish.addEventListener('click', saveAndPublish);
+  $saveAndPublish && $saveAndPublish.addEventListener('click', openPopUp);
 };
 
 const main = function () {

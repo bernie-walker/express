@@ -184,8 +184,12 @@ const createNewStory = async function (req, res) {
 };
 
 const renderEditor = async function (req, res) {
-  const { stories } = req.app.locals;
+  const { stories, tags } = req.app.locals;
   const storyContent = await stories.getStory(req.params.storyID, req.user.id);
+
+  if (storyContent && storyContent.state === 'published') {
+    storyContent.tags = await tags.getAllTags(req.params.storyID);
+  }
 
   if (storyContent) {
     res.render('editor', Object.assign(storyContent, req.user));
@@ -200,7 +204,7 @@ const saveStory = function (req, res) {
   const title = storyTitle.trim() || 'Untitled Story';
 
   stories
-    .updateStory({ title, content, author: req.user.id, id })
+    .updateStory({ title, content, state: 'drafted', author: req.user.id, id })
     .then(res.end.bind(res))
     .catch(() => {
       res.sendStatus(statusCodes.unprocessableEntity);
@@ -226,16 +230,16 @@ const isStoryValid = function (title, allTags) {
 const publishStory = async function (req, res) {
   const author = req.user.id;
   const { stories } = req.app.locals;
-  const { storyTitle = '', blocks: content, storyID: id, tags } = req.body;
+  const { storyTitle, blocks: content, storyID: id, tags } = req.body;
 
-  const title = storyTitle.trim();
+  const title = storyTitle && storyTitle.trim();
   const allTags = validateTags(tags);
 
   if (!isStoryValid(title, allTags)) {
     return res.sendStatus(statusCodes.unprocessableEntity);
   }
 
-  req.app.locals.tags.addTags(id, allTags);
+  req.app.locals.tags.updateTags(id, allTags);
 
   stories
     .updateStory({ title, content, state: 'published', author, id })
