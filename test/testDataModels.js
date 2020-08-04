@@ -246,8 +246,11 @@ describe('Stories', function () {
       const fakeGetPublishedStory = sinon.stub();
       fakeGetPublishedStory
         .withArgs(1)
-        .resolves([{ content: '{"txt":"samp"}' }]);
-      fakeGetPublishedStory.withArgs(2).resolves([]);
+        .resolves({ content: '{"txt":"samp"}', tags: 'tag1,tag2' });
+      fakeGetPublishedStory
+        .withArgs(2)
+        .resolves({ content: '{"txt":"samp"}', tags: null });
+      fakeGetPublishedStory.withArgs(3).resolves(null);
       fakeDbClient.getPublishedStory = fakeGetPublishedStory;
     });
 
@@ -258,12 +261,19 @@ describe('Stories', function () {
     it('should resolve the story page if exists', function () {
       return expect(stories.getStoryPage(1)).to.eventually.deep.equal({
         content: { txt: 'samp' },
+        tags: ['tag1', 'tag2'],
+      });
+    });
+
+    it('tags array should be empty when there are no tags', function () {
+      return expect(stories.getStoryPage(2)).to.eventually.deep.equal({
+        content: { txt: 'samp' },
         tags: [],
       });
     });
 
     it('should resolve undefined if story does not exist', function () {
-      return expect(stories.getStoryPage(2)).to.be.eventually.undefined;
+      return expect(stories.getStoryPage(3)).to.be.eventually.rejected;
     });
   });
 

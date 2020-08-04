@@ -1,18 +1,22 @@
 {
   "users": {
     "tableSchema": "CREATE TABLE users (id varchar(42) PRIMARY KEY, github_id integer NOT NULL, display_name text NOT NULL DEFAULT 'Expresser',avatar_url text NOT NULL,bio text);",
-    "insertionScript": "INSERT INTO users(id, github_id, display_name, avatar_url) VALUES('palpriyanshu', '58025838','Priyanshu','avatar_url'),('shiviraj', '58025059', 'Shivam Rajputh', 'url2')"
+    "insertionScript": "INSERT INTO users(id, github_id, display_name, avatar_url) VALUES('palpriyanshu', '58025838','Priyanshu','avatar_url'),('shiviraj', '58025059', 'Shivam Rajputh', 'url2');"
   },
   "stories": {
     "tableSchema": "CREATE TABLE stories (id integer PRIMARY KEY AUTOINCREMENT,written_by varchar(42) NOT NULL,state varchar(9) NOT NULL DEFAULT 'drafted',title text NOT NULL DEFAULT 'Untitled Story',content text,cover_image text,last_modified timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,  FOREIGN KEY (written_by) REFERENCES users(id),  CHECK (state IN ('drafted','published')));",
-    "insertionScript": "INSERT INTO stories(written_by, state, title, content, last_modified) VALUES  ('palpriyanshu', 'published', 'title1','[{\"type\":\"paragraph\",\"data\":{\"text\":\"You might be wondering where the REST attribute comes in.\"}}]','2020-07-23 09:24:18'),('palpriyanshu', 'drafted', 'title2','[{\"type\":\"paragraph\",\"data\":{\"text\":\"You might be wondering where the REST attribute comes in.\"}}]','2020-07-23 09:24:18'),('shiviraj', 'drafted', 'title3','[{\"type\":\"paragraph\",\"data\":{\"text\":\"You might be wondering where the REST attribute comes in.\"}}]','2019-08-23 09:24:18')"
+    "insertionScript": "INSERT INTO stories(written_by, state, title, content, last_modified) VALUES  ('palpriyanshu', 'published', 'title1','[{\"type\":\"paragraph\",\"data\":{\"text\":\"You might be wondering where the REST attribute comes in.\"}}]','2020-07-23 09:24:18'),('palpriyanshu', 'drafted', 'title2','[{\"type\":\"paragraph\",\"data\":{\"text\":\"You might be wondering where the REST attribute comes in.\"}}]','2020-07-23 09:24:18'),('shiviraj', 'drafted', 'title3','[{\"type\":\"paragraph\",\"data\":{\"text\":\"You might be wondering where the REST attribute comes in.\"}}]','2019-08-23 09:24:18');"
   },
   "tags": {
-    "tableSchema": " CREATE TABLE tags ( id integer PRIMARY KEY AUTOINCREMENT, tag_on integer NOT NULL, tag varchar(50) NOT NULL, FOREIGN KEY (tag_on) REFERENCES stories(id) );",
-    "insertionScript": "INSERT INTO tags (tag_on, tag) VALUES (3, 'go green'), (5, 'romance'), (6, 'love kills'), (8, 'hacking');"
+    "tableSchema": " CREATE TABLE tags (id integer PRIMARY KEY AUTOINCREMENT, tag_on integer NOT NULL, tag varchar(50) NOT NULL, FOREIGN KEY (tag_on) REFERENCES stories(id) );",
+    "insertionScript": "INSERT INTO tags (tag_on, tag) VALUES (1, 'go green'), (1, 'romance'), (1, 'love kills');"
   },
   "claps": {
-    "tableSchema": "CREATE TABLE claps ( id integer PRIMARY KEY AUTOINCREMENT, clapped_on integer NOT NULL, clapped_by varchar(42) NOT NULL, FOREIGN KEY (clapped_on) REFERENCES stories(id), FOREIGN KEY (clapped_by) REFERENCES users(id) );",
+    "tableSchema": "CREATE TABLE claps (id integer PRIMARY KEY AUTOINCREMENT, clapped_on integer NOT NULL, clapped_by varchar(42) NOT NULL, FOREIGN KEY (clapped_on) REFERENCES stories(id), FOREIGN KEY (clapped_by) REFERENCES users(id) );",
     "insertionScript": "INSERT INTO claps (clapped_on, clapped_by) VALUES (1, 'palpriyanshu');"
+  },
+  "comments": {
+    "tableSchema": "CREATE TABLE comments (id integer PRIMARY KEY AUTOINCREMENT, commented_by varchar(42) NOT NULL, commented_on integer NOT NULL, comment text NOT NULL, commented_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (commented_by) REFERENCES users(id), FOREIGN KEY (commented_on) REFERENCES stories(id));",
+    "insertionScript": "INSERT INTO comments (commented_by, commented_on, comment) VALUES('palpriyanshu', 1, 'cool'),('shiviraj', 1, 'extra ordinary'),('palpriyanshu', 1, 'informative'),('shiviraj', 1, 'picturesque');"
   }
 }

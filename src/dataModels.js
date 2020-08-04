@@ -77,13 +77,6 @@ class Users {
   }
 }
 
-const parseTags = function (rows) {
-  return rows.reduce((tags, row) => {
-    row.tag && tags.push(row.tag);
-    return tags;
-  }, []);
-};
-
 class Stories {
   constructor(db) {
     this.db = db;
@@ -100,17 +93,14 @@ class Stories {
   }
 
   getStoryPage(storyID) {
-    return this.db.getPublishedStory(storyID).then((storyRows) => {
-      if (!storyRows.length) {
-        return Promise.resolve();
+    return this.db.getPublishedStory(storyID).then((story) => {
+      if (!story) {
+        return Promise.reject();
       }
 
-      const [story] = storyRows;
-      if (story && story.content) {
-        story.content = JSON.parse(story.content);
-      }
+      story.content = JSON.parse(story.content);
+      story.tags = story.tags ? story.tags.split(',') : [];
 
-      story.tags = parseTags(storyRows);
       return Promise.resolve(story);
     });
   }

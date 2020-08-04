@@ -1,6 +1,6 @@
 {
   "latestNStories": "SELECT usr.display_name as authorName, str.* FROM stories AS str JOIN users AS usr ON str.written_by = usr.id WHERE state='published' ORDER BY str.last_modified DESC LIMIT ? OFFSET ?;",
-  "publishedStory": "SELECT usr.display_name as authorName,usr.avatar_url as authorAvatar, str.title,str.content,str.id as storyID,str.written_by as authorID, date(str.last_modified) as lastModified, tags.tag FROM stories AS str JOIN users AS usr ON str.written_by = usr.id LEFT JOIN tags ON str.id = tags.tag_on WHERE state='published' AND str.id=?;",
+  "publishedStory": "WITH storyInfo AS ( SELECT usr.display_name AS authorName, usr.avatar_url AS authorAvatar, str.title, str.content, str.id AS storyID, str.written_by AS authorID, date(str.last_modified) AS lastModified, count(comments.id) AS comments FROM stories AS str JOIN users AS usr ON str.written_by=usr.id LEFT JOIN comments ON str.id=comments.commented_on WHERE str.state='published') SELECT storyInfo.*, GROUP_CONCAT(tags.tag) AS tags FROM storyInfo LEFT JOIN tags ON storyInfo.storyID=tags.tag_on WHERE storyInfo.storyID=? GROUP BY storyInfo.storyID;",
   "storyOfUser": "SELECT title, content, state, id as storyID FROM stories WHERE id=? AND written_by=?;",
   "findAccount": "SELECT id as userID FROM users WHERE github_id=?;",
   "userInfo": "SELECT id, display_name, avatar_url FROM users WHERE id=?;",

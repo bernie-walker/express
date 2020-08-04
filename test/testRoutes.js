@@ -144,7 +144,12 @@ describe('GET', () => {
 
   context('/blogPage', function () {
     before(() =>
-      setUpDatabase(app.locals.dbClientReference, ['users', 'stories', 'tags'])
+      setUpDatabase(app.locals.dbClientReference, [
+        'users',
+        'stories',
+        'tags',
+        'comments',
+      ])
     );
 
     after(() => cleanDatabase(app.locals.dbClientReference));
@@ -764,7 +769,7 @@ describe('POST', function () {
     });
   });
 
-  context('/claps', function () {
+  context('/clap', function () {
     beforeEach(() =>
       setUpDatabase(app.locals.dbClientReference, [
         'stories',
@@ -773,6 +778,7 @@ describe('POST', function () {
         'claps',
       ])
     );
+
     afterEach(() => cleanDatabase(app.locals.dbClientReference));
 
     it('should add clap if story is not clapped yet by user', function (done) {
@@ -791,6 +797,7 @@ describe('POST', function () {
     });
 
     it('should remove clap if story is clapped yet by user', function (done) {
+      fakeGetSession.resolves('palpriyanshu');
       request(app)
         .post('/clap/1')
         .expect(200)
