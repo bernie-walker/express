@@ -220,7 +220,9 @@ class ExpressDB {
 
   addTag(tagOn, tag) {
     return new Promise((resolve) => {
-      this.dbClient.run(addTag, [tagOn, tag], resolve);
+      this.dbClient.run(addTag, [tagOn, tag], () => {
+        resolve();
+      });
     });
   }
 

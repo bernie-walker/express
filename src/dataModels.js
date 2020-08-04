@@ -149,7 +149,7 @@ class Tags {
     this.db = db;
   }
 
-  async addTags(tags, storyID) {
+  async addTags(storyID, tags) {
     for (const tag of tags) {
       await this.db.addTag(storyID, tag);
     }
