@@ -67,9 +67,9 @@ html
       .story-response
         -const className = isClapped ? "clapped":""
         div(class= className)
-          -const idName = isSignedIn ? "clap" : "signIn"
-          img(src="/images/clap.png" class="clap-image" id=idName)
+          -const clapOnClickListener = isSignedIn ? "clapOnStory()" : "showSignInPopup()"
+          img(src="/images/clap.png" class="clap-image" onclick=clapOnClickListener)
           span #{count} claps
-        #comments-info
+        #comments-info(onclick="showSignInPopup()")
           img(src="/images/comment.png") 
           span #{comments} responses

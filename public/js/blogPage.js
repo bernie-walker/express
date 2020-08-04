@@ -14,26 +14,21 @@ const shareBlog = function () {
   linkCopiedMsg.innerHTML = 'Link copied';
 };
 
-const attachListenerOnClap = function () {
-  if (getElement('#clap')) {
-    clap.addEventListener('click', async () => {
-      const storyID = blogTitle.getAttribute('storyid');
-      const response = await fetch(`/clap/${storyID}`, { method: 'POST' });
-      const { isClapped, count } = await response.json();
-      getElement('.story-response div').classList.remove('clapped');
-      if (isClapped) {
-        getElement('.story-response div').classList.add('clapped');
-      }
-      getElement('.story-response div span').innerText = `${count} claps`;
-    });
+const clapOnStory = async function () {
+  const storyID = blogTitle.getAttribute('storyid');
+  const response = await fetch(`/clap/${storyID}`, { method: 'POST' });
+  const { isClapped, count } = await response.json();
+  getElement('.story-response div').classList.remove('clapped');
+  if (isClapped) {
+    getElement('.story-response div').classList.add('clapped');
   }
+  getElement('.story-response div span').innerText = `${count} claps`;
 };
 
 const main = function () {
   attachHeadListener();
   shareSection.addEventListener('click', shareBlog);
   shareSection.addEventListener('mouseover', showOnHoverMsg);
-  attachListenerOnClap();
 };
 
 window.onload = main;
