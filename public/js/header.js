@@ -1,8 +1,7 @@
 const getElement = (selector) => document.querySelector(selector);
 
 const gotoHome = () => {
-  const homeLocation = getElement('#profile') ? '/dashboard' : '/';
-  window.location = homeLocation;
+  window.location = '/';
 };
 
 const attachGotoDashboardToLogo = function () {
