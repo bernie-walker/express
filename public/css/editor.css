@@ -181,9 +181,17 @@ body {
   color: rgba(10, 10, 10, 0.8);
 }
 
-#profile-section {
+#profileSection {
+  pointer-events: none;
   display: flex;
   justify-content: space-evenly;
+}
+
+#profileSection .avatar img,
+#profileSection .name .display_name,
+#profileSection .name #username {
+  pointer-events: all;
+  cursor: pointer;
 }
 
 #username {

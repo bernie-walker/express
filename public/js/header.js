@@ -13,7 +13,7 @@ const attachGotoDashboardToLogo = function () {
 const attachToGoToProfile = function () {
   const $userName = getElement('#username');
   const userID = $userName.innerText;
-  $userName.addEventListener('click', () => {
+  profileSection.addEventListener('click', () => {
     window.location = `/profile/${userID}`;
   });
 };
