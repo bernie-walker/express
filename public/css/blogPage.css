@@ -213,6 +213,7 @@ p b {
 .tags {
   display: flex;
   flex-wrap: wrap;
+  margin-top: 6vh;
 }
 
 .tag {
@@ -222,17 +223,13 @@ p b {
   color: #888;
   background-color: #eee;
   border: 1px solid #ddd;
-}
-
-.tag:hover {
-  background-color: #f8f8f8;
-  border-color: #ccc;
-  color: #666;
+  border-radius: 0.2vw;
 }
 
 .story-response {
   display: flex;
   padding: 1vh 1vw;
+  margin-top: 2vh;
 }
 
 .story-response div {
@@ -247,4 +244,13 @@ p b {
 
 .clapped {
   opacity: 0.6;
+}
+
+#comments-info {
+  margin-left: 4vw;
+  cursor: pointer;
+}
+
+#comments-info span {
+  margin-left: 0.8vw;
 }
