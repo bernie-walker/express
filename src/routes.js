@@ -36,6 +36,7 @@ const {
   renderEditor,
   saveStory,
   publishStory,
+  updateClap,
   serveUserStoriesPage,
   serveProfilePage,
 } = require('./handlers');
@@ -97,5 +98,6 @@ app.get('/userStories', serveUserStoriesPage);
 
 app.post('/saveStory', saveStory);
 app.post('/publishStory', publishStory);
+app.post('/clap/:storyID', updateClap);
 
 module.exports = { app };

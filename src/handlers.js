@@ -243,13 +243,26 @@ const publishStory = async function (req, res) {
     .catch(() => res.sendStatus(statusCodes.unprocessableEntity));
 };
 
+const updateClap = async function (req, res) {
+  const { claps } = req.app.locals;
+  const { storyID } = req.params;
+  await claps.toggleClap(storyID, req.user.id);
+  const clapsCount = await claps.clapCount(storyID);
+  const isClapped = await claps.isClapped(storyID, req.user.id);
+  res.json(Object.assign(clapsCount, { isClapped }));
+};
+
 const serveUserStoriesPage = async function (req, res) {
   const { users } = req.app.locals;
+  const storyState = { published: 'published', drafted: 'drafted' };
   const publishedStories = await users.getUserStoryList(
     req.user.id,
-    'published'
+    storyState.published
   );
-  const draftedStories = await users.getUserStoryList(req.user.id, 'drafted');
+  const draftedStories = await users.getUserStoryList(
+    req.user.id,
+    storyState.drafted
+  );
   res.render(
     'userStories',
     Object.assign({ publishedStories, draftedStories }, req.user)
@@ -288,6 +301,7 @@ module.exports = {
   renderEditor,
   saveStory,
   publishStory,
+  updateClap,
   serveUserStoriesPage,
   serveProfilePage,
 };

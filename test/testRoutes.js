@@ -763,4 +763,45 @@ describe('POST', function () {
         });
     });
   });
+
+  context('/claps', function () {
+    beforeEach(() =>
+      setUpDatabase(app.locals.dbClientReference, [
+        'stories',
+        'users',
+        'tags',
+        'claps',
+      ])
+    );
+    afterEach(() => cleanDatabase(app.locals.dbClientReference));
+
+    it('should add clap if story is not clapped yet by user', function (done) {
+      fakeGetSession.resolves('shiviraj');
+      request(app)
+        .post('/clap/1')
+        .expect(200)
+        .expect({ count: 2, isClapped: true })
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should remove clap if story is clapped yet by user', function (done) {
+      request(app)
+        .post('/clap/1')
+        .expect(200)
+        .expect({ count: 0 })
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+  });
 });

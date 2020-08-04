@@ -10,5 +10,9 @@
   "tags": {
     "tableSchema": " CREATE TABLE tags ( id integer PRIMARY KEY AUTOINCREMENT, tag_on integer NOT NULL, tag varchar(50) NOT NULL, FOREIGN KEY (tag_on) REFERENCES stories(id) );",
     "insertionScript": "INSERT INTO tags (tag_on, tag) VALUES (3, 'go green'), (5, 'romance'), (6, 'love kills'), (8, 'hacking');"
+  },
+  "claps": {
+    "tableSchema": "CREATE TABLE claps ( id integer PRIMARY KEY AUTOINCREMENT, clapped_on integer NOT NULL, clapped_by varchar(42) NOT NULL, FOREIGN KEY (clapped_on) REFERENCES stories(id), FOREIGN KEY (clapped_by) REFERENCES users(id) );",
+    "insertionScript": "INSERT INTO claps (clapped_on, clapped_by) VALUES (1, 'palpriyanshu');"
   }
 }
