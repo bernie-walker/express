@@ -166,7 +166,7 @@ const serveBlogPage = async function (req, res) {
     const { stories, claps } = req.app.locals;
     const { storyID } = req.params;
     const clapsCount = await claps.clapCount(storyID);
-    const isClapped = await claps.isClapped(storyID, req.user.id);
+    const isClapped = await claps.isClapped(storyID, req.user && req.user.id);
     const blog = await stories.getStoryPage(storyID);
     res.render(
       'blogPage',
