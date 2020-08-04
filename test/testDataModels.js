@@ -1,6 +1,6 @@
 const { assert, expect } = require('chai').use(require('chai-as-promised'));
 const sinon = require('sinon');
-const { Users, Stories } = require('../src/dataModels');
+const { Users, Stories, Claps } = require('../src/dataModels');
 
 describe('Users', function () {
   const fakeDbClient = {};
@@ -331,6 +331,94 @@ describe('Stories', function () {
     it('should reject if story does not exists', function () {
       return expect(stories.updateStory({ id: 2, author: 'user2' })).to.be
         .eventually.rejected;
+    });
+  });
+});
+
+describe('Claps', function () {
+  const fakeDbClient = {};
+  const claps = new Claps(fakeDbClient);
+  context('clapCount', function () {
+    before(() => {
+      const fakeClapCount = sinon.stub();
+      fakeClapCount.withArgs(6).resolves({ count: 2 });
+      fakeClapCount.withArgs(2).resolves({ count: 0 });
+      fakeDbClient.clapCount = fakeClapCount;
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('should count the claps for a given story if clap present', function () {
+      return expect(claps.clapCount(6)).to.be.eventually.deep.equal({
+        count: 2,
+      });
+    });
+
+    it('should count the claps for a given story if clap absent', function () {
+      return expect(claps.clapCount(2)).to.be.eventually.deep.equal({
+        count: 0,
+      });
+    });
+  });
+
+  context('isClapped', function () {
+    before(() => {
+      const fakeIsClapped = sinon.stub();
+      fakeIsClapped.withArgs(6, 'palpriyanshu').resolves(true);
+      fakeIsClapped.withArgs(2, 'palpriyanshu').resolves(undefined);
+      fakeDbClient.isClapped = fakeIsClapped;
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('should give true if given user has already clapped on given story', function () {
+      return expect(claps.isClapped(6, 'palpriyanshu')).to.be.eventually.true;
+    });
+
+    it('should do count the claps for a given story if clap absent', function () {
+      return expect(
+        claps.isClapped(2, 'palpriyanshu')
+      ).to.be.eventually.undefined;
+    });
+  });
+
+  context('addClap', function () {
+    before(() => {
+      const fakeAddClap = sinon.stub();
+      fakeAddClap.withArgs(6, 'palpriyanshu').resolves();
+      fakeDbClient.addClap = fakeAddClap;
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('should resolve after adding clap on given story by given user', function () {
+      return expect(
+        claps.addClap(6, 'palpriyanshu')
+      ).to.be.eventually.fulfilled;
+    });
+  });
+
+  context('removeClap', function () {
+    before(() => {
+      const fakeRemoveClap = sinon.stub();
+      fakeRemoveClap.withArgs(6, 'palpriyanshu').resolves();
+      fakeDbClient.removeClap = fakeRemoveClap;
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('should resolve after adding clap on given story by given user', function () {
+      return expect(
+        claps.removeClap(6, 'palpriyanshu')
+      ).to.be.eventually.fulfilled;
     });
   });
 });

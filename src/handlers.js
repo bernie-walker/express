@@ -41,7 +41,8 @@ const serveHomepage = function (req, res, next) {
 
 const serveDashboard = async function (req, res) {
   const blogsNeeded = 10;
-  const recentStories = await req.app.locals.stories.get(blogsNeeded);
+  const { stories } = req.app.locals;
+  const recentStories = await stories.get(blogsNeeded);
   res.render('dashboard', Object.assign({ recentStories, moment }, req.user));
 };
 

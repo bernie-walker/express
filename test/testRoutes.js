@@ -520,6 +520,25 @@ describe('POST', function () {
         });
     });
 
+    it('should response with 422 for invalid tags', function (done) {
+      request(app)
+        .post('/publishStory')
+        .send({
+          storyTitle: 'validTitle',
+          blocks: [],
+          storyID: '2',
+          tags: ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6'],
+        })
+        .expect(422)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
     it('should respond with 422 for untitled story', function (done) {
       request(app)
         .post('/publishStory')
