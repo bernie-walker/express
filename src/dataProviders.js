@@ -1,18 +1,17 @@
 const {
-  latestNStoriesQuery,
-  publishedStoryQuery,
-  storyOfUserQuery,
-  updateStoryQuery,
-  findAccountQuery,
-  userInfoQuery,
-  userStoriesQuery,
-  userProfileQuery,
-  addTagsQuery,
-  addClapQuery,
-  removeClapQuery,
-  isClappedQuery,
-  clapCountQuery,
-} = require('./dbQueries');
+  latestNStories,
+  publishedStory,
+  storyOfUser,
+  findAccount,
+  userInfo,
+  userStories,
+  userProfile,
+  addTag,
+  addClap,
+  removeClap,
+  isClapped,
+  clapCount,
+} = require('./queries.json');
 
 const setExpirationAndResolve = function (dsClient, token, resolve) {
   dsClient.expire(`newReg_${token}`, 86400, () => {
@@ -105,7 +104,7 @@ class ExpressDB {
 
   getLatestNStories(count = -1, offset = 0) {
     return new Promise((resolve) => {
-      this.dbClient.all(latestNStoriesQuery(count, offset), (err, rows) => {
+      this.dbClient.all(latestNStories, [count, offset], (err, rows) => {
         resolve(rows);
       });
     });
@@ -113,7 +112,7 @@ class ExpressDB {
 
   getPublishedStory(storyID) {
     return new Promise((resolve) => {
-      this.dbClient.all(publishedStoryQuery(storyID), (err, row) => {
+      this.dbClient.all(publishedStory, [storyID], (err, row) => {
         resolve(row);
       });
     });
@@ -121,7 +120,7 @@ class ExpressDB {
 
   getStoryOfUser(storyID, userID) {
     return new Promise((resolve) => {
-      this.dbClient.get(storyOfUserQuery(storyID, userID), (err, row) => {
+      this.dbClient.get(storyOfUser, [storyID, userID], (err, row) => {
         resolve(row);
       });
     });
@@ -141,10 +140,15 @@ class ExpressDB {
 
   updateStory(modifiedStory) {
     const { title, content, state, id, author } = modifiedStory;
+    const status = state ? `state='${state}',` : '';
+    const query = `UPDATE stories SET title=?, content=?,
+                   ${status} 
+                   last_modified=CURRENT_TIMESTAMP
+                   WHERE id=? AND written_by=?`;
 
     return new Promise((resolve) => {
       this.dbClient.run(
-        updateStoryQuery(state),
+        query,
         [title, JSON.stringify(content), id, author],
         resolve
       );
@@ -153,7 +157,7 @@ class ExpressDB {
 
   findUserAccount(gitID) {
     return new Promise((resolve) => {
-      this.dbClient.get(findAccountQuery(gitID), (err, row) => {
+      this.dbClient.get(findAccount, [gitID], (err, row) => {
         resolve(row);
       });
     });
@@ -192,7 +196,7 @@ class ExpressDB {
 
   getUserInfo(userID) {
     return new Promise((resolve) => {
-      this.dbClient.get(userInfoQuery(userID), (err, row) => {
+      this.dbClient.get(userInfo, [userID], (err, row) => {
         resolve(row);
       });
     });
@@ -200,7 +204,7 @@ class ExpressDB {
 
   getUserStories(userID, state) {
     return new Promise((resolve) => {
-      this.dbClient.all(userStoriesQuery(userID, state), (err, rows) => {
+      this.dbClient.all(userStories, [userID, state], (err, rows) => {
         resolve(rows);
       });
     });
@@ -208,48 +212,44 @@ class ExpressDB {
 
   getProfileData(userID) {
     return new Promise((resolve) => {
-      this.dbClient.all(userProfileQuery(userID), (err, rows) => {
+      this.dbClient.all(userProfile, [userID], (err, rows) => {
         resolve(rows);
       });
     });
   }
 
-  addTags(tags, storyID) {
+  addTag(tagOn, tag) {
     return new Promise((resolve) => {
-      this.dbClient.run(addTagsQuery(tags, storyID), resolve);
+      this.dbClient.run(addTag, [tagOn, tag], resolve);
     });
   }
 
   addClap(clappedOn, clappedBy) {
     return new Promise((resolve) => {
-      this.dbClient.run(addClapQuery(), [clappedOn, clappedBy], resolve);
+      this.dbClient.run(addClap, [clappedOn, clappedBy], resolve);
     });
   }
 
   removeClap(clappedOn, clappedBy) {
     return new Promise((resolve) => {
-      this.dbClient.run(removeClapQuery(), [clappedOn, clappedBy], resolve);
+      this.dbClient.run(removeClap, [clappedOn, clappedBy], resolve);
     });
   }
 
   isClapped(clappedOn, clappedBy) {
     return new Promise((resolve) => {
-      this.dbClient.get(
-        isClappedQuery(),
-        [clappedOn, clappedBy],
-        (err, row) => {
-          if (row) {
-            return resolve(true);
-          }
-          resolve();
+      this.dbClient.get(isClapped, [clappedOn, clappedBy], (err, row) => {
+        if (row) {
+          return resolve(true);
         }
-      );
+        resolve();
+      });
     });
   }
 
   clapCount(clappedOn) {
     return new Promise((resolve) => {
-      this.dbClient.get(clapCountQuery(), [clappedOn], (err, row) => {
+      this.dbClient.get(clapCount, [clappedOn], (err, row) => {
         resolve(row);
       });
     });

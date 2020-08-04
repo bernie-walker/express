@@ -1,0 +1,14 @@
+{
+  "latestNStories": "SELECT usr.display_name as authorName, str.* FROM stories AS str JOIN users AS usr ON str.written_by = usr.id WHERE state='published' ORDER BY str.last_modified DESC LIMIT ?,?;",
+  "publishedStory": "SELECT usr.display_name as authorName,usr.avatar_url as authorAvatar, str.title,str.content,str.id as storyID,str.written_by as authorID, date(str.last_modified) as lastModified, tag FROM stories AS str JOIN users AS usr  ON str.written_by = usr.id LEFT JOIN tags ON str.id = tags.tag_on WHERE state='published' AND str.id=?;",
+  "storyOfUser": "SELECT title, content, state, id as storyID FROM stories WHERE id=? AND written_by=?;",
+  "findAccount": "SELECT id as userID FROM users WHERE github_id=?;",
+  "userInfo": "SELECT id, display_name, avatar_url FROM users WHERE id=?;",
+  "userStories": "SELECT title, id as storyID, date(last_modified) as lastModified FROM stories WHERE written_by=? AND state=? ORDER BY last_modified DESC;",
+  "userProfile": "SELECT usr.id as profileID, usr.display_name as profileName, usr.avatar_url as profileAvatar, usr.bio,str.id as storyID, str.title, str.content, str.state,str.cover_image as coverImage, date(str.last_modified) as lastModified FROM users as usr LEFT JOIN stories as str ON usr.id=str.written_by WHERE usr.id=? ORDER BY last_modified DESC;",
+  "addTag": "INSERT INTO tags(tag_on, tag) VALUES(?,?);",
+  "addClap": "INSERT INTO claps (clapped_on, clapped_by) VALUES(?,?);",
+  "removeClap": "DELETE FROM claps WHERE clapped_on=? AND clapped_by=?;",
+  "isClapped": "SELECT * FROM claps WHERE clapped_on=? AND clapped_by=?;",
+  "clapCount": "SELECT count(*) as count FROM claps WHERE clapped_on=?;"
+}

@@ -235,7 +235,7 @@ const publishStory = async function (req, res) {
     return res.sendStatus(statusCodes.unprocessableEntity);
   }
 
-  req.app.locals.tags.addTags(allTags, id);
+  req.app.locals.tags.addTags(id, allTags);
 
   stories
     .updateStory({ title, content, state: 'published', author, id })

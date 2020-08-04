@@ -149,8 +149,11 @@ class Tags {
     this.db = db;
   }
 
-  addTags(tags, storyID) {
-    return this.db.addTags(tags, storyID);
+  async addTags(tags, storyID) {
+    for (const tag of tags) {
+      await this.db.addTag(storyID, tag);
+    }
+    return true;
   }
 }
 
