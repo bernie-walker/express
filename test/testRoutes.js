@@ -150,6 +150,7 @@ describe('GET', () => {
         'stories',
         'tags',
         'comments',
+        'claps',
       ])
     );
 
@@ -528,13 +529,9 @@ describe('POST', function () {
     );
     afterEach(() => cleanDatabase(app.locals.dbClientReference));
 
-    before(() => {
-      sinon.stub(ImageHandlers.prototype, 'deleteUnusedImages');
-    });
+    before(() => sinon.stub(ImageHandlers.prototype, 'deleteUnusedImages'));
 
-    after(() => {
-      sinon.restore();
-    });
+    after(() => sinon.restore());
 
     it('should publish the story and redirect to the blogPage for a valid story', function (done) {
       request(app)
@@ -657,7 +654,35 @@ describe('POST', function () {
       return setUpDatabase(app.locals.dbClientReference, ['stories', 'users']);
     });
 
-    after(() => cleanDatabase(app.locals.dbClientReference));
+    after(() => {
+      sinon.restore();
+      return cleanDatabase(app.locals.dbClientReference);
+    });
+
+    it('should respond with a OK for a valid story', function (done) {
+      request(app)
+        .post('/saveStory')
+        .send({
+          storyTitle: 'validTitle',
+          blocks: [
+            { type: 'paragraph', data: { text: 'paragraph' } },
+            {
+              type: 'image',
+              data: { file: { url: '/blog_image/image_1_2.png' } },
+            },
+            { type: 'image', data: { file: {} } },
+          ],
+          storyID: '1',
+        })
+        .expect(200)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
 
     it('should respond with a 401 an unauthorized user', function (done) {
       fakeGetSession.resolves(null);
@@ -687,31 +712,6 @@ describe('POST', function () {
           storyID: '3',
         })
         .expect(422)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
-    });
-
-    it('should respond with a OK for a valid story', function (done) {
-      request(app)
-        .post('/saveStory')
-        .send({
-          storyTitle: 'validTitle',
-          blocks: [
-            { type: 'paragraph', data: { text: 'paragraph' } },
-            {
-              type: 'image',
-              data: { file: { url: '/blog_image/image_1_2.png' } },
-            },
-            { type: 'image', data: { file: {} } },
-          ],
-          storyID: '1',
-        })
-        .expect(200)
         .end((err) => {
           if (err) {
             done(err);
@@ -904,7 +904,21 @@ describe('POST', function () {
       request(app)
         .post('/clap/1')
         .expect(200)
-        .expect({ count: 0 })
+        .expect({ count: 0, isClapped: false })
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond with 401 if user is not signed in', function (done) {
+      fakeGetSession.resolves('null');
+      request(app)
+        .post('/clap/1')
+        .expect(401)
         .end((err) => {
           if (err) {
             done(err);

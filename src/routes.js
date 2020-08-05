@@ -33,6 +33,7 @@ const {
   checkUsernameAvailability,
   registerUser,
   serveBlogImage,
+  getClapsDetails,
   serveBlogPage,
   serveComments,
   createNewStory,
@@ -99,7 +100,7 @@ app.post('/signUp', registerUser);
 app.use(attachUserIfSignedIn);
 app.get('/', serveHomepage, serveDashboard);
 app.get('/profile/:profileID', serveProfilePage);
-app.get('/blogPage/:storyID', serveBlogPage);
+app.get('/blogPage/:storyID', getClapsDetails, serveBlogPage);
 
 app.use(authorizeUser);
 app.get('/newStory', createNewStory);
@@ -107,7 +108,7 @@ app.get('/editor/:storyID', renderEditor);
 app.get('/userStories', serveUserStoriesPage);
 
 app.post('/saveStory', deleteUnusedImages, saveStory);
-app.post('/uploadImage/:storyID', imageValidation, uploadImage, handleError);
+app.post('/uploadImage/:storyID', imageValidation, handleError, uploadImage);
 app.post('/publishStory', deleteUnusedImages, publishStory);
 app.post('/clap/:storyID', updateClap);
 

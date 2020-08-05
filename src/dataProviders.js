@@ -257,7 +257,7 @@ class ExpressDB {
         if (row) {
           return resolve(true);
         }
-        resolve();
+        resolve(false);
       });
     });
   }

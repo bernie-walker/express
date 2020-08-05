@@ -402,7 +402,7 @@ describe('Claps', function () {
     before(() => {
       const fakeIsClapped = sinon.stub();
       fakeIsClapped.withArgs(6, 'palpriyanshu').resolves(true);
-      fakeIsClapped.withArgs(2, 'palpriyanshu').resolves(undefined);
+      fakeIsClapped.withArgs(2, 'palpriyanshu').resolves(false);
       fakeDbClient.isClapped = fakeIsClapped;
     });
 
@@ -415,9 +415,7 @@ describe('Claps', function () {
     });
 
     it('should do count the claps for a given story if clap absent', function () {
-      return expect(
-        claps.isClapped(2, 'palpriyanshu')
-      ).to.be.eventually.undefined;
+      return expect(claps.isClapped(2, 'palpriyanshu')).to.be.eventually.false;
     });
   });
 

@@ -72,15 +72,15 @@ const redirectToGithub = function (req, res) {
   );
 };
 
-const closeSession = function (req, res) {
+const closeSession = async function (req, res) {
   const { sesID } = req.cookies;
-  req.app.locals.expressDS.deleteSession(sesID).then(() => {
-    res.clearCookie('sesID');
-    res.redirect('/');
-  });
+  const { expressDS } = req.app.locals;
+  await expressDS.deleteSession(sesID);
+  res.clearCookie('sesID');
+  res.redirect('/');
 };
 
-const authenticateUser = function (req, res, next) {
+const authenticateUser = async function (req, res, next) {
   const { fetch } = req.app.locals;
 
   fetch
@@ -140,8 +140,9 @@ const checkUsernameAvailability = async function (req, res) {
 
 const registerUser = async function (req, res) {
   const { users, expressDS } = req.app.locals;
+  const { userID } = req.body;
 
-  if (!req.body.userID || req.body.userID.match(/\s/)) {
+  if (!userID || userID.match(/\s/)) {
     res.sendStatus(statusCodes.unprocessableEntity);
     return;
   }
@@ -173,20 +174,30 @@ const serveBlogImage = function (req, res) {
   });
 };
 
-const serveBlogPage = async function (req, res) {
-  try {
-    const { stories, claps } = req.app.locals;
-    const { storyID } = req.params;
-    const clapsCount = await claps.clapCount(storyID);
-    const isClapped = await claps.isClapped(storyID, req.user && req.user.id);
-    const blog = await stories.getStoryPage(storyID);
-    res.render(
-      'blogPage',
-      Object.assign(blog, req.user, clapsCount, { isClapped })
-    );
-  } catch (error) {
-    res.sendStatus(statusCodes.notFound);
+const getClapsDetails = async function (req, res, next) {
+  const { claps } = req.app.locals;
+  const { storyID } = req.params;
+  req.params.isClapped = false;
+  if (req.user) {
+    req.params.isClapped = await claps.isClapped(storyID, req.user.id);
   }
+  req.params.clapsCount = await claps.clapCount(storyID);
+  next();
+};
+
+const serveBlogPage = function (req, res) {
+  const { stories } = req.app.locals;
+  const { storyID, clapsCount, isClapped } = req.params;
+
+  stories
+    .getStoryPage(storyID)
+    .then((blog) => {
+      res.render(
+        'blogPage',
+        Object.assign(blog, req.user, clapsCount, { isClapped })
+      );
+    })
+    .catch(() => res.sendStatus(statusCodes.notFound));
 };
 
 const serveComments = async function (req, res) {
@@ -236,6 +247,15 @@ const saveStory = async function (req, res) {
     });
 };
 
+const handleError = function (error, req, res, next) {
+  if (error) {
+    res.status(statusCodes.unprocessableEntity);
+    res.send({ error: error.message });
+    return;
+  }
+  next();
+};
+
 const uploadImage = async function (req, res) {
   const { imageHandlers } = req.app.locals;
   const { storyID } = req.params;
@@ -243,11 +263,6 @@ const uploadImage = async function (req, res) {
   const imageName = await imageHandlers.uploadImage(req.file, storyID);
 
   res.send({ success: 1, file: { url: `/blog_image/${imageName}` } });
-};
-
-// eslint-disable-next-line no-unused-vars
-const handleError = function (error, req, res, next) {
-  res.status(statusCodes.unprocessableEntity).send({ error: error.message });
 };
 
 const validateTags = function (tags = []) {
@@ -268,17 +283,17 @@ const isStoryValid = function (title, allTags) {
 
 const publishStory = async function (req, res) {
   const author = req.user.id;
-  const { stories } = req.app.locals;
-  const { storyTitle, blocks: content, storyID: id, tags } = req.body;
+  const { stories, tags } = req.app.locals;
+  const { storyTitle, blocks: content, storyID: id, tags: newTags } = req.body;
 
   const title = storyTitle && storyTitle.trim();
-  const allTags = validateTags(tags);
+  const allTags = validateTags(newTags);
 
   if (!isStoryValid(title, allTags)) {
     return res.sendStatus(statusCodes.unprocessableEntity);
   }
 
-  req.app.locals.tags.updateTags(id, allTags);
+  tags.updateTags(id, allTags);
 
   stories
     .updateStory({ title, content, state: 'published', author, id })
@@ -289,6 +304,10 @@ const publishStory = async function (req, res) {
 const updateClap = async function (req, res) {
   const { claps } = req.app.locals;
   const { storyID } = req.params;
+  if (!req.user.isSignedIn) {
+    res.sendStatus(statusCodes.unauthorized);
+    return;
+  }
   await claps.toggleClap(storyID, req.user.id);
   const clapsCount = await claps.clapCount(storyID);
   const isClapped = await claps.isClapped(storyID, req.user.id);
@@ -340,6 +359,7 @@ module.exports = {
   registerUser,
   serveDashboard,
   serveBlogImage,
+  getClapsDetails,
   serveBlogPage,
   serveComments,
   createNewStory,
