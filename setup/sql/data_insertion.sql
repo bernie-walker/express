@@ -50,7 +50,7 @@ INSERT INTO comments
 	(commented_by, commented_on, comment)
 VALUES
 	('palpriyanshu', 6, 'cool'),
-	('lazyhackerthani', 6, 'very good'),
+	('lazyhackerthani', 6, 'I love Express — it gives me access to the stories I love by the writers I love, and it allows me to help support those writers financially'),
 	('shiviraj', 3, 'extra ordinary'),
-	('palpriyanshu', 7, 'informative'),
-	('shiviraj', 7, 'picturesque');
+	('palpriyanshu', 7, 'While I agree that many of our behaviors are addictive in nature, discipline is not the way to overcome addiction. Moving past unconscious behaviors is much more complex than simply trying harder to do things that are good for you.'),
+	('shiviraj', 7, 'When you spend time reading a story, a portion of your membership fee will go directly to its author');
