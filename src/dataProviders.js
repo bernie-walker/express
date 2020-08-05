@@ -174,6 +174,7 @@ class ExpressDB {
         [userID, githubID, avatarURL, displayName, bio],
         (err) => {
           if (err) {
+            console.log('issue creating user account');
             reject();
           } else {
             resolve(userID);

@@ -808,9 +808,7 @@ describe('POST', function () {
 
     after(() => cleanDatabase(app.locals.dbClientReference));
 
-    it('should register and redirect the user to / when valid credentials', function (done) {
-      this.timeout(3000);
-
+    it.only('should register and redirect the user to / when valid credentials', function (done) {
       sinon
         .stub(ExpressDS.prototype, 'getTokenValue')
         .resolves({ githubID: 1234, avatarURL: 'url' });
