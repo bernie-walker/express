@@ -1,5 +1,5 @@
-const moment = require('moment');
 const fs = require('fs');
+const moment = require('moment');
 const multer = require('multer');
 const sharp = require('sharp');
 
@@ -202,10 +202,39 @@ const renderEditor = async function (req, res) {
   }
 };
 
+const getStoryImages = function (content) {
+  return content.reduce((images, block) => {
+    if (block.type === 'image') {
+      const imageUrl = block.data.file.url || '';
+      const [, , image] = imageUrl.split('/');
+      image && images.push(image);
+    }
+    return images;
+  }, []);
+};
+
+const handleImages = function (storyID, content) {
+  const usedImages = getStoryImages(content);
+
+  const imageDir = `${__dirname}/../data/images`;
+  const files = fs.readdirSync(imageDir);
+
+  const isUnusedImage = (file) =>
+    file.startsWith(`image_${storyID}_`) && !usedImages.includes(file);
+
+  files.forEach((file) => {
+    if (isUnusedImage(file)) {
+      fs.unlinkSync(`${imageDir}/${file}`);
+    }
+  });
+};
+
 const saveStory = function (req, res) {
   const { stories } = req.app.locals;
   const { storyTitle, blocks: content, storyID: id } = req.body;
   const title = storyTitle.trim() || 'Untitled Story';
+
+  handleImages(id, content);
 
   stories
     .updateStory({ title, content, state: 'drafted', author: req.user.id, id })
@@ -225,18 +254,24 @@ const upload = multer({
   },
 });
 
-const uploadImage = async function (req, res) {
-  const buffer = await sharp(req.file.buffer).png().toBuffer();
+const changeImageIntoPng = async function (req) {
+  return await sharp(req.file.buffer).png().toBuffer();
+};
+
+const getImageDetails = async function (req) {
   const { blogImagePath, expressDS } = req.app.locals;
   const imageID = await expressDS.incrID('image');
   const [, root] = __dirname.match(/(.*express\/)(.*)/);
   const imageName = `image_${req.params.storyID}_${imageID}.png`;
   const imageStorePath = root + blogImagePath + imageName;
+  return { imageStorePath, imageName };
+};
+
+const uploadImage = async function (req, res) {
+  const buffer = await changeImageIntoPng(req);
+  const { imageStorePath, imageName } = await getImageDetails(req);
   fs.writeFileSync(imageStorePath, buffer);
-  res.send({
-    success: 1,
-    file: { url: `/blog_image/${imageName}` },
-  });
+  res.send({ success: 1, file: { url: `/blog_image/${imageName}` } });
 };
 
 // eslint-disable-next-line no-unused-vars
