@@ -92,9 +92,7 @@ const authenticateUser = function (req, res, next) {
 };
 
 const createSessionAndRedirect = async function (res, dataStore, userID) {
-  const sesID = await dataStore.createSession(userID).catch((err) => {
-    console.log('create session and redirect', err);
-  });
+  const sesID = await dataStore.createSession(userID);
   res.cookie('sesID', sesID);
   res.redirect('/');
 };
@@ -139,7 +137,6 @@ const registerUser = async function (req, res) {
   const { users, expressDS } = req.app.locals;
 
   if (!req.body.userID || req.body.userID.match(/\s/)) {
-    console.log('userID has spaces space');
     res.sendStatus(statusCodes.unprocessableEntity);
     return;
   }
@@ -156,8 +153,7 @@ const registerUser = async function (req, res) {
     .then((userID) => {
       createSessionAndRedirect(res, expressDS, userID);
     })
-    .catch((err) => {
-      console.log('userID registration err', err);
+    .catch(() => {
       res.sendStatus(statusCodes.unprocessableEntity);
     });
 };
