@@ -416,3 +416,7 @@ body.blur > div {
   border-color: #c33;
   color: #c33;
 }
+
+.hidden {
+  display: none;
+}
