@@ -239,12 +239,16 @@ body.blur > div {
 }
 
 .actions #cancel {
-  border-color: black;
+  border: 1px solid #333;
 }
 
 .actions a {
-  border-color: #c33;
-  color: #c33;
+  border: 1px solid #c33;
+}
+
+.actions div:hover,
+.actions a:hover {
+  transform: scale(1.05);
 }
 
 .hidden {

@@ -30,19 +30,23 @@ const getEditorContent = async function () {
   return Object.assign(content, { storyTitle, storyID, tags });
 };
 
+let isReadyToSave = true;
+
 const saveDraft = async function () {
-  if (!articleTitle.innerText.trim()) {
+  if (!articleTitle.innerText.trim() || !isReadyToSave) {
     return;
   }
-  saveConfirmation.innerText = 'Draft Saving...';
-  const editorContent = await getEditorContent();
-  const response = await updateStory('/saveStory', editorContent);
 
-  if (response.ok) {
-    setTimeout(() => {
+  saveConfirmation.innerText = 'Draft Saving...';
+  isReadyToSave = false;
+  setTimeout(async () => {
+    const editorContent = await getEditorContent();
+    const response = await updateStory('/saveStory', editorContent);
+    if (response.ok) {
       saveConfirmation.innerText = 'Draft Saved';
-    }, 1000);
-  }
+    }
+    isReadyToSave = true;
+  }, 3000);
 };
 
 const saveAndPublish = async function () {
@@ -156,6 +160,7 @@ const attachTagListener = function () {
 const attachSaveOrPublishStory = function () {
   if (getElement('#publishBtn')) {
     editorjs.addEventListener('keyup', saveDraft);
+    articleTitle.addEventListener('keyup', saveDraft);
     publishBtn.addEventListener('click', openPopUp);
   }
   const $publishNowBtn = getElement('#publishNowBtn');
