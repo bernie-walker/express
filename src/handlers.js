@@ -253,8 +253,6 @@ const publishStory = async function (req, res) {
   const { stories } = req.app.locals;
   const { storyTitle, blocks: content, storyID: id, tags } = req.body;
 
-  handleImages(id, content);
-
   const title = storyTitle && storyTitle.trim();
   const allTags = validateTags(tags);
 

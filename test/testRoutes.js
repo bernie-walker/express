@@ -1,10 +1,10 @@
 const request = require('supertest');
 const sinon = require('sinon');
-const fs = require('fs');
+const { setUpDatabase, cleanDatabase } = require('./fixture/databaseSetUp');
 const { app } = require('../src/routes');
 const { Fetch } = require('../src/resourceFetcher');
 const { ExpressDS } = require('../src/dataProviders');
-const { setUpDatabase, cleanDatabase } = require('./fixture/databaseSetUp');
+const fs = require('fs');
 app.locals.expressDS.closeClient();
 
 describe('GET', () => {
@@ -625,7 +625,12 @@ describe('POST', function () {
     before(() =>
       setUpDatabase(app.locals.dbClientReference, ['stories', 'users'])
     );
+
     after(() => cleanDatabase(app.locals.dbClientReference));
+
+    beforeEach(() => {
+      sinon.stub(fs, 'readdirSync').returns([]);
+    });
 
     it('should respond with a OK for a valid story', function (done) {
       request(app)
@@ -718,11 +723,14 @@ describe('POST', function () {
   context('/uploadImage', function () {
     before(() => {
       setUpDatabase(app.locals.dbClientReference, ['stories', 'users']);
-      sinon.replace(fs, 'writeFileSync', () => {});
     });
+
     after(() => {
       cleanDatabase(app.locals.dbClientReference);
-      sinon.restore();
+    });
+
+    beforeEach(() => {
+      sinon.stub(fs, 'writeFileSync').returns();
     });
 
     it('should upload a valid image for post', function (done) {
@@ -801,6 +809,8 @@ describe('POST', function () {
     after(() => cleanDatabase(app.locals.dbClientReference));
 
     it('should register and redirect the user to / when valid credentials', function (done) {
+      this.timeout(3000);
+
       sinon
         .stub(ExpressDS.prototype, 'getTokenValue')
         .resolves({ githubID: 1234, avatarURL: 'url' });
