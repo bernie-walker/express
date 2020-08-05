@@ -97,6 +97,7 @@ const handleTitleKeypress = function () {
 };
 
 const createEditor = async function () {
+  const storyID = articleTitle.getAttribute('storyid');
   const content = JSON.parse(localStorage.getItem('storyContent'));
   editor = new EditorJS({
     holder: 'editorjs',
@@ -106,7 +107,13 @@ const createEditor = async function () {
       Marker: { class: Marker, shortcut: 'CMD+SHIFT+M' },
       delimiter: { class: Delimiter },
       inlineCode: { class: InlineCode, shortcut: 'OPTION+CMD+SHIFT+C' },
-      image: { class: ImageTool, shortcut: 'CMD+SHIFT+I' },
+      image: {
+        class: ImageTool,
+        config: {
+          endpoints: { byFile: `http://localhost:3000/uploadImage/${storyID}` },
+        },
+        shortcut: 'CMD+SHIFT+I',
+      },
     },
     data: { blocks: content },
   });

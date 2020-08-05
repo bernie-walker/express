@@ -35,6 +35,9 @@ const {
   createNewStory,
   renderEditor,
   saveStory,
+  upload,
+  handleError,
+  uploadImage,
   publishStory,
   updateClap,
   serveUserStoriesPage,
@@ -97,6 +100,12 @@ app.get('/editor/:storyID', renderEditor);
 app.get('/userStories', serveUserStoriesPage);
 
 app.post('/saveStory', saveStory);
+app.post(
+  '/uploadImage/:storyID',
+  upload.single('image'),
+  uploadImage,
+  handleError
+);
 app.post('/publishStory', publishStory);
 app.post('/clap/:storyID', updateClap);
 

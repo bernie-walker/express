@@ -1,5 +1,6 @@
 const request = require('supertest');
 const sinon = require('sinon');
+const fs = require('fs');
 const { app } = require('../src/routes');
 const { Fetch } = require('../src/resourceFetcher');
 const { ExpressDS } = require('../src/dataProviders');
@@ -672,6 +673,46 @@ describe('POST', function () {
           storyID: '1',
         })
         .expect(401)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+  });
+
+  context('/uploadImage', function () {
+    before(() => {
+      setUpDatabase(app.locals.dbClientReference, ['stories', 'users']);
+      sinon.replace(fs, 'writeFileSync', () => {});
+    });
+    after(() => {
+      cleanDatabase(app.locals.dbClientReference);
+      sinon.restore();
+    });
+
+    it('should upload a valid image for post', function (done) {
+      request(app)
+        .post('/uploadImage/2')
+        .attach('image', 'test/testData/images/profile.jpg')
+        .expect(200)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should not upload any image without .png .jpeg .jpg extensions', function (done) {
+      request(app)
+        .post('/uploadImage/2')
+        .attach('image', 'test/testData/images/image.pdf')
+        .expect(422)
+        .expect({ error: 'please upload an image' })
         .end((err) => {
           if (err) {
             done(err);

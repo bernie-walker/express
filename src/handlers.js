@@ -1,5 +1,9 @@
-const { generateUrl } = require('./resourceFetcher');
 const moment = require('moment');
+const fs = require('fs');
+const multer = require('multer');
+const sharp = require('sharp');
+
+const { generateUrl } = require('./resourceFetcher');
 const statusCodes = require('./statusCodes.json');
 
 const logRequest = function (req, res, next) {
@@ -211,6 +215,35 @@ const saveStory = function (req, res) {
     });
 };
 
+const upload = multer({
+  limits: { fileSize: 2000000 },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+      cb(new Error('please upload an image'));
+    }
+    cb(null, true);
+  },
+});
+
+const uploadImage = async function (req, res) {
+  const buffer = await sharp(req.file.buffer).png().toBuffer();
+  const { blogImagePath, expressDS } = req.app.locals;
+  const imageID = await expressDS.incrID('image');
+  const [, root] = __dirname.match(/(.*express\/)(.*)/);
+  const imageName = `image_${req.params.storyID}_${imageID}.png`;
+  const imageStorePath = root + blogImagePath + imageName;
+  fs.writeFileSync(imageStorePath, buffer);
+  res.send({
+    success: 1,
+    file: { url: `/blog_image/${imageName}` },
+  });
+};
+
+// eslint-disable-next-line no-unused-vars
+const handleError = function (error, req, res, next) {
+  res.status(statusCodes.unprocessableEntity).send({ error: error.message });
+};
+
 const validateTags = function (tags = []) {
   const MAX_TAG_LENGTH = 26;
   return tags.reduce((tags, tagValue) => {
@@ -304,6 +337,9 @@ module.exports = {
   createNewStory,
   renderEditor,
   saveStory,
+  upload,
+  handleError,
+  uploadImage,
   publishStory,
   updateClap,
   serveUserStoriesPage,
