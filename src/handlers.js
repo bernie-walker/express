@@ -1,13 +1,18 @@
-const fs = require('fs');
 const moment = require('moment');
+const multer = require('multer');
 
 const { generateUrl } = require('./resourceFetcher');
 const statusCodes = require('./statusCodes.json');
-const {
-  getImageDetails,
-  changeImageIntoPng,
-  handleImages,
-} = require('./imageHandlers');
+
+const upload = multer({
+  limits: { fileSize: 2000000 },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+      cb(new Error('please upload an image'));
+    }
+    cb(null, true);
+  },
+});
 
 const logRequest = function (req, res, next) {
   if (!process.env.NO_LOG) {
@@ -31,7 +36,7 @@ const attachUserIfSignedIn = async function (req, res, next) {
 };
 
 const authorizeUser = function (req, res, next) {
-  if (req.user && !req.user.isSignedIn) {
+  if (!req.user || !req.user.isSignedIn) {
     res.sendStatus(statusCodes.unauthorized);
     return;
   }
@@ -211,12 +216,17 @@ const renderEditor = async function (req, res) {
   }
 };
 
-const saveStory = function (req, res) {
+const deleteUnusedImages = async function (req, res, next) {
+  const { imageHandlers } = req.app.locals;
+  const { storyID, blocks: content } = req.body;
+  await imageHandlers.deleteUnusedImages(storyID, content);
+  next();
+};
+
+const saveStory = async function (req, res) {
   const { stories } = req.app.locals;
   const { storyTitle, blocks: content, storyID: id } = req.body;
   const title = storyTitle.trim() || 'Untitled Story';
-
-  handleImages(id, content);
 
   stories
     .updateStory({ title, content, state: 'drafted', author: req.user.id, id })
@@ -227,9 +237,11 @@ const saveStory = function (req, res) {
 };
 
 const uploadImage = async function (req, res) {
-  const buffer = await changeImageIntoPng(req);
-  const { imageStorePath, imageName } = await getImageDetails(req);
-  fs.writeFileSync(imageStorePath, buffer);
+  const { imageHandlers } = req.app.locals;
+  const { storyID } = req.params;
+
+  const imageName = await imageHandlers.uploadImage(req.file, storyID);
+
   res.send({ success: 1, file: { url: `/blog_image/${imageName}` } });
 };
 
@@ -314,6 +326,7 @@ const serveProfilePage = async function (req, res) {
 };
 
 module.exports = {
+  imageValidation: upload.single('image'),
   logRequest,
   attachUserIfSignedIn,
   authorizeUser,
@@ -334,6 +347,7 @@ module.exports = {
   saveStory,
   handleError,
   uploadImage,
+  deleteUnusedImages,
   publishStory,
   updateClap,
   serveUserStoriesPage,

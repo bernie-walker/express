@@ -4,7 +4,7 @@ const { setUpDatabase, cleanDatabase } = require('./fixture/databaseSetUp');
 const { app } = require('../src/routes');
 const { Fetch } = require('../src/resourceFetcher');
 const { ExpressDS } = require('../src/dataProviders');
-const fs = require('fs');
+const { ImageHandlers } = require('../src/imageHandlers');
 app.locals.expressDS.closeClient();
 
 describe('GET', () => {
@@ -528,6 +528,14 @@ describe('POST', function () {
     );
     afterEach(() => cleanDatabase(app.locals.dbClientReference));
 
+    before(() => {
+      sinon.stub(ImageHandlers.prototype, 'deleteUnusedImages');
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
     it('should publish the story and redirect to the blogPage for a valid story', function (done) {
       request(app)
         .post('/publishStory')
@@ -644,17 +652,18 @@ describe('POST', function () {
   });
 
   context('/saveStory', function () {
-    before(() =>
-      setUpDatabase(app.locals.dbClientReference, ['stories', 'users'])
-    );
-
-    after(() => cleanDatabase(app.locals.dbClientReference));
-
-    beforeEach(() => {
-      sinon.stub(fs, 'readdirSync').returns([]);
+    before(() => {
+      setUpDatabase(app.locals.dbClientReference, ['stories', 'users']);
+      sinon.stub(ImageHandlers.prototype, 'deleteUnusedImages');
     });
 
-    it('should respond with a OK for a valid story', function (done) {
+    after(() => {
+      cleanDatabase(app.locals.dbClientReference);
+      sinon.restore();
+    });
+
+    it('should respond with a 401 an unauthorized user', function (done) {
+      fakeGetSession.resolves(null);
       request(app)
         .post('/saveStory')
         .send({
@@ -662,7 +671,7 @@ describe('POST', function () {
           blocks: [],
           storyID: '1',
         })
-        .expect(200)
+        .expect(401)
         .end((err) => {
           if (err) {
             done(err);
@@ -690,16 +699,22 @@ describe('POST', function () {
         });
     });
 
-    it('should respond with a 401 an unauthorized user', function (done) {
-      fakeGetSession.resolves(null);
+    it('should respond with a OK for a valid story', function (done) {
       request(app)
         .post('/saveStory')
         .send({
           storyTitle: 'validTitle',
-          blocks: [],
+          blocks: [
+            { type: 'paragraph', data: { text: 'paragraph' } },
+            {
+              type: 'image',
+              data: { file: { url: '/blog_image/image_1_2.png' } },
+            },
+            { type: 'image', data: { file: {} } },
+          ],
           storyID: '1',
         })
-        .expect(401)
+        .expect(200)
         .end((err) => {
           if (err) {
             done(err);
@@ -710,13 +725,6 @@ describe('POST', function () {
     });
 
     it('should remove unused images from database', function (done) {
-      after(sinon.restore);
-      sinon.replace(fs, 'readdirSync', () => [
-        'image_1_1.png',
-        'image_1_2.png',
-      ]);
-      sinon.replace(fs, 'unlinkSync', () => {});
-
       request(app)
         .post('/saveStory')
         .send({
@@ -745,51 +753,9 @@ describe('POST', function () {
   context('/uploadImage', function () {
     before(() => {
       setUpDatabase(app.locals.dbClientReference, ['stories', 'users']);
+      sinon.stub(ImageHandlers.prototype, 'uploadImage');
     });
 
-    after(() => {
-      cleanDatabase(app.locals.dbClientReference);
-    });
-
-    beforeEach(() => {
-      sinon.stub(fs, 'writeFileSync').returns();
-    });
-
-    it('should upload a valid image for post', function (done) {
-      request(app)
-        .post('/uploadImage/2')
-        .attach('image', 'test/testData/images/profile.jpg')
-        .expect(200)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
-    });
-
-    it('should not upload any image without .png .jpeg .jpg extensions', function (done) {
-      request(app)
-        .post('/uploadImage/2')
-        .attach('image', 'test/testData/images/image.pdf')
-        .expect(422)
-        .expect({ error: 'please upload an image' })
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
-    });
-  });
-
-  context('/uploadImage', function () {
-    before(() => {
-      setUpDatabase(app.locals.dbClientReference, ['stories', 'users']);
-      sinon.replace(fs, 'writeFileSync', () => {});
-    });
     after(() => {
       cleanDatabase(app.locals.dbClientReference);
       sinon.restore();

@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const { ExpressDB, ExpressDS } = require('./dataProviders');
 const { Users, Stories, Tags, Claps } = require('./dataModels');
 const { Fetch } = require('./resourceFetcher');
-const { imageValidation } = require('./imageHandlers');
+const { ImageHandlers } = require('./imageHandlers');
 
 const {
   NO_LOG,
@@ -19,6 +19,7 @@ const {
 } = process.env;
 
 const {
+  imageValidation,
   logRequest,
   attachUserIfSignedIn,
   serveHomepage,
@@ -39,6 +40,7 @@ const {
   saveStory,
   handleError,
   uploadImage,
+  deleteUnusedImages,
   publishStory,
   updateClap,
   serveUserStoriesPage,
@@ -65,7 +67,10 @@ const dsClient = redis.createClient({
   url: REDIS_URL || 'redis://127.0.0.1:6379',
   db: REDIS_DB,
 });
-app.locals.expressDS = new ExpressDS(dsClient);
+
+const expressDS = new ExpressDS(dsClient);
+app.locals.expressDS = expressDS;
+app.locals.imageHandlers = new ImageHandlers(expressDS, BLOG_IMAGE_PATH);
 
 app.set('view engine', 'pug');
 
@@ -101,9 +106,9 @@ app.get('/newStory', createNewStory);
 app.get('/editor/:storyID', renderEditor);
 app.get('/userStories', serveUserStoriesPage);
 
-app.post('/saveStory', saveStory);
+app.post('/saveStory', deleteUnusedImages, saveStory);
 app.post('/uploadImage/:storyID', imageValidation, uploadImage, handleError);
-app.post('/publishStory', publishStory);
+app.post('/publishStory', deleteUnusedImages, publishStory);
 app.post('/clap/:storyID', updateClap);
 
 module.exports = { app };
