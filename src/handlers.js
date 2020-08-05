@@ -184,6 +184,12 @@ const serveBlogPage = async function (req, res) {
   }
 };
 
+const serveComments = async function (req, res) {
+  const { stories } = req.app.locals;
+  const comments = await stories.listCommentsOn(req.params.storyID);
+  res.render('comments', { comments });
+};
+
 const createNewStory = async function (req, res) {
   const { stories } = req.app.locals;
   const storyID = await stories.createStory(req.user.id);
@@ -322,6 +328,7 @@ module.exports = {
   serveDashboard,
   serveBlogImage,
   serveBlogPage,
+  serveComments,
   createNewStory,
   renderEditor,
   saveStory,

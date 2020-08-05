@@ -33,6 +33,7 @@ const {
   registerUser,
   serveBlogImage,
   serveBlogPage,
+  serveComments,
   createNewStory,
   renderEditor,
   saveStory,
@@ -84,6 +85,7 @@ app.get(
 );
 
 app.get('/blog_image/:imageID', serveBlogImage);
+app.get('/commentList/:storyID', serveComments);
 app.get('/signOut', closeSession);
 
 app.get('/checkUsername/:userName', checkUsernameAvailability);

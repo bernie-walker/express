@@ -132,6 +132,10 @@ class Stories {
       return this.db.updateStory(editedStory).then(() => Promise.resolve());
     });
   }
+
+  listCommentsOn(storyID) {
+    return this.db.listCommentsOnStory(storyID);
+  }
 }
 
 class Tags {

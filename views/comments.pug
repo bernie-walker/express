@@ -1,0 +1,12 @@
+each comment in comments
+  .comment
+        .commenter
+          .commenterAvatar
+            img.icon-image(src= comment.commenterAvatarURL)
+          .comment-info
+            .commenter-name
+              a(href=`/profile/${comment.commenterID}`)= comment.commenter
+            .blog-date= comment.commentDate
+        .comment-text= comment.commentText
+else 
+  .emptyMessage Be the first one to respond to this story

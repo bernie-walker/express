@@ -302,7 +302,7 @@ describe('Stories', function () {
     });
   });
 
-  describe('.createStory', function () {
+  context('.createStory', function () {
     before(() => {
       const fakeCreateStoryByUser = sinon.stub();
       fakeCreateStoryByUser.withArgs('user1').resolves(1);
@@ -318,7 +318,7 @@ describe('Stories', function () {
     });
   });
 
-  describe('.updateStory', function () {
+  context('.updateStory', function () {
     before(() => {
       const fakeGetStoryOfUser = sinon.stub();
       fakeGetStoryOfUser
@@ -334,13 +334,38 @@ describe('Stories', function () {
     });
 
     it('should update the story if story exists', function () {
-      return expect(stories.updateStory({ id: 1, author: 'user1' })).to.be
-        .eventually.fulfilled;
+      return expect(
+        stories.updateStory({ id: 1, author: 'user1' })
+      ).to.be.eventually.fulfilled;
     });
 
     it('should reject if story does not exists', function () {
-      return expect(stories.updateStory({ id: 2, author: 'user2' })).to.be
-        .eventually.rejected;
+      return expect(
+        stories.updateStory({ id: 2, author: 'user2' })
+      ).to.be.eventually.rejected;
+    });
+  });
+
+  context('.listCommentsOn', function () {
+    before(() => {
+      const fakeListComments = sinon.stub();
+      fakeListComments.withArgs(1).resolves([{ comment: 'hello' }]);
+      fakeListComments.withArgs(2).resolves([]);
+      fakeDbClient.listCommentsOnStory = fakeListComments;
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('should resolve with the comments when there are comments', function () {
+      expect(stories.listCommentsOn(1)).to.eventually.deep.equal([
+        { comment: 'hello' },
+      ]);
+    });
+
+    it('should resolve with the empty array when there are comments', function () {
+      expect(stories.listCommentsOn(2)).to.eventually.deep.equal([]);
     });
   });
 });

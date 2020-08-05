@@ -1,3 +1,17 @@
+const insertCommentsIfNotHidden = async function () {
+  const storyID = blogTitle.getAttribute('storyid');
+  const list = await fetch(`/commentList/${storyID}`).then((response) =>
+    response.text()
+  );
+  commentList.innerHTML = list;
+};
+
+const toggleComments = function () {
+  comments.classList.toggle('hidden');
+  rawComment.focus();
+  insertCommentsIfNotHidden();
+};
+
 const showOnHoverMsg = function () {
   linkCopiedMsg.innerHTML = 'Copy to clipboard';
 };

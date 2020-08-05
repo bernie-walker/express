@@ -246,17 +246,16 @@ p b {
   opacity: 0.6;
 }
 
-#responses {
+#response {
   margin-left: 4vw;
   cursor: pointer;
 }
-#responses span {
+#response span {
   margin-left: 0.8vw;
 }
 
 #comments {
   margin-top: 3vh;
-  height: 200vh;
   border-top: 1px solid rgba(150, 150, 150, 0.8);
 }
 
@@ -266,17 +265,9 @@ p b {
 }
 
 .comment-header {
-  /* display: flex; */
-  /* justify-content: space-between; */
-  margin-bottom: 3vh;
+  margin: 1.5vh auto 1.5vh auto;
   height: 7vh;
   font-size: 5vh;
-}
-
-.comment-header > img {
-  margin: 2vh 1vh auto;
-  width: auto;
-  height: 45%;
 }
 
 .commenter {
@@ -287,6 +278,7 @@ p b {
   display: flex;
   height: 20vh;
 }
+
 #rawComment {
   box-shadow: 0 1px 3px #ccc;
   height: 17vh;
@@ -356,4 +348,11 @@ p b {
   letter-spacing: 0.12vw;
   line-height: 1.4;
   margin: 1vh auto;
+}
+
+.emptyMessage {
+  color: rgb(135, 127, 127);
+  font-size: calc(0.8vw + 1em);
+  margin-top: 5vh;
+  text-align: center;
 }

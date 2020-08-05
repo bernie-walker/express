@@ -70,6 +70,13 @@ html
           -const clapOnClickListener = isSignedIn ? "clapOnStory()" : "showSignInPopup()"
           img(src="/images/clap.png" class="clap-image" onclick=clapOnClickListener)
           span #{count} claps
-        #responses(onclick="showSignInPopup()")
+        #response(onclick="toggleComments()")
           img(src="/images/comment.png") 
           span #{comments} responses
+      #comments.hidden
+        .comment-header
+          | responses
+        #writeComment
+          #rawComment(contenteditable='')
+          #respond.inactive respond
+        #commentList

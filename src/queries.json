@@ -13,5 +13,6 @@
   "removeClap": "DELETE FROM claps WHERE clapped_on=? AND clapped_by=?;",
   "isClapped": "SELECT * FROM claps WHERE clapped_on=? AND clapped_by=?;",
   "clapCount": "SELECT count(*) as count FROM claps WHERE clapped_on=?;",
-  "updateStory": "UPDATE stories SET title=?, content=?, state=?, last_modified=CURRENT_TIMESTAMP WHERE id=? AND written_by=?"
+  "updateStory": "UPDATE stories SET title=?, content=?, state=?, last_modified=CURRENT_TIMESTAMP WHERE id=? AND written_by=?",
+  "listComments": "SELECT cmnt.commented_by AS commenterID, date(cmnt.commented_at) AS commentDate, cmnt.comment as commentText, usr.display_name AS commenter, usr.avatar_url AS commenterAvatarURL FROM comments AS cmnt JOIN users AS usr ON cmnt.commented_by = usr.id WHERE cmnt.commented_on = ? ORDER BY cmnt.commented_at DESC;"
 }

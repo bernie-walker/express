@@ -226,6 +226,28 @@ describe('GET', () => {
     });
   });
 
+  context('/commentList', function () {
+    before(() =>
+      setUpDatabase(app.locals.dbClientReference, ['users', 'comments'])
+    );
+
+    after(() => cleanDatabase(app.locals.dbClientReference));
+
+    it('should respond with comment list', function (done) {
+      request(app)
+        .get('/commentList/1')
+        .expect(200)
+        .expect(/comment/)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+  });
+
   context('/userStories', () => {
     before(() =>
       setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
