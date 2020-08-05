@@ -1,10 +1,13 @@
 const fs = require('fs');
 const moment = require('moment');
-const multer = require('multer');
-const sharp = require('sharp');
 
 const { generateUrl } = require('./resourceFetcher');
 const statusCodes = require('./statusCodes.json');
+const {
+  getImageDetails,
+  changeImageIntoPng,
+  handleImages,
+} = require('./imageHandlers');
 
 const logRequest = function (req, res, next) {
   if (!process.env.NO_LOG) {
@@ -202,33 +205,6 @@ const renderEditor = async function (req, res) {
   }
 };
 
-const getStoryImages = function (content) {
-  return content.reduce((images, block) => {
-    if (block.type === 'image') {
-      const imageUrl = block.data.file.url || '';
-      const [, , image] = imageUrl.split('/');
-      image && images.push(image);
-    }
-    return images;
-  }, []);
-};
-
-const handleImages = function (storyID, content) {
-  const usedImages = getStoryImages(content);
-
-  const imageDir = `${__dirname}/../data/images`;
-  const files = fs.readdirSync(imageDir);
-
-  const isUnusedImage = (file) =>
-    file.startsWith(`image_${storyID}_`) && !usedImages.includes(file);
-
-  files.forEach((file) => {
-    if (isUnusedImage(file)) {
-      fs.unlinkSync(`${imageDir}/${file}`);
-    }
-  });
-};
-
 const saveStory = function (req, res) {
   const { stories } = req.app.locals;
   const { storyTitle, blocks: content, storyID: id } = req.body;
@@ -242,29 +218,6 @@ const saveStory = function (req, res) {
     .catch(() => {
       res.sendStatus(statusCodes.unprocessableEntity);
     });
-};
-
-const upload = multer({
-  limits: { fileSize: 2000000 },
-  fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-      cb(new Error('please upload an image'));
-    }
-    cb(null, true);
-  },
-});
-
-const changeImageIntoPng = async function (req) {
-  return await sharp(req.file.buffer).png().toBuffer();
-};
-
-const getImageDetails = async function (req) {
-  const { blogImagePath, expressDS } = req.app.locals;
-  const imageID = await expressDS.incrID('image');
-  const [, root] = __dirname.match(/(.*express\/)(.*)/);
-  const imageName = `image_${req.params.storyID}_${imageID}.png`;
-  const imageStorePath = root + blogImagePath + imageName;
-  return { imageStorePath, imageName };
 };
 
 const uploadImage = async function (req, res) {
@@ -299,6 +252,8 @@ const publishStory = async function (req, res) {
   const author = req.user.id;
   const { stories } = req.app.locals;
   const { storyTitle, blocks: content, storyID: id, tags } = req.body;
+
+  handleImages(id, content);
 
   const title = storyTitle && storyTitle.trim();
   const allTags = validateTags(tags);
@@ -372,7 +327,6 @@ module.exports = {
   createNewStory,
   renderEditor,
   saveStory,
-  upload,
   handleError,
   uploadImage,
   publishStory,

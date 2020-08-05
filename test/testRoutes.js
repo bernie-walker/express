@@ -694,7 +694,14 @@ describe('POST', function () {
         .post('/saveStory')
         .send({
           storyTitle: 'validTitle',
-          blocks: [{ type: 'image', data: { file: { url: 'image_1_2.png' } } }],
+          blocks: [
+            { type: 'paragraph', data: { text: 'paragraph' } },
+            {
+              type: 'image',
+              data: { file: { url: '/blog_image/image_1_2.png' } },
+            },
+            { type: 'image', data: { file: {} } },
+          ],
           storyID: '1',
         })
         .expect(200)

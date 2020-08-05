@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const { ExpressDB, ExpressDS } = require('./dataProviders');
 const { Users, Stories, Tags, Claps } = require('./dataModels');
 const { Fetch } = require('./resourceFetcher');
+const { imageValidation } = require('./imageHandlers');
 
 const {
   NO_LOG,
@@ -35,7 +36,6 @@ const {
   createNewStory,
   renderEditor,
   saveStory,
-  upload,
   handleError,
   uploadImage,
   publishStory,
@@ -100,12 +100,7 @@ app.get('/editor/:storyID', renderEditor);
 app.get('/userStories', serveUserStoriesPage);
 
 app.post('/saveStory', saveStory);
-app.post(
-  '/uploadImage/:storyID',
-  upload.single('image'),
-  uploadImage,
-  handleError
-);
+app.post('/uploadImage/:storyID', imageValidation, uploadImage, handleError);
 app.post('/publishStory', publishStory);
 app.post('/clap/:storyID', updateClap);
 
