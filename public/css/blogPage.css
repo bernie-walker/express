@@ -166,6 +166,7 @@ p b {
 
 #shareSection #shareBtn {
   pointer-events: all;
+  cursor: pointer;
 }
 
 #shareSection:hover {

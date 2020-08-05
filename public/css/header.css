@@ -155,14 +155,18 @@
 }
 
 .section a,
-.section div {
+.section div:not(.display_name) {
   text-decoration: none;
   color: rgba(10, 10, 10, 0.6);
   cursor: pointer;
 }
 
+.display_name {
+  color: rgba(10, 10, 10, 0.8);
+}
+
 .section a:hover,
-.section div:hover {
+.section div:not(.display_name):hover {
   color: rgba(10, 10, 10, 0.8);
 }
 
@@ -244,6 +248,7 @@ body.blur > div {
 
 .actions a {
   border: 1px solid #c33;
+  color: #c33;
 }
 
 .actions div:hover,

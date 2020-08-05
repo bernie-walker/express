@@ -653,14 +653,11 @@ describe('POST', function () {
 
   context('/saveStory', function () {
     before(() => {
-      setUpDatabase(app.locals.dbClientReference, ['stories', 'users']);
       sinon.stub(ImageHandlers.prototype, 'deleteUnusedImages');
+      return setUpDatabase(app.locals.dbClientReference, ['stories', 'users']);
     });
 
-    after(() => {
-      cleanDatabase(app.locals.dbClientReference);
-      sinon.restore();
-    });
+    after(() => cleanDatabase(app.locals.dbClientReference));
 
     it('should respond with a 401 an unauthorized user', function (done) {
       fakeGetSession.resolves(null);
@@ -751,17 +748,14 @@ describe('POST', function () {
   });
 
   context('/uploadImage', function () {
-    before(() => {
-      setUpDatabase(app.locals.dbClientReference, ['stories', 'users']);
-      sinon.stub(ImageHandlers.prototype, 'uploadImage');
-    });
+    before(() =>
+      setUpDatabase(app.locals.dbClientReference, ['stories', 'users'])
+    );
 
-    after(() => {
-      cleanDatabase(app.locals.dbClientReference);
-      sinon.restore();
-    });
+    after(() => cleanDatabase(app.locals.dbClientReference));
 
     it('should upload a valid image for post', function (done) {
+      sinon.stub(ImageHandlers.prototype, 'uploadImage');
       request(app)
         .post('/uploadImage/2')
         .attach('image', 'test/testData/images/profile.jpg')
@@ -796,7 +790,7 @@ describe('POST', function () {
 
     after(() => cleanDatabase(app.locals.dbClientReference));
 
-    it.skip('should register and redirect the user to / when valid credentials', function (done) {
+    it('should register and redirect the user to / when valid credentials', function (done) {
       sinon
         .stub(ExpressDS.prototype, 'getTokenValue')
         .resolves({ githubID: 1234, avatarURL: 'url' });

@@ -36,7 +36,7 @@ const attachUserIfSignedIn = async function (req, res, next) {
 };
 
 const authorizeUser = function (req, res, next) {
-  if (!req.user || !req.user.isSignedIn) {
+  if (!(req.user && req.user.isSignedIn)) {
     res.sendStatus(statusCodes.unauthorized);
     return;
   }
