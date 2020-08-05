@@ -1,4 +1,4 @@
-const hideSignInPopup = () => backCover.classList.add('hidden-cover');
+const hideSignInPopup = () => backCover.classList.add('hidden');
 
 const hideSigInIfEsc = function () {
   if (event.key === 'Escape') {
@@ -12,7 +12,7 @@ const hideIfTargetIsCover = function () {
   }
 };
 
-const showSignInPopup = () => backCover.classList.remove('hidden-cover');
+const showSignInPopup = () => backCover.classList.remove('hidden');
 
 const attachSignInListeners = function () {
   signIn.addEventListener('click', showSignInPopup);

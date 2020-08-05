@@ -162,10 +162,6 @@ a {
   color: green;
 }
 
-.hidden-cover {
-  display: none;
-}
-
 .advertise {
   height: 80vh;
   display: flex;

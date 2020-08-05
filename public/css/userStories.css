@@ -95,10 +95,6 @@ body {
   margin-top: 0.6vh;
 }
 
-.hidden {
-  display: none;
-}
-
 .story-actions {
   display: flex;
 }

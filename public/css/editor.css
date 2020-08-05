@@ -96,11 +96,6 @@ body {
   cursor: pointer;
 }
 
-.inactive {
-  filter: opacity(0.4);
-  pointer-events: none;
-}
-
 .profile,
 .avatar {
   height: 48px;
@@ -420,8 +415,4 @@ body.blur > div {
 .actions a {
   border-color: #c33;
   color: #c33;
-}
-
-.hidden {
-  display: none;
 }

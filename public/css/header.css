@@ -250,7 +250,3 @@ body.blur > div {
 .actions a:hover {
   transform: scale(1.05);
 }
-
-.hidden {
-  display: none;
-}
