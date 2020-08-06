@@ -382,14 +382,14 @@ describe('Stories', function () {
   });
 
   context('.listCommentsOn', function () {
-    before(() => {
+    beforeEach(() => {
       const fakeListComments = sinon.stub();
       fakeListComments.withArgs(1).resolves([{ comment: 'hello' }]);
       fakeListComments.withArgs(2).resolves([]);
       fakeDbClient.listCommentsOnStory = fakeListComments;
     });
 
-    after(() => {
+    afterEach(() => {
       sinon.restore();
     });
 
@@ -401,6 +401,28 @@ describe('Stories', function () {
 
     it('should resolve with the empty array when there are comments', function () {
       expect(stories.listCommentsOn(2)).to.eventually.deep.equal([]);
+    });
+  });
+
+  context('.comment', function () {
+    beforeEach(() => {
+      fakeDbClient.addComment = sinon.stub().resolves(1);
+    });
+
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it('should return the promise from addComment', function () {
+      return expect(
+        stories.comment({ storyID: 1, userID: 'me', comment: 'text' })
+      ).to.be.eventually.equal(1);
+    });
+
+    it('should reject when the commentInfo  is insufficient', function () {
+      return expect(
+        stories.comment({ storyID: 1, userID: 'me' })
+      ).to.be.eventually.rejected;
     });
   });
 });

@@ -934,4 +934,55 @@ describe('POST', function () {
         });
     });
   });
+
+  context('addComment', function () {
+    before(() =>
+      setUpDatabase(app.locals.dbClientReference, ['users', 'comments'])
+    );
+
+    after(() => cleanDatabase(app.locals.dbClientReference));
+
+    it('should add comment and respond with comment list for valid comment info', function (done) {
+      request(app)
+        .post('/addComment')
+        .send({ storyID: 1, comment: 'text' })
+        .expect(200)
+        .expect(/comment/)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond with 422 for insufficient comment info', function (done) {
+      request(app)
+        .post('/addComment')
+        .send({ storyID: 1 })
+        .expect(422)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should respond with 401 when user not signed in', function (done) {
+      fakeGetSession.resolves(null);
+      request(app)
+        .post('/addComment')
+        .expect(401)
+        .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+  });
 });
