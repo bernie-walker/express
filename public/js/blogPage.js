@@ -76,7 +76,7 @@ const clapOnStory = async function () {
   if (isClapped) {
     getElement('.clap-image').classList.add('clapped');
   }
-  getElement('.story-response div span').innerText = `${count} claps`;
+  getElement('.story-response div #count').innerText = count;
 };
 
 const main = function () {

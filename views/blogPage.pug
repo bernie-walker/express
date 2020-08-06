@@ -69,7 +69,8 @@ html
         div(class= className)
           -const clapOnClickListener = isSignedIn ? "clapOnStory()" : "showSignInPopup()"
           img(src="/images/clap.png" class=['clap-image', 'not-clapped', clappedClass] onclick=clapOnClickListener)
-          span #{count} claps
+          span#count= count  
+          span claps
         #response(onclick="toggleComments()")
           img(src="/images/comment.png") 
           span #{comments} responses

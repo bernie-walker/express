@@ -243,6 +243,12 @@ p b {
   cursor: pointer;
 }
 
+span#count {
+  width: 15px;
+  margin-right: 5px;
+  text-align: right;
+}
+
 .not-clapped {
   opacity: 0.6;
 }
