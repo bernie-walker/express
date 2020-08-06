@@ -65,10 +65,10 @@ html
         each tag in tags
           .tag= tag
       .story-response
-        -const className = isClapped ? "clapped":""
+        -const clappedClass = isClapped ? "clapped": ""
         div(class= className)
           -const clapOnClickListener = isSignedIn ? "clapOnStory()" : "showSignInPopup()"
-          img(src="/images/clap.png" class="clap-image" onclick=clapOnClickListener)
+          img(src="/images/clap.png" class=['clap-image', 'not-clapped', clappedClass] onclick=clapOnClickListener)
           span #{count} claps
         #response(onclick="toggleComments()")
           img(src="/images/comment.png") 
