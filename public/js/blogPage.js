@@ -18,6 +18,7 @@ const addComment = async function () {
   const storyID = blogTitle.getAttribute('storyid');
   const comment = rawComment.innerText;
   rawComment.innerText = '';
+  respond.classList.add('inactive');
 
   const commentList = await fetch('/addComment', {
     method: 'POST',
