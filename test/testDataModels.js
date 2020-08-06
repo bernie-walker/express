@@ -79,7 +79,7 @@ describe('Users', function () {
     });
   });
 
-  context('.list', function () {
+  context('.has', function () {
     before(() => {
       fakeDbClient.getUsersList = sinon
         .stub()
@@ -90,8 +90,12 @@ describe('Users', function () {
       sinon.restore();
     });
 
-    it('should resolve with users list', function () {
-      expect(users.list()).to.eventually.deep.equal(['bernie', 'walker']);
+    it('should resolve with true if user name exists', function () {
+      return expect(users.has('bernie')).to.eventually.true;
+    });
+
+    it('should resolve with false if user name does not exist', function () {
+      return expect(users.has('priyanshu')).to.eventually.false;
     });
   });
 

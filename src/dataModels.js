@@ -50,10 +50,10 @@ class Users {
       : Promise.reject();
   }
 
-  list() {
+  has(userID) {
     return this.db.getUsersList().then((usersList) => {
-      const userNameList = usersList.map((user) => user.id);
-      return Promise.resolve(userNameList);
+      const hasUser = usersList.find((user) => user.id === userID);
+      return hasUser ? Promise.resolve(true) : Promise.resolve(false);
     });
   }
 

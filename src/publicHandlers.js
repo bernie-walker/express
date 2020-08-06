@@ -10,14 +10,8 @@ const serveHomepage = function (req, res, next) {
 
 const checkUsernameAvailability = async function (req, res) {
   const { users } = req.app.locals;
-  const usersList = await users.list();
-  let available = true;
-
-  if (usersList.includes(req.params.userName)) {
-    available = false;
-  }
-
-  res.json({ available });
+  const isUserPresent = await users.has(req.params.userName);
+  res.json({ available: !isUserPresent });
 };
 
 const serveBlogImage = function (req, res) {
