@@ -121,6 +121,14 @@ class Stories {
       .then((storyID) => Promise.resolve(storyID));
   }
 
+  async setCoverImage({ content = [], id, author }) {
+    const imageBlock = content.find((block) => block.type === 'image');
+    if (imageBlock) {
+      const coverImage = imageBlock.data.file.url;
+      await this.db.setCoverImage(id, author, coverImage);
+    }
+  }
+
   updateStory(editedStory) {
     const { id, author } = editedStory;
 
@@ -128,6 +136,8 @@ class Stories {
       if (!story) {
         return Promise.reject();
       }
+
+      this.setCoverImage(editedStory);
 
       return this.db.updateStory(editedStory).then(() => Promise.resolve());
     });

@@ -247,13 +247,12 @@ const saveStory = async function (req, res) {
     });
 };
 
+// eslint-disable-next-line no-unused-vars
 const handleError = function (error, req, res, next) {
   if (error) {
     res.status(statusCodes.unprocessableEntity);
     res.send({ error: error.message });
-    return;
   }
-  next();
 };
 
 const uploadImage = async function (req, res) {

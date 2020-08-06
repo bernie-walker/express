@@ -13,6 +13,7 @@ const {
   removeClap,
   isClapped,
   clapCount,
+  setCoverImage,
   updateStory,
   listComments,
   newComment,
@@ -140,6 +141,12 @@ class ExpressDB {
       this.dbClient.run(query, [userID], function () {
         resolve(this.lastID);
       });
+    });
+  }
+
+  setCoverImage(id, author, coverImage) {
+    return new Promise((resolve) => {
+      this.dbClient.run(setCoverImage, [coverImage, id, author], resolve);
     });
   }
 

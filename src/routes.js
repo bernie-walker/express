@@ -109,7 +109,7 @@ app.get('/editor/:storyID', renderEditor);
 app.get('/userStories', serveUserStoriesPage);
 
 app.post('/saveStory', deleteUnusedImages, saveStory);
-app.post('/uploadImage/:storyID', imageValidation, handleError, uploadImage);
+app.post('/uploadImage/:storyID', imageValidation, uploadImage, handleError);
 app.post('/publishStory', deleteUnusedImages, publishStory);
 app.post('/clap/:storyID', updateClap);
 app.post('/addComment', addComment, serveComments);

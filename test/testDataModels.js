@@ -318,6 +318,41 @@ describe('Stories', function () {
     });
   });
 
+  context('.setCoverImage', function () {
+    before(() => {
+      const fakeGetStoryOfUser = sinon.stub();
+      fakeGetStoryOfUser
+        .withArgs(1, 'user1')
+        .resolves({ content: '{"txt":"samp"}' });
+      fakeGetStoryOfUser.withArgs(2, 'user2').resolves();
+      fakeDbClient.getStoryOfUser = fakeGetStoryOfUser;
+      fakeDbClient.setCoverImage = sinon.stub().resolves();
+    });
+
+    after(sinon.restore);
+
+    it('should set the cover image if story exists', function () {
+      return expect(
+        stories.setCoverImage({
+          id: 1,
+          author: 'user1',
+          content: [
+            {
+              type: 'image',
+              data: { file: { url: '/blog_image/image_1_1.png' } },
+            },
+          ],
+        })
+      ).to.be.eventually.fulfilled;
+    });
+
+    it('should not set cover image if image does not exists', function () {
+      return expect(
+        stories.setCoverImage({ id: 2, author: 'user2', content: [] })
+      ).to.be.eventually.fulfilled;
+    });
+  });
+
   context('.updateStory', function () {
     before(() => {
       const fakeGetStoryOfUser = sinon.stub();

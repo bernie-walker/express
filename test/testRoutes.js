@@ -748,18 +748,24 @@ describe('POST', function () {
   });
 
   context('/uploadImage', function () {
-    before(() =>
-      setUpDatabase(app.locals.dbClientReference, ['stories', 'users'])
-    );
+    before(() => {
+      sinon
+        .stub(ImageHandlers.prototype, 'uploadImage')
+        .resolves('image_1_1.jpg');
+      return setUpDatabase(app.locals.dbClientReference, ['stories', 'users']);
+    });
 
-    after(() => cleanDatabase(app.locals.dbClientReference));
+    after(() => {
+      sinon.restore();
+      return cleanDatabase(app.locals.dbClientReference);
+    });
 
     it('should upload a valid image for post', function (done) {
-      sinon.stub(ImageHandlers.prototype, 'uploadImage');
       request(app)
         .post('/uploadImage/2')
         .attach('image', 'test/testData/images/profile.jpg')
         .expect(200)
+        .expect({ success: 1, file: { url: '/blog_image/image_1_1.jpg' } })
         .end((err) => {
           if (err) {
             done(err);
