@@ -7,7 +7,7 @@ each comment in comments
             .commenter-name
               a(href=`/profile/${comment.commenterID}`)= comment.commenter
             - const [,month,date,year] = new Date(comment.commentDate).toString().split(' ');  
-            .blog-date= `${month} ${date}, ${year}`
+            .comment-date= `${month} ${date}, ${year}`
         .comment-text= comment.commentText
 else 
   .emptyMessage Be the first one to respond to this story

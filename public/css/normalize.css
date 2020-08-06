@@ -1,3 +1,13 @@
+@font-face {
+  src: url('../fonts/Epilogue-Medium.ttf');
+  font-family: 'Epilogue-Medium';
+}
+
+@font-face {
+  src: url('../fonts/Epilogue-Light.ttf');
+  font-family: 'Epilogue-Light';
+}
+
 html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;

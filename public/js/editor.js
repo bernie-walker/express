@@ -81,11 +81,11 @@ const publishBlog = async function () {
 };
 
 const togglePublishedOnTitle = function () {
-  const $buttons = Array.from(getAllElements('.story-actions .btn'));
+  const button = getAllElements('.story-actions .btn');
   if (articleTitle.innerText.trim()) {
-    $buttons.forEach(($button) => $button.classList.remove('inactive'));
+    button.classList.remove('inactive');
   } else {
-    $buttons.forEach(($button) => $button.classList.add('inactive'));
+    button.classList.add('inactive');
   }
 };
 

@@ -7,10 +7,7 @@ const updateResponseCount = function () {
 
 const displayComments = function (comments) {
   commentList.innerHTML = comments;
-  const element =
-    document.querySelector('.comment') ||
-    document.querySelector('.emptyMessage');
-  element.scrollIntoView();
+  document.querySelector('.comment-header').scrollIntoView();
   updateResponseCount();
 };
 

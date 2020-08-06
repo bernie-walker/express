@@ -4,7 +4,7 @@
 }
 
 body {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Epilogue-Light';
 }
 
 .header {
@@ -63,7 +63,7 @@ body {
   align-items: center;
   letter-spacing: 0.05vw;
   word-spacing: 1.2vw;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: 'Epilogue-Medium';
 }
 
 .searchAndProfile {
@@ -83,7 +83,6 @@ body {
   margin-right: 2vw;
 }
 .btn {
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   margin: 1.5vh 0.5vw;
   font-size: calc(0.8vh + 0.7em);
   border: 1px solid green;
@@ -125,7 +124,6 @@ body {
   flex-direction: column;
   border: 1px solid #ddd;
   right: 80px;
-  font-family: sans-serif;
   z-index: 999;
 }
 
@@ -222,6 +220,8 @@ body {
   color: rgba(10, 10, 10, 0.9);
   outline: none;
   background-origin: border-box;
+  font-family: 'Epilogue-Medium';
+  font-weight: 600;
 }
 
 #articleTitle:empty::before {
@@ -340,10 +340,12 @@ body {
   justify-content: center;
 }
 
-.button .btn {
-  padding: 1.5vh 1.5vw;
+.button,
+.btn {
+  padding: 0.6vw 0.8vw 0.3vw 0.8vw;
   height: auto;
-  font-size: calc(0.8vw + 0.6em);
+  font-size: calc(0.6vw + 0.6em);
+  font-weight: 600;
 }
 
 #closeBtn {

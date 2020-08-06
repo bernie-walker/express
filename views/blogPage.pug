@@ -19,7 +19,6 @@ html
   head
     meta(charset='UTF-8')
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
-    link(href='https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap' rel='stylesheet')
     link(rel='stylesheet' href='/css/normalize.css')
     link(rel='stylesheet' href='/css/header.css')
     link(rel='stylesheet' href='/css/blogPage.css')
@@ -79,5 +78,5 @@ html
           | responses
         #writeComment
           #rawComment(contenteditable onclick= isSignedIn  ? "" : "showSignInPopup()")
-          #respond.inactive respond
+          #respond.inactive Respond
         #commentList

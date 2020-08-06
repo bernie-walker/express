@@ -9,7 +9,6 @@ head
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/inline-code@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/delimiter@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/image@latest')
-  link(href='https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap' rel='stylesheet')
   script(src='/js/header.js')
   script(src='/js/editor.js')
   link(rel='stylesheet' href='/css/normalize.css')
@@ -31,9 +30,9 @@ body
     .searchAndProfile
       .story-actions
         if state === 'published'  
-          .btn#saveAndPublish save and publish
+          .btn#saveAndPublish Save and publish
         else
-          .btn#publishBtn publish
+          .btn#publishBtn Publish
 
       .profile
         img#profile(src= avatar_url, alt="avatar")
@@ -47,12 +46,12 @@ body
               #username= id
           .section
             div 
-              a(href="/newStory") write a story
+              a(href="/newStory") Write a story
             div 
-              a(href="/userStories") stories
+              a(href="/userStories") Stories
           .section
             div 
-              #signOut sign out
+              #signOut Sign out
             //- div help
   #editor
     - const storyTitle = title === 'Untitled Story' ?  '' : title;
@@ -71,7 +70,7 @@ body
               .cross &#215;
 
       div.button
-        button.btn#publishNowBtn publish now
+        button.btn#publishNowBtn Publish now
       div#closeBtn
         img(src="/images/close.png", alt="X")
 
@@ -80,5 +79,5 @@ body
     div
       .msg Are you sure you want to sign out?
     .actions
-      #cancel cancel
-      a(href="/signout") sign out
+      #cancel Cancel
+      a(href="/signout") Sign out

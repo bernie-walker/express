@@ -15,14 +15,17 @@ a {
   padding: 4px;
   height: 48px;
 }
+
 @media (max-width: 420px) {
   .header {
     height: 32px;
   }
 }
+
 .header > div {
   width: 35%;
 }
+
 @media (max-width: 420px) {
   .header {
     justify-content: space-between;
@@ -109,6 +112,7 @@ a {
   top: 23.5%;
   right: 35%;
   text-align: center;
+  font-family: 'Epilogue-Medium';
 }
 
 #closeBtn {
@@ -116,6 +120,7 @@ a {
 }
 
 #closeIcon {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 1.7vw;
   font-weight: 100;
   opacity: 0.5;
@@ -135,13 +140,15 @@ a {
 }
 
 #signInBtn {
+  font-family: 'Epilogue-Light';
   border: 1px solid rgba(0, 0, 0, 0.4);
   border-radius: 0.4vw;
   width: 55%;
   margin: 11vh auto;
   padding: 1vw;
   font-weight: 100;
-  font-size: 1.8vw;
+  font-size: 1.5vw;
+  align-items: center;
   cursor: pointer;
   display: flex;
   justify-content: space-around;

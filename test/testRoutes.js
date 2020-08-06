@@ -32,7 +32,7 @@ describe('GET', () => {
         .get('/')
         .expect(200)
         .expect(/Express/)
-        .expect(/sign in/)
+        .expect(/Sign in/)
         .end((err) => {
           if (err) {
             done(err);

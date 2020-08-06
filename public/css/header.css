@@ -5,8 +5,9 @@
   justify-content: center;
   padding: 4px;
   height: 48px;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: 'Epilogue-Light';
 }
+
 @media (max-width: 420px) {
   .header {
     height: 32px;
@@ -52,9 +53,9 @@
   border: 1px solid rgba(0, 128, 0, 0.6);
   color: rgba(0, 128, 0, 0.7);
   border-radius: 0.4vw;
-  padding: 0.1vw 1.4vw 0.4vw;
+  padding: 0.3vw 1.4vw 0.2vw 1.4vw;
   font-size: 1.5vw;
-  font-weight: 400;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -114,7 +115,6 @@
   flex-direction: column;
   border: 1px solid #ddd;
   right: 80px;
-  font-family: sans-serif;
   z-index: 1;
 }
 
@@ -163,6 +163,7 @@
 
 .display_name {
   color: rgba(10, 10, 10, 0.8);
+  font-weight: 600;
 }
 
 .section a:hover,
@@ -208,6 +209,7 @@
   visibility: hidden;
   opacity: 0;
   box-shadow: 0 1px 0.6vw 0.4vw #bbbaba33;
+  font-family: 'Epilogue-Medium';
 }
 
 body.blur > div {
