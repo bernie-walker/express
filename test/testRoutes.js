@@ -355,7 +355,7 @@ describe('GET', () => {
     });
   });
 
-  context('/authorize', function () {
+  context('/authenticate', function () {
     it('should redirect to github authorization page', function (done) {
       request(app)
         .get('/authenticate')
@@ -792,14 +792,18 @@ describe('POST', function () {
   });
 
   context('/signUp', function () {
-    before(() => setUpDatabase(app.locals.dbClientReference, ['users']));
+    let fakeGetTempTokenValue;
 
-    after(() => cleanDatabase(app.locals.dbClientReference));
-
-    it('should register and redirect the user to / when valid credentials', function (done) {
-      sinon
+    beforeEach(() => {
+      fakeGetTempTokenValue = sinon
         .stub(ExpressDS.prototype, 'getTokenValue')
         .resolves({ githubID: 1234, avatarURL: 'url' });
+      return setUpDatabase(app.locals.dbClientReference, ['users']);
+    });
+
+    afterEach(() => cleanDatabase(app.locals.dbClientReference));
+
+    it('should register and redirect the user to / when valid credentials', function (done) {
       sinon.stub(ExpressDS.prototype, 'createSession').resolves(1);
 
       request(app)
@@ -807,7 +811,29 @@ describe('POST', function () {
         .send({ userID: 'bernie' })
         .expect(302)
         .expect('Location', '/')
+        .expect('set-cookie', /sesID=1/)
         .end((err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done();
+        });
+    });
+
+    it('should delete temp session and regT cookie when successfully registered', function (done) {
+      sinon.stub(ExpressDS.prototype, 'createSession').resolves(1);
+      const fakeDeleteTempToken = sinon
+        .stub(ExpressDS.prototype, 'deleteTempToken')
+        .resolves();
+
+      request(app)
+        .post('/signUp')
+        .send({ userID: 'bernie' })
+        .expect(302)
+        .expect('set-cookie', /regT=;.*Expires=/)
+        .end((err) => {
+          sinon.assert.called(fakeDeleteTempToken);
           if (err) {
             done(err);
             return;
@@ -844,10 +870,6 @@ describe('POST', function () {
     });
 
     it('should respond with 422 when the user name is already taken', function (done) {
-      sinon
-        .stub(ExpressDS.prototype, 'getTokenValue')
-        .resolves({ githubID: 1234, avatarURL: 'url' });
-
       request(app)
         .post('/signUp')
         .send({ userID: 'palpriyanshu' })
@@ -862,8 +884,7 @@ describe('POST', function () {
     });
 
     it('should respond with 401 when the registration token is invalid', function (done) {
-      sinon.stub(ExpressDS.prototype, 'getTokenValue').resolves(null);
-
+      fakeGetTempTokenValue.resolves(null);
       request(app)
         .post('/signUp')
         .send({ userID: 'bernie' })

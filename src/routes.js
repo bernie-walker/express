@@ -32,6 +32,7 @@ const {
   takeToSignUp,
   checkUsernameAvailability,
   registerUser,
+  finishRegistration,
   serveBlogImage,
   getClapsDetails,
   serveBlogPage,
@@ -96,7 +97,7 @@ app.get('/commentList/:storyID', serveComments);
 app.get('/signOut', closeSession);
 
 app.get('/checkUsername/:userName', checkUsernameAvailability);
-app.post('/signUp', registerUser);
+app.post('/signUp', registerUser, finishRegistration);
 
 app.use(attachUserIfSignedIn);
 app.get('/', serveHomepage, serveDashboard);

@@ -138,14 +138,9 @@ const checkUsernameAvailability = async function (req, res) {
   res.json({ available });
 };
 
-const registerUser = async function (req, res) {
+const registerUser = async function (req, res, next) {
   const { users, expressDS } = req.app.locals;
   const { userID } = req.body;
-
-  if (!userID || userID.match(/\s/)) {
-    res.sendStatus(statusCodes.unprocessableEntity);
-    return;
-  }
 
   const registrationInfo = await expressDS.getTokenValue(req.cookies.regT);
 
@@ -154,14 +149,29 @@ const registerUser = async function (req, res) {
     return;
   }
 
+  if (!userID || userID.match(/\s/)) {
+    res.sendStatus(statusCodes.unprocessableEntity);
+    return;
+  }
+
   users
     .registerUser(Object.assign(registrationInfo, req.body))
-    .then((userID) => {
-      createSessionAndRedirect(res, expressDS, userID);
+    .then(() => {
+      next();
     })
     .catch(() => {
       res.sendStatus(statusCodes.unprocessableEntity);
     });
+};
+
+const finishRegistration = async function (req, res) {
+  const { expressDS } = req.app.locals;
+  const { userID } = req.body;
+
+  await expressDS.deleteTempToken(req.cookies.regT);
+  res.clearCookie('regT');
+
+  createSessionAndRedirect(res, expressDS, userID);
 };
 
 const serveBlogImage = function (req, res) {
@@ -364,6 +374,7 @@ module.exports = {
   takeToSignUp,
   checkUsernameAvailability,
   registerUser,
+  finishRegistration,
   serveDashboard,
   serveBlogImage,
   getClapsDetails,
