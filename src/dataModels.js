@@ -136,6 +136,16 @@ class Stories {
   listCommentsOn(storyID) {
     return this.db.listCommentsOnStory(storyID);
   }
+
+  comment(commentInfo) {
+    const { storyID: on, userID: by, comment: text } = commentInfo;
+
+    if (!(on && by && text)) {
+      return Promise.reject();
+    }
+
+    return this.db.addComment({ on, text, by });
+  }
 }
 
 class Tags {

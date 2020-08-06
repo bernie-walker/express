@@ -44,6 +44,7 @@ const {
   deleteUnusedImages,
   publishStory,
   updateClap,
+  addComment,
   serveUserStoriesPage,
   serveProfilePage,
 } = require('./handlers');
@@ -111,5 +112,6 @@ app.post('/saveStory', deleteUnusedImages, saveStory);
 app.post('/uploadImage/:storyID', imageValidation, handleError, uploadImage);
 app.post('/publishStory', deleteUnusedImages, publishStory);
 app.post('/clap/:storyID', updateClap);
+app.post('/addComment', addComment, serveComments);
 
 module.exports = { app };

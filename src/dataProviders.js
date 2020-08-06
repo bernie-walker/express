@@ -15,6 +15,7 @@ const {
   clapCount,
   updateStory,
   listComments,
+  newComment,
 } = require('./queries.json');
 
 const setExpirationAndResolve = function (dsClient, token, resolve) {
@@ -274,6 +275,19 @@ class ExpressDB {
     return new Promise((resolve) => {
       this.dbClient.all(listComments, [storyID], (err, rows) => {
         resolve(rows);
+      });
+    });
+  }
+
+  addComment(comment) {
+    const { on, by, text } = comment;
+    return new Promise((resolve, reject) => {
+      this.dbClient.run(newComment, [on, by, text], (err) => {
+        if (err) {
+          reject();
+        } else {
+          resolve(on);
+        }
       });
     });
   }

@@ -314,6 +314,17 @@ const updateClap = async function (req, res) {
   res.json(Object.assign(clapsCount, { isClapped }));
 };
 
+const addComment = async function (req, res, next) {
+  const { stories } = req.app.locals;
+  stories
+    .comment(Object.assign(req.body, { userID: req.user.id }))
+    .then((storyID) => {
+      req.params.storyID = storyID;
+      next();
+    })
+    .catch(() => res.sendStatus(statusCodes.unprocessableEntity));
+};
+
 const serveUserStoriesPage = async function (req, res) {
   const { users } = req.app.locals;
   const storyState = { published: 'published', drafted: 'drafted' };
@@ -370,6 +381,7 @@ module.exports = {
   deleteUnusedImages,
   publishStory,
   updateClap,
+  addComment,
   serveUserStoriesPage,
   serveProfilePage,
 };

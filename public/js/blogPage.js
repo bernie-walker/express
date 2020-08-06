@@ -1,15 +1,54 @@
-const insertCommentsIfNotHidden = async function () {
+const updateResponseCount = function () {
+  const comments = Array.from(document.querySelectorAll('.comment'));
+  document.querySelector(
+    '#response > span'
+  ).innerText = `${comments.length} responses`;
+};
+
+const displayComments = function (comments) {
+  commentList.innerHTML = comments;
+  const element =
+    document.querySelector('.comment') ||
+    document.querySelector('.emptyMessage');
+  element.scrollIntoView();
+  updateResponseCount();
+};
+
+const addComment = async function () {
   const storyID = blogTitle.getAttribute('storyid');
-  const list = await fetch(`/commentList/${storyID}`).then((response) =>
+  const comment = rawComment.innerText;
+  rawComment.innerText = '';
+
+  const commentList = await fetch('/addComment', {
+    method: 'POST',
+    body: JSON.stringify({ storyID, comment }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then((response) => response.text());
+
+  displayComments(commentList);
+};
+
+const activateRespond = function () {
+  if (rawComment.innerText.trim()) {
+    respond.classList.remove('inactive');
+  } else {
+    respond.classList.add('inactive');
+  }
+};
+
+const getComments = async function () {
+  const storyID = blogTitle.getAttribute('storyid');
+  const commentList = await fetch(`/commentList/${storyID}`).then((response) =>
     response.text()
   );
-  commentList.innerHTML = list;
+  displayComments(commentList);
 };
 
 const toggleComments = function () {
   comments.classList.toggle('hidden');
-  rawComment.focus();
-  insertCommentsIfNotHidden();
+  getComments().then(viewComments);
 };
 
 const showOnHoverMsg = function () {
@@ -43,6 +82,8 @@ const main = function () {
   attachHeadListener();
   shareSection.addEventListener('click', shareBlog);
   shareSection.addEventListener('mouseover', showOnHoverMsg);
+  rawComment.addEventListener('keyup', activateRespond);
+  respond.addEventListener('click', addComment);
 };
 
 window.onload = main;
