@@ -303,10 +303,7 @@ const publishStory = async function (req, res) {
 const updateClap = async function (req, res) {
   const { claps } = req.app.locals;
   const { storyID } = req.params;
-  if (!req.user.isSignedIn) {
-    res.sendStatus(statusCodes.unauthorized);
-    return;
-  }
+
   await claps.toggleClap(storyID, req.user.id);
   const clapsCount = await claps.clapCount(storyID);
   const isClapped = await claps.isClapped(storyID, req.user.id);
