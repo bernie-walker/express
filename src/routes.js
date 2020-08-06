@@ -19,24 +19,34 @@ const {
 } = process.env;
 
 const {
-  imageValidation,
   logRequest,
   attachUserIfSignedIn,
-  serveHomepage,
-  serveDashboard,
-  redirectToGithub,
-  closeSession,
-  authenticateUser,
   authorizeUser,
+  closeSession,
+} = require('./generalHandlers');
+
+const {
+  redirectToGithub,
+  authenticateUser,
   redirectAuthenticated,
   takeToSignUp,
-  checkUsernameAvailability,
   registerUser,
   finishRegistration,
+} = require('./authenticationHandlers');
+
+const {
+  serveHomepage,
+  checkUsernameAvailability,
   serveBlogImage,
   getClapsDetails,
   serveBlogPage,
   serveComments,
+  serveProfilePage,
+} = require('./publicHandlers');
+
+const {
+  imageValidation,
+  serveDashboard,
   createNewStory,
   renderEditor,
   saveStory,
@@ -47,8 +57,7 @@ const {
   updateClap,
   addComment,
   serveUserStoriesPage,
-  serveProfilePage,
-} = require('./handlers');
+} = require('./privateHandlers');
 
 const app = express();
 
