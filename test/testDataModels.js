@@ -39,7 +39,7 @@ describe('Users', function () {
     before(() => {
       fakeCreateUserAccount = sinon.stub();
       fakeDbClient.createUserAccount = fakeCreateUserAccount;
-      fakeCreateUserAccount.resolves('bernie');
+      fakeCreateUserAccount.resolves();
     });
 
     after(() => {
@@ -49,19 +49,26 @@ describe('Users', function () {
     it('should register the user with unique userID', function () {
       return expect(
         users.registerUser({ userID: 'bernie' })
-      ).to.eventually.equal('bernie');
+      ).to.eventually.fulfilled;
     });
 
-    it('should assign null for displayName and bio if not available', function (done) {
+    it('should assign default for displayName and bio if not available', function (done) {
       const expectedUserInfo = {
         displayName: 'Expresser',
         bio: null,
+        userID: 'bernie',
       };
 
-      users.registerUser({}).then(() => {
+      users.registerUser({ userID: 'bernie' }).then(() => {
         sinon.assert.calledWith(fakeCreateUserAccount, expectedUserInfo);
         done();
       });
+    });
+
+    it('should not register the user if userID has spaces', function () {
+      return expect(
+        users.registerUser({ userID: 'wr o ng' })
+      ).to.be.eventually.rejected;
     });
 
     it('should not register the user if userID is not unique', function () {

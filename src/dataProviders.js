@@ -185,7 +185,7 @@ class ExpressDB {
           if (err) {
             reject();
           } else {
-            resolve(userID);
+            resolve();
           }
         }
       );

@@ -140,17 +140,11 @@ const checkUsernameAvailability = async function (req, res) {
 
 const registerUser = async function (req, res, next) {
   const { users, expressDS } = req.app.locals;
-  const { userID } = req.body;
 
   const registrationInfo = await expressDS.getTokenValue(req.cookies.regT);
 
   if (!registrationInfo) {
     res.sendStatus(statusCodes.unauthorized);
-    return;
-  }
-
-  if (!userID || userID.match(/\s/)) {
-    res.sendStatus(statusCodes.unprocessableEntity);
     return;
   }
 

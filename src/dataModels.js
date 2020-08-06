@@ -24,6 +24,10 @@ const extractNecessary = function (profile) {
   return { profileID, profileName, profileAvatar, bio, stories };
 };
 
+const validateUserID = function (userID) {
+  return userID && !userID.match(/\s/);
+};
+
 class Users {
   constructor(db) {
     this.db = db;
@@ -36,10 +40,14 @@ class Users {
   }
 
   registerUser(userInfo) {
-    const { displayName, bio } = userInfo;
+    const { displayName, bio, userID } = userInfo;
+
     userInfo.displayName = displayName || 'Expresser';
     userInfo.bio = bio || null;
-    return this.db.createUserAccount(userInfo);
+
+    return validateUserID(userID)
+      ? this.db.createUserAccount(userInfo)
+      : Promise.reject();
   }
 
   list() {
