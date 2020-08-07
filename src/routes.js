@@ -38,7 +38,6 @@ const {
   serveHomepage,
   checkUsernameAvailability,
   serveBlogImage,
-  getClapsDetails,
   serveBlogPage,
   serveComments,
   serveProfilePage,
@@ -111,7 +110,7 @@ app.post('/signUp', registerUser, finishRegistration);
 app.use(attachUserIfSignedIn);
 app.get('/', serveHomepage, serveDashboard);
 app.get('/profile/:profileID', serveProfilePage);
-app.get('/blogPage/:storyID', getClapsDetails, serveBlogPage);
+app.get('/blogPage/:storyID', serveBlogPage);
 
 app.use(authorizeUser);
 app.get('/newStory', createNewStory);

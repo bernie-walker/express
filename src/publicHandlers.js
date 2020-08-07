@@ -24,21 +24,14 @@ const serveBlogImage = function (req, res) {
   });
 };
 
-const getClapsDetails = async function (req, res, next) {
-  const { claps } = req.app.locals;
+const serveBlogPage = async function (req, res) {
+  const { stories, claps } = req.app.locals;
   const { storyID } = req.params;
-  req.params.isClapped = false;
+  let isClapped = false;
   if (req.user) {
-    req.params.isClapped = await claps.isClapped(storyID, req.user.id);
+    isClapped = await claps.isClapped(storyID, req.user.id);
   }
-  req.params.clapsCount = await claps.clapCount(storyID);
-  next();
-};
-
-const serveBlogPage = function (req, res) {
-  const { stories } = req.app.locals;
-  const { storyID, clapsCount, isClapped } = req.params;
-
+  const clapsCount = await claps.clapCount(storyID);
   stories
     .getStoryPage(storyID)
     .then((blog) => {
@@ -73,7 +66,6 @@ module.exports = {
   serveHomepage,
   checkUsernameAvailability,
   serveBlogImage,
-  getClapsDetails,
   serveBlogPage,
   serveComments,
   serveProfilePage,
