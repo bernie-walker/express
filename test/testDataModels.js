@@ -144,73 +144,43 @@ describe('Users', function () {
   });
 
   context('.getUserProfile', function () {
-    before(() => {
-      const resolutionWithoutStory = [
-        {
-          profileID: 'someName',
-          profileName: 'name',
-          profileAvatar: 'avatar',
-          bio: 'some bio',
-          storyID: null,
-          title: null,
-          content: null,
-          coverImage: null,
-          lastModified: null,
-        },
-      ];
-      const resolutionWithStory = [
-        {
-          profileID: 'someName',
-          profileName: 'name',
-          profileAvatar: 'avatar',
-          bio: 'some bio',
-          storyID: '1',
-          title: 'title',
-          content: '[{"para":"text"}]',
-          coverImage: 'image',
-          lastModified: 'today',
-        },
-      ];
-      const fakeGetProfileData = sinon.stub();
-      fakeGetProfileData.withArgs('noStory').resolves(resolutionWithoutStory);
-      fakeGetProfileData.withArgs('withStory').resolves(resolutionWithStory);
-      fakeGetProfileData.withArgs('invalid').resolves([]);
-      fakeDbClient.getProfileData = fakeGetProfileData;
-    });
+    let profile, fakeGetProfileData, fakeGetUserStories;
 
-    after(sinon.restore);
-
-    it('should resolve profile with empty stories list when user has no stories', function () {
-      const profile = {
-        profileID: 'someName',
+    beforeEach(() => {
+      profile = {
+        profileID: 'user1',
         profileName: 'name',
         profileAvatar: 'avatar',
         bio: 'some bio',
-        stories: [],
       };
-      return expect(users.getUserProfile('noStory')).to.eventually.deep.equal(
-        profile
+
+      fakeGetProfileData = sinon.stub();
+      fakeGetProfileData.withArgs('user1').resolves(Object.assign({}, profile));
+      fakeGetProfileData.resolves();
+      fakeDbClient.getProfileData = fakeGetProfileData;
+
+      fakeGetUserStories = sinon.stub();
+      fakeDbClient.getUserStories = fakeGetUserStories;
+    });
+
+    afterEach(sinon.restore);
+
+    it('should resolve profile with empty stories list when user has no stories', function () {
+      fakeGetUserStories.resolves([]);
+      return expect(users.getUserProfile('user1')).to.eventually.deep.equal(
+        Object.assign({ stories: [] }, profile)
       );
     });
 
     it('should resolve profile with list of stories when user has stories', function () {
-      const profile = {
-        profileID: 'someName',
-        profileName: 'name',
-        profileAvatar: 'avatar',
-        bio: 'some bio',
-        stories: [
+      fakeGetUserStories.resolves([{ content: '[{"text":"bernie"}]' }]);
+      return expect(users.getUserProfile('user1')).to.eventually.deep.equal(
+        Object.assign(
           {
-            storyID: '1',
-            title: 'title',
-            content: [{ para: 'text' }],
-            coverImage: 'image',
-            lastModified: 'today',
+            stories: [{ content: [{ text: 'bernie' }] }],
           },
-        ],
-      };
-      return expect(users.getUserProfile('withStory')).to.eventually.deep.equal(
-        profile
+          profile
+        )
       );
     });
 
@@ -302,16 +272,23 @@ describe('Stories', function () {
   });
 
   context('.createStory', function () {
+    let fakeCreateStoryByUser;
+
     before(() => {
-      const fakeCreateStoryByUser = sinon.stub();
+      fakeCreateStoryByUser = sinon.stub();
       fakeCreateStoryByUser.withArgs('user1').resolves(1);
       fakeDbClient.createStoryByUser = fakeCreateStoryByUser;
     });
 
     after(sinon.restore);
 
-    it('should create the story by the user', function () {
-      return expect(stories.createStory('user1')).to.eventually.equal(1);
+    it('should create the story by the user', function (done) {
+      expect(stories.createStory('user1'))
+        .to.eventually.equal(1)
+        .notify(() => {
+          sinon.assert.calledWithExactly(fakeCreateStoryByUser, 'user1', '[]');
+          done();
+        });
     });
   });
 

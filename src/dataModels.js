@@ -1,29 +1,3 @@
-const groupStories = function (profileRows) {
-  return profileRows.reduce((stories, row) => {
-    const { storyID, title, content, coverImage, lastModified, state } = row;
-
-    if (state === 'drafted') {
-      return stories;
-    }
-
-    const story = {
-      storyID,
-      title,
-      content: JSON.parse(content),
-      coverImage,
-      lastModified,
-    };
-
-    stories.push(story);
-    return stories;
-  }, []);
-};
-
-const extractNecessary = function (profile) {
-  const { profileID, profileName, profileAvatar, bio, stories } = profile;
-  return { profileID, profileName, profileAvatar, bio, stories };
-};
-
 const validateUserID = function (userID) {
   return userID && !userID.match(/\s/);
 };
@@ -67,21 +41,21 @@ class Users {
       .then((storyList) => Promise.resolve(storyList));
   }
 
-  getUserProfile(userID) {
-    return this.db.getProfileData(userID).then((profileRows) => {
-      if (!profileRows.length) {
-        return Promise.reject();
-      }
+  async getUserProfile(userID) {
+    const profileInfo = await this.db.getProfileData(userID);
 
-      const [profileFirstRow] = profileRows;
-      profileFirstRow.stories = [];
+    if (!profileInfo) {
+      throw new Error();
+    }
 
-      if (profileFirstRow.storyID) {
-        profileFirstRow.stories = groupStories(profileRows);
-      }
+    const userStories = await this.getUserStoryList(userID, 'published');
 
-      return Promise.resolve(extractNecessary(profileFirstRow));
+    profileInfo.stories = userStories.map((story) => {
+      story.content = JSON.parse(story.content);
+      return story;
     });
+
+    return profileInfo;
   }
 }
 
@@ -125,7 +99,7 @@ class Stories {
 
   createStory(userID) {
     return this.db
-      .createStoryByUser(userID)
+      .createStoryByUser(userID, '[]')
       .then((storyID) => Promise.resolve(storyID));
   }
 

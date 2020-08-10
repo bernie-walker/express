@@ -132,13 +132,13 @@ class ExpressDB {
     });
   }
 
-  createStoryByUser(userID) {
+  createStoryByUser(userID, initialContent) {
     const query = `
     INSERT INTO stories(written_by, content) 
-    VALUES(?, '[]')`;
+    VALUES(?, ?)`;
 
     return new Promise((resolve) => {
-      this.dbClient.run(query, [userID], function () {
+      this.dbClient.run(query, [userID, initialContent], function () {
         resolve(this.lastID);
       });
     });
@@ -219,8 +219,8 @@ class ExpressDB {
 
   getProfileData(userID) {
     return new Promise((resolve) => {
-      this.dbClient.all(userProfile, [userID], (err, rows) => {
-        resolve(rows);
+      this.dbClient.get(userProfile, [userID], (err, row) => {
+        resolve(row);
       });
     });
   }
