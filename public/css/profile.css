@@ -1,0 +1,135 @@
+body {
+  font-family: 'Epilogue-Medium';
+}
+
+.container {
+  width: 50%;
+  margin: auto;
+  margin-top: 6vh;
+}
+
+.profile-div {
+  display: flex;
+  padding: 1vh 0;
+  justify-content: space-between;
+}
+
+.info {
+  width: 75%;
+}
+
+#name {
+  font-size: calc(1.2vw + 1em);
+  width: fit-content;
+  font-weight: 600;
+}
+.bio {
+  margin-top: 2vh;
+  font-size: calc(0.5vw + 0.5em);
+  color: #aaa;
+  font-weight: 300;
+  letter-spacing: 0.1vh;
+  padding: 0 2vh;
+}
+.profile-icon {
+  display: flex;
+  align-items: center;
+}
+.profile-icon img {
+  height: 20vh;
+  width: 20vh;
+  border-radius: 50%;
+  border: 1px solid #555;
+}
+
+.optionBar {
+  display: flex;
+  margin: 2vh 0;
+  border-bottom: 1px solid #aaa;
+}
+
+.optionBar div:hover {
+  color: rgba(53, 48, 48, 1);
+}
+
+.optionBar div {
+  border-bottom: 1px solid black;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  color: rgba(10, 10, 10, 0.8);
+}
+
+.card {
+  padding: 1.5vw;
+  margin: 2vh 0;
+  border: 1px solid #eee;
+  transition: 0.4s;
+  cursor: pointer;
+}
+.card:hover {
+  transition: 0.4s;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 3px #ccc;
+}
+
+.author-profile-div {
+  display: flex;
+}
+
+.author-profile-icon {
+  height: calc(3vw + 1em);
+  width: calc(3vw + 1em);
+}
+
+.author-profile-icon img {
+  height: inherit;
+  width: inherit;
+  border: 1px solid #555;
+  border-radius: 50%;
+}
+
+.author-info {
+  padding-left: 2vh;
+  margin-top: 0.8vh;
+}
+
+#author-name {
+  font-size: calc(0.8vw + 0.5em);
+  letter-spacing: 0.1vh;
+  color: #333;
+}
+
+.story-date {
+  margin-top: 0.4vh;
+  color: #888;
+  font-size: calc(0.4vw + 0.6em);
+}
+
+#coverImage {
+  height: 20vh;
+  margin: 2.5vh 0;
+}
+
+#coverImage img {
+  object-fit: cover;
+  height: inherit;
+  width: 100%;
+}
+
+.story-title {
+  margin-top: 1vh;
+  font-size: calc(0.8vw + 0.8em);
+  letter-spacing: 0.04vh;
+}
+
+.content {
+  font-size: calc(0.7vw + 0.5em);
+  color: #888;
+  font-weight: 300;
+  letter-spacing: 0.1vh;
+  line-height: 1.2;
+}
