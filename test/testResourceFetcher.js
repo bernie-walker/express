@@ -8,7 +8,7 @@ describe('Fetch', function () {
   const fetch = new Fetch(fakeHttpClient, 'myID', 'mySecret');
 
   context('.getAccessToken', function () {
-    afterEach(sinon.restore.bind(sinon));
+    afterEach(sinon.restore);
 
     it('should respond  with the access token  for valid code', function (done) {
       fakeHttpClient.resolves({ data: { access_token: 'token' } });
@@ -35,7 +35,7 @@ describe('Fetch', function () {
   });
 
   context('.getUserInfo', function () {
-    afterEach(sinon.restore.bind(sinon));
+    afterEach(sinon.restore);
 
     it('should respond with user info for a valid access token', function (done) {
       fakeHttpClient.resolves({

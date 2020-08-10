@@ -11,9 +11,7 @@ describe('ExpressDS', function () {
       fakeDSProvider.incr = sinon.stub().callsArgWithAsync(1, null, 2);
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should increment and resolve the ID', function () {
       return expect(expressDS.incrID('idName')).to.eventually.equal(2);
@@ -26,9 +24,7 @@ describe('ExpressDS', function () {
       fakeDSProvider.set = sinon.stub().callsArgAsync(4);
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should create the session and resolve with session id', function (done) {
       expressDS.createSession('bernie').then((sesID) => {
@@ -50,9 +46,7 @@ describe('ExpressDS', function () {
       fakeDSProvider.get = sinon.stub().callsArgWithAsync(1, null, 'usr');
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should get the session for the given id', function (done) {
       expressDS.getSession(1).then((userName) => {
@@ -68,9 +62,7 @@ describe('ExpressDS', function () {
       fakeDSProvider.del = sinon.stub().callsArgAsync(1);
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should delete the session', function (done) {
       expressDS.deleteSession(1).then(() => {
@@ -87,9 +79,7 @@ describe('ExpressDS', function () {
       fakeDSProvider.expire = sinon.stub().callsArgAsync(2);
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should create the temp token and resolve with token', function (done) {
       expressDS
@@ -110,18 +100,16 @@ describe('ExpressDS', function () {
     });
   });
 
-  context('.getSession', function () {
+  context('.getTokenValue', function () {
     before(() => {
-      fakeDSProvider.hgetall = sinon.stub().callsArgWithAsync(1, null, 'usr');
+      fakeDSProvider.hgetall = sinon.stub().callsArgWithAsync(1, null, 'acc');
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should get the session for the given id', function (done) {
-      expressDS.getTokenValue(1).then((userName) => {
-        assert.strictEqual(userName, 'usr');
+      expressDS.getTokenValue(1).then((accountInfo) => {
+        assert.strictEqual(accountInfo, 'acc');
         sinon.assert.calledWith(fakeDSProvider.hgetall, 'newReg_1');
         done();
       });
@@ -133,9 +121,7 @@ describe('ExpressDS', function () {
       fakeDSProvider.del = sinon.stub().callsArgAsync(1);
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should delete the the temp token', function (done) {
       expressDS.deleteTempToken(1).then(() => {

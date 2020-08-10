@@ -15,13 +15,11 @@ describe('GET', () => {
     fakeGetSession.resolves('palpriyanshu');
   });
 
-  afterEach(() => {
-    sinon.restore();
-  });
+  afterEach(sinon.restore);
 
   context('/', () => {
     before(() =>
-      setUpDatabase(app.locals.dbClientReference, ['users', 'stories', 'tags'])
+      setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
     );
 
     after(() => cleanDatabase(app.locals.dbClientReference));
@@ -33,13 +31,7 @@ describe('GET', () => {
         .expect(200)
         .expect(/Express/)
         .expect(/Sign in/)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should serve the dashboard if user is signed in', function (done) {
@@ -48,49 +40,28 @@ describe('GET', () => {
         .expect(200)
         .expect(/Express/)
         .expect(/palpriyanshu/)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
   });
 
   context('/newStory', function () {
     before(() =>
-      setUpDatabase(app.locals.dbClientReference, ['users', 'stories', 'tags'])
+      setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
     );
 
     after(() => cleanDatabase(app.locals.dbClientReference));
 
-    it('should create a new story redirect to the editor for authorized user', function (done) {
+    it('should create a new story and redirect to the editor for authorized user', function (done) {
       request(app)
         .get('/newStory')
         .expect(302)
         .expect('Location', '/editor/4')
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should respond with 401 for unauthorized user', function (done) {
       fakeGetSession.resolves(null);
-      request(app)
-        .get('/newStory')
-        .expect(401)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+      request(app).get('/newStory').expect(401).end(done);
     });
   });
 
@@ -106,40 +77,16 @@ describe('GET', () => {
         .get('/editor/1')
         .expect(200)
         .expect(/Editor/)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should respond with not found when story does not exist', function (done) {
-      request(app)
-        .get('/editor/3')
-        .expect(404)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+      request(app).get('/editor/3').expect(404).end(done);
     });
 
     it('should respond with 401 for unauthorized user', function (done) {
       fakeGetSession.resolves(null);
-      request(app)
-        .get('/editor/1')
-        .expect(401)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+      request(app).get('/editor/1').expect(401).end(done);
     });
   });
 
@@ -161,13 +108,7 @@ describe('GET', () => {
         .get('/blogPage/1')
         .expect(200)
         .expect(/palpriyanshu/)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should serve the blog page when exists, for an unauthorized user', function (done) {
@@ -176,54 +117,21 @@ describe('GET', () => {
         .get('/blogPage/1')
         .expect(200)
         .expect(/Sign in/)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should respond NOT FOUND if blog does not exist', function (done) {
-      request(app)
-        .get('/blogPage/2')
-        .expect(404)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+      request(app).get('/blogPage/2').expect(404).end(done);
     });
   });
 
   context('/blog_image', function () {
     it('should respond with OK if image is found', function (done) {
-      request(app)
-        .get('/blog_image/image')
-        .expect(200)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+      request(app).get('/blog_image/image').expect(200).end(done);
     });
 
     it('should respond NOT FOUND if image is not present', function (done) {
-      request(app)
-        .get('/blog_image/badImage')
-        .expect(404)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+      request(app).get('/blog_image/badImage').expect(404).end(done);
     });
   });
 
@@ -239,13 +147,15 @@ describe('GET', () => {
         .get('/commentList/1')
         .expect(200)
         .expect(/comment/)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
+    });
+
+    it('should respond  with empty message for when there are no comments', function (done) {
+      request(app)
+        .get('/commentList/2')
+        .expect(200)
+        .expect(/Be the first/)
+        .end(done);
     });
   });
 
@@ -261,27 +171,12 @@ describe('GET', () => {
         .get('/userStories')
         .expect(200)
         .expect(/Express/)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should respond with 401 for an unauthorized user', function (done) {
       fakeGetSession.resolves(null);
-      request(app)
-        .get('/userStories')
-        .expect(401)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+      request(app).get('/userStories').expect(401).end(done);
     });
   });
 
@@ -299,13 +194,7 @@ describe('GET', () => {
         .expect(/Express/)
         .expect(/palpriyanshu/)
         .expect(/Priyanshu/)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should serve the profile page when user exists and has only drafted stories', function (done) {
@@ -315,13 +204,7 @@ describe('GET', () => {
         .expect(/Express/)
         .expect(/palpriyanshu/)
         .expect(/Shivam Rajputh/)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should serve the profile page when user exists, for an unauthorized user', function (done) {
@@ -332,26 +215,11 @@ describe('GET', () => {
         .expect(/Express/)
         .expect(/Priyanshu/)
         .expect(/Sign in/)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should not serve the profile page when user does not exists', function (done) {
-      request(app)
-        .get('/profile/wrongUserId')
-        .expect(404)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+      request(app).get('/profile/wrongUserId').expect(404).end(done);
     });
   });
 
@@ -364,22 +232,14 @@ describe('GET', () => {
           'Location',
           'https://github.com/login/oauth/authorize?client_id=myId123&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2FgitOauth%2FauthCode'
         )
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
   });
 
   context('/gitOauth/authCode', function () {
     let fakeGetAccessToken, fakeGetUserInfo;
 
-    before(() =>
-      setUpDatabase(app.locals.dbClientReference, ['users', 'stories'])
-    );
+    before(() => setUpDatabase(app.locals.dbClientReference, ['users']));
 
     after(() => cleanDatabase(app.locals.dbClientReference));
 
@@ -401,13 +261,7 @@ describe('GET', () => {
         .expect(302)
         .expect('Location', '/')
         .expect('set-cookie', /sesID=1/)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should redirect to sign up when the code is valid but user has no account', function (done) {
@@ -424,27 +278,12 @@ describe('GET', () => {
         .get('/gitOauth/authCode?code=goodCode2')
         .expect(200)
         .expect('set-cookie', /regT=1/)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should send unauthorized for a bad code', function (done) {
       fakeGetAccessToken.rejects();
-      request(app)
-        .get('/gitOauth/authCode')
-        .expect(401)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+      request(app).get('/gitOauth/authCode').expect(401).end(done);
     });
   });
 
@@ -456,10 +295,6 @@ describe('GET', () => {
       fakeDelete.resolves();
     });
 
-    after(() => {
-      sinon.restore();
-    });
-
     it('should remove the session Id and redirect to main page', function (done) {
       request(app)
         .get('/signOut')
@@ -469,11 +304,7 @@ describe('GET', () => {
         .expect('set-cookie', /sesID=;.*Expires=/)
         .end((err) => {
           sinon.assert.calledWith(fakeDelete, '1');
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
+          done(err);
         });
     });
   });
@@ -486,27 +317,15 @@ describe('GET', () => {
     it('should respond with available if username is available', function (done) {
       request(app)
         .get('/checkUsername/bernie')
-        .expect(JSON.stringify({ available: true }))
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .expect({ available: true })
+        .end(done);
     });
 
     it('should respond with unavailable if username is taken', function (done) {
       request(app)
         .get('/checkUsername/palpriyanshu')
-        .expect(JSON.stringify({ available: false }))
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .expect({ available: false })
+        .end(done);
     });
   });
 });
@@ -519,19 +338,19 @@ describe('POST', function () {
     fakeGetSession.resolves('palpriyanshu');
   });
 
-  afterEach(() => {
-    sinon.restore();
-  });
+  afterEach(sinon.restore);
 
   context('/publishStory', function () {
-    beforeEach(() =>
-      setUpDatabase(app.locals.dbClientReference, ['stories', 'users', 'tags'])
-    );
-    afterEach(() => cleanDatabase(app.locals.dbClientReference));
+    before(() => {
+      sinon.stub(ImageHandlers.prototype, 'deleteUnusedImages');
+      return setUpDatabase(app.locals.dbClientReference, [
+        'stories',
+        'users',
+        'tags',
+      ]);
+    });
 
-    before(() => sinon.stub(ImageHandlers.prototype, 'deleteUnusedImages'));
-
-    after(() => sinon.restore());
+    after(() => cleanDatabase(app.locals.dbClientReference));
 
     it('should publish the story and redirect to the blogPage for a valid story', function (done) {
       request(app)
@@ -544,13 +363,7 @@ describe('POST', function () {
         })
         .expect(302)
         .expect('Location', '/blogPage/2')
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should response with 422 for invalid tags', function (done) {
@@ -563,13 +376,7 @@ describe('POST', function () {
           tags: ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6'],
         })
         .expect(422)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should respond with 422 for untitled story', function (done) {
@@ -580,13 +387,7 @@ describe('POST', function () {
           storyID: '2',
         })
         .expect(422)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should respond with 422 for a story with white spaced title', function (done) {
@@ -599,13 +400,7 @@ describe('POST', function () {
           tags: ['tag1', 'tag2'],
         })
         .expect(422)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should respond with 422 for the userid and story mismatch', function (done) {
@@ -618,13 +413,7 @@ describe('POST', function () {
           tags: ['tag1', 'tag2'],
         })
         .expect(422)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should respond with 401 for an unauthorized user', function (done) {
@@ -638,13 +427,7 @@ describe('POST', function () {
           tags: ['tag1', 'tag2'],
         })
         .expect(401)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
   });
 
@@ -675,13 +458,7 @@ describe('POST', function () {
           storyID: '1',
         })
         .expect(200)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should respond with a 401 an unauthorized user', function (done) {
@@ -694,13 +471,7 @@ describe('POST', function () {
           storyID: '1',
         })
         .expect(401)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should respond with 422 for wrong story ID', function (done) {
@@ -712,13 +483,7 @@ describe('POST', function () {
           storyID: '3',
         })
         .expect(422)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should remove unused images from database', function (done) {
@@ -737,13 +502,7 @@ describe('POST', function () {
           storyID: '1',
         })
         .expect(200)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
   });
 
@@ -766,13 +525,7 @@ describe('POST', function () {
         .attach('image', 'test/testData/images/profile.jpg')
         .expect(200)
         .expect({ success: 1, file: { url: '/blog_image/image_1_1.jpg' } })
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should not upload any image without .png .jpeg .jpg extensions', function (done) {
@@ -781,13 +534,7 @@ describe('POST', function () {
         .attach('image', 'test/testData/images/image.pdf')
         .expect(422)
         .expect({ error: 'please upload an image' })
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
   });
 
@@ -812,13 +559,7 @@ describe('POST', function () {
         .expect(302)
         .expect('Location', '/')
         .expect('set-cookie', /sesID=1/)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should delete temp session and regT cookie when successfully registered', function (done) {
@@ -843,16 +584,7 @@ describe('POST', function () {
     });
 
     it('should respond with 422 when there is no user name', function (done) {
-      request(app)
-        .post('/signUp')
-        .expect(422)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+      request(app).post('/signUp').expect(422).end(done);
     });
 
     it('should respond with 422 when the user name has spaces', function (done) {
@@ -860,13 +592,7 @@ describe('POST', function () {
         .post('/signUp')
         .send({ userID: 'b ernie' })
         .expect(422)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should respond with 422 when the user name is already taken', function (done) {
@@ -874,13 +600,7 @@ describe('POST', function () {
         .post('/signUp')
         .send({ userID: 'palpriyanshu' })
         .expect(422)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should respond with 401 when the registration token is invalid', function (done) {
@@ -889,24 +609,13 @@ describe('POST', function () {
         .post('/signUp')
         .send({ userID: 'bernie' })
         .expect(401)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
   });
 
   context('/clap', function () {
     beforeEach(() =>
-      setUpDatabase(app.locals.dbClientReference, [
-        'stories',
-        'users',
-        'tags',
-        'claps',
-      ])
+      setUpDatabase(app.locals.dbClientReference, ['stories', 'users', 'claps'])
     );
 
     afterEach(() => cleanDatabase(app.locals.dbClientReference));
@@ -917,13 +626,7 @@ describe('POST', function () {
         .post('/clap/1')
         .expect(200)
         .expect({ count: 2, isClapped: true })
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should remove clap if story is clapped yet by user', function (done) {
@@ -932,27 +635,12 @@ describe('POST', function () {
         .post('/clap/1')
         .expect(200)
         .expect({ count: 0, isClapped: false })
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should respond with 401 if user is not signed in', function (done) {
       fakeGetSession.resolves('null');
-      request(app)
-        .post('/clap/1')
-        .expect(401)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+      request(app).post('/clap/1').expect(401).end(done);
     });
   });
 
@@ -969,13 +657,7 @@ describe('POST', function () {
         .send({ storyID: 1, comment: 'text' })
         .expect(200)
         .expect(/comment/)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should respond with 422 for insufficient comment info', function (done) {
@@ -983,27 +665,12 @@ describe('POST', function () {
         .post('/addComment')
         .send({ storyID: 1 })
         .expect(422)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+        .end(done);
     });
 
     it('should respond with 401 when user not signed in', function (done) {
       fakeGetSession.resolves(null);
-      request(app)
-        .post('/addComment')
-        .expect(401)
-        .end((err) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          done();
-        });
+      request(app).post('/addComment').expect(401).end(done);
     });
   });
 });

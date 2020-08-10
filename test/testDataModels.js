@@ -14,9 +14,7 @@ describe('Users', function () {
       fakeDbClient.findUserAccount = fakeFindUserAccount;
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should resolve with the user id if account exists', function (done) {
       users.findAccount('valid').then((userInfo) => {
@@ -42,9 +40,7 @@ describe('Users', function () {
       fakeCreateUserAccount.resolves();
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should register the user with unique userID', function () {
       return expect(
@@ -86,9 +82,7 @@ describe('Users', function () {
         .resolves([{ id: 'bernie' }, { id: 'walker' }]);
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should resolve with true if user name exists', function () {
       return expect(users.has('bernie')).to.eventually.true;
@@ -107,9 +101,7 @@ describe('Users', function () {
       fakeDbClient.getUserInfo = fakeGetUserInfo;
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should resolve with the user info  for valid  userID', function (done) {
       users.getUser('valid').then((userInfo) => {
@@ -133,9 +125,8 @@ describe('Users', function () {
       fakeGetUserStories.withArgs('invalid', 'drafted').resolves([]);
       fakeDbClient.getUserStories = fakeGetUserStories;
     });
-    after(() => {
-      sinon.restore();
-    });
+
+    after(sinon.restore);
 
     it('should resolve list of stories for valid  userID', function (done) {
       users.getUserStoryList('valid', 'drafted').then((storyList) => {
@@ -186,9 +177,8 @@ describe('Users', function () {
       fakeGetProfileData.withArgs('invalid').resolves([]);
       fakeDbClient.getProfileData = fakeGetProfileData;
     });
-    after(() => {
-      sinon.restore();
-    });
+
+    after(sinon.restore);
 
     it('should resolve profile with empty stories list when user has no stories', function () {
       const profile = {
@@ -203,7 +193,7 @@ describe('Users', function () {
       );
     });
 
-    it('should resolve profile with list of stories when user has no stories', function () {
+    it('should resolve profile with list of stories when user has stories', function () {
       const profile = {
         profileID: 'someName',
         profileName: 'name',
@@ -241,9 +231,7 @@ describe('Stories', function () {
       fakeDbClient.getLatestNStories = fakeGetLatestNStories;
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should resolve the latest story list', function () {
       return expect(stories.get(1)).to.eventually.deep.equal([
@@ -253,23 +241,19 @@ describe('Stories', function () {
   });
 
   context('.getStoryPage', function () {
-    before(() => {
-      const fakeGetPublishedStory = sinon.stub();
-      fakeGetPublishedStory
-        .withArgs(1)
-        .resolves({ content: '{"txt":"samp"}', tags: 'tag1,tag2' });
-      fakeGetPublishedStory
-        .withArgs(2)
-        .resolves({ content: '{"txt":"samp"}', tags: null });
-      fakeGetPublishedStory.withArgs(3).resolves(null);
+    let fakeGetPublishedStory;
+
+    beforeEach(() => {
+      fakeGetPublishedStory = sinon.stub();
       fakeDbClient.getPublishedStory = fakeGetPublishedStory;
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    afterEach(sinon.restore);
 
     it('should resolve the story page if exists', function () {
+      fakeGetPublishedStory
+        .withArgs(1)
+        .resolves({ content: '{"txt":"samp"}', tags: 'tag1,tag2' });
       return expect(stories.getStoryPage(1)).to.eventually.deep.equal({
         content: { txt: 'samp' },
         tags: ['tag1', 'tag2'],
@@ -277,6 +261,9 @@ describe('Stories', function () {
     });
 
     it('tags array should be empty when there are no tags', function () {
+      fakeGetPublishedStory
+        .withArgs(2)
+        .resolves({ content: '{"txt":"samp"}', tags: null });
       return expect(stories.getStoryPage(2)).to.eventually.deep.equal({
         content: { txt: 'samp' },
         tags: [],
@@ -284,31 +271,32 @@ describe('Stories', function () {
     });
 
     it('should resolve undefined if story does not exist', function () {
+      fakeGetPublishedStory.withArgs(3).resolves(null);
       return expect(stories.getStoryPage(3)).to.be.eventually.rejected;
     });
   });
 
   context('.getStory', function () {
-    before(() => {
-      const fakeGetStoryOfUser = sinon.stub();
-      fakeGetStoryOfUser
-        .withArgs(1, 'user1')
-        .resolves({ content: '{"txt":"samp"}' });
-      fakeGetStoryOfUser.withArgs(2, 'user2').resolves();
+    let fakeGetStoryOfUser;
+
+    beforeEach(() => {
+      fakeGetStoryOfUser = sinon.stub();
       fakeDbClient.getStoryOfUser = fakeGetStoryOfUser;
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    afterEach(sinon.restore);
 
     it('should resolve the story page if exists', function () {
+      fakeGetStoryOfUser
+        .withArgs(1, 'user1')
+        .resolves({ content: '{"txt":"samp"}' });
       return expect(stories.getStory(1, 'user1')).to.eventually.deep.equal({
         content: { txt: 'samp' },
       });
     });
 
     it('should resolve undefined if story does not exist', function () {
+      fakeGetStoryOfUser.withArgs(2, 'user2').resolves();
       return expect(stories.getStory(2, 'user2')).to.be.eventually.undefined;
     });
   });
@@ -320,9 +308,7 @@ describe('Stories', function () {
       fakeDbClient.createStoryByUser = fakeCreateStoryByUser;
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should create the story by the user', function () {
       return expect(stories.createStory('user1')).to.eventually.equal(1);
@@ -375,9 +361,7 @@ describe('Stories', function () {
       fakeDbClient.updateStory = sinon.stub().resolves();
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should update the story if story exists', function () {
       return expect(
@@ -400,9 +384,7 @@ describe('Stories', function () {
       fakeDbClient.listCommentsOnStory = fakeListComments;
     });
 
-    afterEach(() => {
-      sinon.restore();
-    });
+    afterEach(sinon.restore);
 
     it('should resolve with the comments when there are comments', function () {
       expect(stories.listCommentsOn(1)).to.eventually.deep.equal([
@@ -410,27 +392,30 @@ describe('Stories', function () {
       ]);
     });
 
-    it('should resolve with the empty array when there are comments', function () {
+    it('should resolve with the empty array when there are no comments', function () {
       expect(stories.listCommentsOn(2)).to.eventually.deep.equal([]);
     });
   });
 
   context('.comment', function () {
+    let fakeAddComment;
+
     beforeEach(() => {
-      fakeDbClient.addComment = sinon.stub().resolves(1);
+      fakeAddComment = sinon.stub();
+      fakeDbClient.addComment = fakeAddComment;
     });
 
-    afterEach(() => {
-      sinon.restore();
-    });
+    afterEach(sinon.restore);
 
     it('should return the promise from addComment', function () {
+      fakeAddComment.resolves(1);
       return expect(
         stories.comment({ storyID: 1, userID: 'me', comment: 'text' })
       ).to.be.eventually.equal(1);
     });
 
     it('should reject when the commentInfo  is insufficient', function () {
+      fakeAddComment.rejects();
       return expect(
         stories.comment({ storyID: 1, userID: 'me' })
       ).to.be.eventually.rejected;
@@ -441,6 +426,7 @@ describe('Stories', function () {
 describe('Claps', function () {
   const fakeDbClient = {};
   const claps = new Claps(fakeDbClient);
+
   context('clapCount', function () {
     before(() => {
       const fakeClapCount = sinon.stub();
@@ -449,9 +435,7 @@ describe('Claps', function () {
       fakeDbClient.clapCount = fakeClapCount;
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should count the claps for a given story if clap present', function () {
       return expect(claps.clapCount(6)).to.be.eventually.deep.equal({
@@ -474,9 +458,7 @@ describe('Claps', function () {
       fakeDbClient.isClapped = fakeIsClapped;
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should give true if given user has already clapped on given story', function () {
       return expect(claps.isClapped(6, 'palpriyanshu')).to.be.eventually.true;
@@ -494,9 +476,7 @@ describe('Claps', function () {
       fakeDbClient.addClap = fakeAddClap;
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should resolve after adding clap on given story by given user', function () {
       return expect(
@@ -512,9 +492,7 @@ describe('Claps', function () {
       fakeDbClient.removeClap = fakeRemoveClap;
     });
 
-    after(() => {
-      sinon.restore();
-    });
+    after(sinon.restore);
 
     it('should resolve after adding clap on given story by given user', function () {
       return expect(
