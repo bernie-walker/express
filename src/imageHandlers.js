@@ -1,54 +1,65 @@
-const fs = require('fs');
-
-const getStoryImages = function (content) {
+const getUsedImages = function (content) {
   return content.reduce((images, block) => {
     if (block.type === 'image') {
       const imageUrl = block.data.file.url || '';
-      const [, , image] = imageUrl.split('/');
-      image && images.push(image);
+      const indexFromLast = -2;
+      const [folder, image] = imageUrl.split('/').slice(indexFromLast);
+      image && images.push(`${folder}/${image}`);
     }
     return images;
   }, []);
 };
 
-const isUnusedImage = function (image, storyID, usedImages) {
-  return image.startsWith(`image_${storyID}_`) && !usedImages.includes(image);
+const destroyImage = function (cloud, imageId) {
+  return new Promise((resolve) => {
+    cloud.destroy(imageId, resolve);
+  });
 };
 
-class ImageHandlers {
-  constructor(dsClient, path) {
-    this.dsClient = dsClient;
-    this.path = path;
+class ImageStorage {
+  constructor(cloud) {
+    this.cloud = cloud;
   }
 
-  async getNewImageName(storyID, mimetype) {
-    const imageID = await this.dsClient.incrID(`img_${storyID}`);
-    const [, extension] = mimetype.split('/');
-    return `image_${storyID}_${imageID}.${extension}`;
-  }
+  upload(storyID, file) {
+    return new Promise((resolve, reject) => {
+      const imageOptions = { tags: storyID, folder: 'blog_image' };
+      const callBack = function (err, res) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(res.secure_url);
+        }
+      };
 
-  uploadImage({ buffer, mimetype }, storyID) {
-    return new Promise((resolve) => {
-      this.getNewImageName(storyID, mimetype).then((imageName) => {
-        fs.writeFileSync(`${this.path}/${imageName}`, buffer);
-        resolve(imageName);
-      });
+      const stream = this.cloud.uploader.upload_stream(imageOptions, callBack);
+
+      stream.write(file.buffer);
+      stream.end();
     });
   }
 
-  deleteUnusedImages(storyID, content) {
+  getImagesOfStory(storyID) {
     return new Promise((resolve) => {
-      const storyImages = getStoryImages(content);
-      const allImages = fs.readdirSync(this.path);
-
-      allImages.forEach((image) => {
-        if (isUnusedImage(image, storyID, storyImages)) {
-          fs.unlinkSync(`${this.path}/${image}`);
+      this.cloud.api.resources_by_tag(storyID, (err, res) => {
+        if (!err) {
+          resolve(res.resources);
         }
       });
-      resolve();
     });
   }
-}
 
-module.exports = { ImageHandlers };
+  async delete(storyID, content) {
+    const res = await this.getImagesOfStory(storyID);
+    const usedImages = getUsedImages(content);
+
+    for (const image of res) {
+      if (!usedImages.includes(`${image.public_id}.png`)) {
+        await destroyImage(this.cloud.uploader, image.public_id);
+      }
+    }
+
+    return true;
+  }
+}
+module.exports = { ImageStorage };

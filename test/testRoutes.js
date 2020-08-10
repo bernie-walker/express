@@ -4,7 +4,7 @@ const { setUpDatabase, cleanDatabase } = require('./fixture/databaseSetUp');
 const { app } = require('../src/routes');
 const { Fetch } = require('../src/resourceFetcher');
 const { ExpressDS } = require('../src/dataProviders');
-const { ImageHandlers } = require('../src/imageHandlers');
+const { ImageStorage } = require('../src/imageHandlers');
 app.locals.expressDS.closeClient();
 
 describe('GET', () => {
@@ -341,16 +341,15 @@ describe('POST', function () {
   afterEach(sinon.restore);
 
   context('/publishStory', function () {
-    before(() => {
-      sinon.stub(ImageHandlers.prototype, 'deleteUnusedImages');
+    beforeEach(() => {
+      sinon.stub(ImageStorage.prototype, 'delete');
       return setUpDatabase(app.locals.dbClientReference, [
         'stories',
         'users',
         'tags',
       ]);
     });
-
-    after(() => cleanDatabase(app.locals.dbClientReference));
+    afterEach(() => cleanDatabase(app.locals.dbClientReference));
 
     it('should publish the story and redirect to the blogPage for a valid story', function (done) {
       request(app)
@@ -432,15 +431,13 @@ describe('POST', function () {
   });
 
   context('/saveStory', function () {
-    before(() => {
-      sinon.stub(ImageHandlers.prototype, 'deleteUnusedImages');
-      return setUpDatabase(app.locals.dbClientReference, ['stories', 'users']);
-    });
+    beforeEach(() => sinon.stub(ImageStorage.prototype, 'delete').resolves());
 
-    after(() => {
-      sinon.restore();
-      return cleanDatabase(app.locals.dbClientReference);
-    });
+    before(() =>
+      setUpDatabase(app.locals.dbClientReference, ['stories', 'users'])
+    );
+
+    after(() => cleanDatabase(app.locals.dbClientReference));
 
     it('should respond with a OK for a valid story', function (done) {
       request(app)
@@ -509,8 +506,8 @@ describe('POST', function () {
   context('/uploadImage', function () {
     before(() => {
       sinon
-        .stub(ImageHandlers.prototype, 'uploadImage')
-        .resolves('image_1_1.jpg');
+        .stub(ImageStorage.prototype, 'upload')
+        .resolves('/blog_image/image_1_1.jpg');
       return setUpDatabase(app.locals.dbClientReference, ['stories', 'users']);
     });
 

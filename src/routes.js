@@ -2,11 +2,12 @@ const express = require('express');
 const redis = require('redis');
 const Sqlite3 = require('sqlite3').verbose();
 const axios = require('axios');
+const cloudinary = require('cloudinary').v2;
 const cookieParser = require('cookie-parser');
 const { ExpressDB, ExpressDS } = require('./dataProviders');
 const { Users, Stories, Tags, Claps } = require('./dataModels');
 const { Fetch } = require('./resourceFetcher');
-const { ImageHandlers } = require('./imageHandlers');
+const { ImageStorage } = require('./imageHandlers');
 
 const {
   NO_LOG,
@@ -16,6 +17,9 @@ const {
   GIT_CLIENT_SECRET,
   REDIS_URL,
   REDIS_DB,
+  CLOUD_SECRET,
+  CLOUD_KEY,
+  CLOUD_NAME,
 } = process.env;
 
 const {
@@ -79,9 +83,15 @@ const dsClient = redis.createClient({
   db: REDIS_DB,
 });
 
+cloudinary.config({
+  cloud_name: CLOUD_NAME || 'name',
+  api_key: CLOUD_KEY || 'key',
+  api_secret: CLOUD_SECRET || 'secret',
+});
+
 const expressDS = new ExpressDS(dsClient);
 app.locals.expressDS = expressDS;
-app.locals.imageHandlers = new ImageHandlers(expressDS, BLOG_IMAGE_PATH);
+app.locals.imageStorage = new ImageStorage(cloudinary);
 
 app.set('view engine', 'pug');
 

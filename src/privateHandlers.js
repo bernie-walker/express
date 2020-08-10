@@ -1,6 +1,5 @@
 const moment = require('moment');
 const multer = require('multer');
-
 const statusCodes = require('./statusCodes.json');
 
 const upload = multer({
@@ -42,9 +41,9 @@ const renderEditor = async function (req, res) {
 };
 
 const deleteUnusedImages = async function (req, res, next) {
-  const { imageHandlers } = req.app.locals;
+  const { imageStorage } = req.app.locals;
   const { storyID, blocks: content } = req.body;
-  await imageHandlers.deleteUnusedImages(storyID, content);
+  await imageStorage.delete(storyID, content);
   next();
 };
 
@@ -70,12 +69,12 @@ const handleError = function (error, req, res, next) {
 };
 
 const uploadImage = async function (req, res) {
-  const { imageHandlers } = req.app.locals;
+  const { imageStorage } = req.app.locals;
   const { storyID } = req.params;
 
-  const imageName = await imageHandlers.uploadImage(req.file, storyID);
+  const cloudImage = await imageStorage.upload(storyID, req.file);
 
-  res.send({ success: 1, file: { url: `/blog_image/${imageName}` } });
+  res.send({ success: 1, file: { url: cloudImage } });
 };
 
 const validateTags = function (tags = []) {

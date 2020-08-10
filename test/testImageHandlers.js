@@ -1,44 +1,74 @@
-const { expect } = require('chai').use(require('chai-as-promised'));
 const sinon = require('sinon');
-const fs = require('fs');
-const { ImageHandlers } = require('../src/imageHandlers');
-const { ExpressDS } = require('../src/dataProviders');
+const { ImageStorage } = require('../src/imageHandlers');
+const { assert } = require('chai');
 
-describe('function under test', function () {
-  let imageHandlers;
-  before(() => {
-    sinon.stub(fs, 'writeFileSync').returns(undefined);
-    sinon.stub(fs, 'readdirSync').returns(['image_1_2.png']);
-    sinon.stub(fs, 'unlinkSync').returns(undefined);
-    const fakeDSProvider = {};
-    const expressDS = new ExpressDS(fakeDSProvider);
-    fakeDSProvider.incr = sinon.stub().callsArgWithAsync(1, null, 2);
-    imageHandlers = new ImageHandlers(expressDS, 'path');
-  });
-
-  after(sinon.restore);
-
-  context('.getNewImageName', function () {
-    it('should give image name', function () {
-      return expect(
-        imageHandlers.getNewImageName(1, 'image/png')
-      ).to.eventually.equal('image_1_2.png');
+describe('ImageStorage', function () {
+  const fakeCloud = {
+    uploader: {},
+    api: {},
+  };
+  const imageStorage = new ImageStorage(fakeCloud);
+  const fakeStream = {
+    write: sinon.fake(),
+    end: sinon.fake(),
+  };
+  afterEach(() => sinon.restore());
+  context('.upload', function () {
+    before(() => {
+      const fakeUploadStream = sinon
+        .stub()
+        .callsArgWithAsync(1, null, { secure_url: 'image' })
+        .returns(fakeStream);
+      fakeCloud.uploader.upload_stream = fakeUploadStream;
     });
-  });
 
-  context('.uploadImage', function () {
     it('should upload image and give image name', function () {
-      return expect(
-        imageHandlers.uploadImage({ mimetype: 'image/png' }, 1)
-      ).to.eventually.equal('image_1_2.png');
+      imageStorage
+        .upload({ mimetype: 'image/png', buffer: '' }, 1)
+        .then((imagePath) => {
+          sinon.assert.called(fakeStream.write);
+          sinon.assert.called(fakeStream.end);
+          assert.equal(imagePath, 'image');
+        });
     });
   });
 
-  context('.deleteUnusedImages', function () {
-    it('should delete unused image of given story', function () {
-      return expect(
-        imageHandlers.deleteUnusedImages(1, [])
-      ).to.eventually.fulfilled;
+  context('.delete', function () {
+    before(() => {
+      const fakeGetImagesOfStory = sinon
+        .stub()
+        .returns(['http//blog_image/image_1.png']);
+      const fakeDestroy = sinon
+        .stub()
+        .callsArgWithAsync(1, null, { result: 'ok' });
+      const fakeResourceByTag = sinon.stub().callsArgWithAsync(1, null, {
+        resources: [{ public_id: 'blog_image/image_1' }],
+      });
+      fakeCloud.uploader.destroy = fakeDestroy;
+      fakeCloud.api.resources_by_tag = fakeResourceByTag;
+      fakeCloud.getImagesOfStory = fakeGetImagesOfStory;
+    });
+
+    it('should not delete an image if it is present in usedImages', function () {
+      imageStorage
+        .delete(1, [
+          { type: 'image', data: { file: { url: '/blog_image/image_1.png' } } },
+        ])
+        .then((reply) => {
+          sinon.assert.notCalled(fakeCloud.uploader.destroy);
+          assert.isTrue(reply);
+        });
+    });
+
+    it('should delete an image if it is not present in usedImages', function () {
+      imageStorage
+        .delete(2, [
+          { type: 'image', data: { file: { url: '/blog_image/image_2.png' } } },
+        ])
+        .then((reply) => {
+          sinon.assert.called(fakeCloud.uploader.destroy);
+          assert.isTrue(reply);
+        });
     });
   });
 });
