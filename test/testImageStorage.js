@@ -4,15 +4,9 @@ const { assert } = require('chai');
 
 describe('ImageStorage', function () {
   const fakeDb = {};
-  const fakeCloud = {
-    uploader: {},
-    api: {},
-  };
+  const fakeCloud = { uploader: {}, api: {} };
   const imageStorage = new ImageStorage(fakeCloud, fakeDb);
-  const fakeStream = {
-    write: sinon.fake(),
-    end: sinon.fake(),
-  };
+  const fakeStream = { write: sinon.fake(), end: sinon.fake() };
 
   afterEach(() => sinon.restore());
 
@@ -37,28 +31,20 @@ describe('ImageStorage', function () {
   });
 
   context('.delete', function () {
+    const content = JSON.stringify([
+      {
+        type: 'image',
+        data: { file: { url: 'http//blog_image/image_1.png' } },
+      },
+    ]);
+
     before(() => {
       const fakeGetStoryOfUser = sinon
         .stub()
         .withArgs(1, 1)
-        .returns({
-          content: JSON.stringify([
-            {
-              type: 'image',
-              data: { file: { url: 'http//blog_image/image_1.png' } },
-            },
-          ]),
-        });
+        .returns({ content });
 
-      const fakeDestroy = sinon
-        .stub()
-        .callsArgWithAsync(1, null, { result: 'ok' });
-      const fakeResourceByTag = sinon.stub().callsArgWithAsync(1, null, {
-        resources: [{ public_id: 'blog_image/image_1' }],
-      });
-
-      fakeCloud.uploader.destroy = fakeDestroy;
-      fakeCloud.api.resources_by_tag = fakeResourceByTag;
+      fakeCloud.uploader.destroy = sinon.stub();
       fakeDb.getStoryOfUser = fakeGetStoryOfUser;
     });
 
