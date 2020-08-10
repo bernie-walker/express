@@ -1,18 +1,21 @@
 const sinon = require('sinon');
-const { ImageStorage } = require('../src/imageHandlers');
+const { ImageStorage } = require('../src/imageStorage');
 const { assert } = require('chai');
 
 describe('ImageStorage', function () {
+  const fakeDb = {};
   const fakeCloud = {
     uploader: {},
     api: {},
   };
-  const imageStorage = new ImageStorage(fakeCloud);
+  const imageStorage = new ImageStorage(fakeCloud, fakeDb);
   const fakeStream = {
     write: sinon.fake(),
     end: sinon.fake(),
   };
+
   afterEach(() => sinon.restore());
+
   context('.upload', function () {
     before(() => {
       const fakeUploadStream = sinon
@@ -35,23 +38,33 @@ describe('ImageStorage', function () {
 
   context('.delete', function () {
     before(() => {
-      const fakeGetImagesOfStory = sinon
+      const fakeGetStoryOfUser = sinon
         .stub()
-        .returns(['http//blog_image/image_1.png']);
+        .withArgs(1, 1)
+        .returns({
+          content: JSON.stringify([
+            {
+              type: 'image',
+              data: { file: { url: 'http//blog_image/image_1.png' } },
+            },
+          ]),
+        });
+
       const fakeDestroy = sinon
         .stub()
         .callsArgWithAsync(1, null, { result: 'ok' });
       const fakeResourceByTag = sinon.stub().callsArgWithAsync(1, null, {
         resources: [{ public_id: 'blog_image/image_1' }],
       });
+
       fakeCloud.uploader.destroy = fakeDestroy;
       fakeCloud.api.resources_by_tag = fakeResourceByTag;
-      fakeCloud.getImagesOfStory = fakeGetImagesOfStory;
+      fakeDb.getStoryOfUser = fakeGetStoryOfUser;
     });
 
     it('should not delete an image if it is present in usedImages', function () {
       imageStorage
-        .delete(1, [
+        .delete(1, 1, [
           { type: 'image', data: { file: { url: '/blog_image/image_1.png' } } },
         ])
         .then((reply) => {
@@ -62,7 +75,7 @@ describe('ImageStorage', function () {
 
     it('should delete an image if it is not present in usedImages', function () {
       imageStorage
-        .delete(2, [
+        .delete(2, 1, [
           { type: 'image', data: { file: { url: '/blog_image/image_2.png' } } },
         ])
         .then((reply) => {

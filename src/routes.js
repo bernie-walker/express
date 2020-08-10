@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const { ExpressDB, ExpressDS } = require('./dataProviders');
 const { Users, Stories, Tags, Claps } = require('./dataModels');
 const { Fetch } = require('./resourceFetcher');
-const { ImageStorage } = require('./imageHandlers');
+const { ImageStorage } = require('./imageStorage');
 
 const {
   NO_LOG,
@@ -91,7 +91,7 @@ cloudinary.config({
 
 const expressDS = new ExpressDS(dsClient);
 app.locals.expressDS = expressDS;
-app.locals.imageStorage = new ImageStorage(cloudinary);
+app.locals.imageStorage = new ImageStorage(cloudinary, expressDB);
 
 app.set('view engine', 'pug');
 

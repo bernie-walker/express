@@ -4,7 +4,8 @@ const getUsedImages = function (content) {
       const imageUrl = block.data.file.url || '';
       const indexFromLast = -2;
       const [folder, image] = imageUrl.split('/').slice(indexFromLast);
-      image && images.push(`${folder}/${image}`);
+      const [imageName] = image.split('.');
+      image && images.push(`${folder}/${imageName}`);
     }
     return images;
   }, []);
@@ -17,8 +18,9 @@ const destroyImage = function (cloud, imageId) {
 };
 
 class ImageStorage {
-  constructor(cloud) {
+  constructor(cloud, db) {
     this.cloud = cloud;
+    this.db = db;
   }
 
   upload(storyID, file) {
@@ -33,29 +35,19 @@ class ImageStorage {
       };
 
       const stream = this.cloud.uploader.upload_stream(imageOptions, callBack);
-
       stream.write(file.buffer);
       stream.end();
     });
   }
 
-  getImagesOfStory(storyID) {
-    return new Promise((resolve) => {
-      this.cloud.api.resources_by_tag(storyID, (err, res) => {
-        if (!err) {
-          resolve(res.resources);
-        }
-      });
-    });
-  }
+  async delete(storyID, userID, currentContent) {
+    const story = await this.db.getStoryOfUser(storyID, userID);
+    const storedImages = getUsedImages(JSON.parse(story.content));
+    const usedImages = getUsedImages(currentContent);
 
-  async delete(storyID, content) {
-    const res = await this.getImagesOfStory(storyID);
-    const usedImages = getUsedImages(content);
-
-    for (const image of res) {
-      if (!usedImages.includes(`${image.public_id}.png`)) {
-        await destroyImage(this.cloud.uploader, image.public_id);
+    for (const image of storedImages) {
+      if (!usedImages.includes(`${image}`)) {
+        await destroyImage(this.cloud.uploader, image);
       }
     }
 

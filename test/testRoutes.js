@@ -4,7 +4,7 @@ const { setUpDatabase, cleanDatabase } = require('./fixture/databaseSetUp');
 const { app } = require('../src/routes');
 const { Fetch } = require('../src/resourceFetcher');
 const { ExpressDS } = require('../src/dataProviders');
-const { ImageStorage } = require('../src/imageHandlers');
+const { ImageStorage } = require('../src/imageStorage');
 app.locals.expressDS.closeClient();
 
 describe('GET', () => {
