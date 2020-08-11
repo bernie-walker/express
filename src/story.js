@@ -26,7 +26,7 @@ class Story {
   // getContent() {}
 
   update(story) {
-    return this.dbClient.updateStory(this.id, story);
+    return this.dbClient.updateStory(Object.assign(story, { id: this.id }));
   }
 
   save(story) {

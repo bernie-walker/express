@@ -22,7 +22,8 @@ describe('Story', function () {
 
     it('should save the given story', function (done) {
       story.save({ title: 'story' }).then(() => {
-        sinon.assert.calledWithExactly(fakeUpdate, 1, {
+        sinon.assert.calledWithExactly(fakeUpdate, {
+          id: 1,
           title: 'story',
           state: 'drafted',
           coverImage: null,
@@ -33,7 +34,8 @@ describe('Story', function () {
 
     it('should save the story with default title when title is empty', function (done) {
       story.save({ title: '  ' }).then(() => {
-        sinon.assert.calledWithExactly(fakeUpdate, 1, {
+        sinon.assert.calledWithExactly(fakeUpdate, {
+          id: 1,
           title: 'Untitled Story',
           state: 'drafted',
           coverImage: null,
@@ -58,13 +60,14 @@ describe('Story', function () {
     it('should publish the valid story', function (done) {
       const assertPublishedStory = function (affirmation) {
         const expected = {
+          id: 1,
           title: 'title1',
           content: [],
           state: 'published',
           coverImage: null,
         };
         assert.isTrue(affirmation);
-        sinon.assert.calledWithExactly(fakeUpdate, 1, expected);
+        sinon.assert.calledWithExactly(fakeUpdate, expected);
         sinon.assert.calledWithExactly(fakeDeleteTags, 1);
         sinon.assert.calledWithExactly(fakeAddTag, 1, 'tag1');
       };
@@ -77,7 +80,7 @@ describe('Story', function () {
         });
     });
 
-    it('should find chose the first image of content as cover image', function (done) {
+    it('should chose the first image of content as cover image', function (done) {
       const storyToPublish = {
         title: 'a',
         content: [
@@ -89,7 +92,7 @@ describe('Story', function () {
 
       story.publish(storyToPublish).then((affirmation) => {
         assert.isTrue(affirmation);
-        assert.strictEqual(fakeUpdate.args[0][1].coverImage, 'image1');
+        assert.strictEqual(fakeUpdate.args[0][0].coverImage, 'image1');
         done();
       });
     });
