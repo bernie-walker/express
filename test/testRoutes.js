@@ -121,7 +121,7 @@ describe('GET', () => {
     });
 
     it('should respond NOT FOUND if blog does not exist', function (done) {
-      request(app).get('/blogPage/2').expect(404).end(done);
+      request(app).get('/blogPage/2').expect(422).end(done);
     });
   });
 

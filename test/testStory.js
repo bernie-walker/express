@@ -12,6 +12,45 @@ describe('Story', function () {
 
   afterEach(sinon.restore);
 
+  context('.render', function () {
+    let fakeGetPublished, fakeGetClapInfo;
+
+    beforeEach(() => {
+      fakeGetPublished = sinon.stub();
+      fakeDBClient.getPublishedStory = fakeGetPublished;
+      fakeGetClapInfo = sinon.stub();
+      fakeDBClient.getClapInfo = fakeGetClapInfo;
+    });
+
+    it('should render the story page with tags are present', function () {
+      fakeGetPublished.resolves({ content: '{"txt":"samp"}', tags: 'a,b' });
+      fakeGetClapInfo.resolves({ clapsCount: 1 });
+
+      story.render('usr').then((storyPage) => {
+        assert.deepStrictEqual(storyPage, {
+          content: { txt: 'samp' },
+          tags: ['a', 'b'],
+          clapsCount: 1,
+        });
+        sinon.assert.calledWithExactly(fakeGetPublished, 1);
+        sinon.assert.calledWithExactly(fakeGetClapInfo, 1, 'usr');
+      });
+    });
+
+    it('should render the story with no tags', function () {
+      fakeGetPublished.resolves({ content: '{"txt":"samp"}' });
+      fakeGetClapInfo.resolves({ clapsCount: 1 });
+
+      story.render('usr').then((storyPage) => {
+        assert.deepStrictEqual(storyPage, {
+          content: { txt: 'samp' },
+          tags: [],
+          clapsCount: 1,
+        });
+      });
+    });
+  });
+
   context('.save', function () {
     let fakeUpdate;
 

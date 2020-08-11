@@ -1,6 +1,6 @@
 const { assert, expect } = require('chai').use(require('chai-as-promised'));
 const sinon = require('sinon');
-const { Users, Stories, Story, Claps } = require('../src/dataModels');
+const { Users, Stories, Story } = require('../src/dataModels');
 
 describe('Users', function () {
   const fakeDbClient = {};
@@ -210,67 +210,6 @@ describe('Stories', function () {
     });
   });
 
-  context('.getStoryPage', function () {
-    let fakeGetPublishedStory;
-
-    beforeEach(() => {
-      fakeGetPublishedStory = sinon.stub();
-      fakeDbClient.getPublishedStory = fakeGetPublishedStory;
-    });
-
-    afterEach(sinon.restore);
-
-    it('should resolve the story page if exists', function () {
-      fakeGetPublishedStory
-        .withArgs(1)
-        .resolves({ content: '{"txt":"samp"}', tags: 'tag1,tag2' });
-      return expect(stories.getStoryPage(1)).to.eventually.deep.equal({
-        content: { txt: 'samp' },
-        tags: ['tag1', 'tag2'],
-      });
-    });
-
-    it('tags array should be empty when there are no tags', function () {
-      fakeGetPublishedStory
-        .withArgs(2)
-        .resolves({ content: '{"txt":"samp"}', tags: null });
-      return expect(stories.getStoryPage(2)).to.eventually.deep.equal({
-        content: { txt: 'samp' },
-        tags: [],
-      });
-    });
-
-    it('should resolve undefined if story does not exist', function () {
-      fakeGetPublishedStory.withArgs(3).resolves(null);
-      return expect(stories.getStoryPage(3)).to.be.eventually.rejected;
-    });
-  });
-
-  context('.getStory', function () {
-    let fakeGetStoryOfUser;
-
-    beforeEach(() => {
-      fakeGetStoryOfUser = sinon.stub();
-      fakeDbClient.getStoryOfUser = fakeGetStoryOfUser;
-    });
-
-    afterEach(sinon.restore);
-
-    it('should resolve the story page if exists', function () {
-      fakeGetStoryOfUser
-        .withArgs(1, 'user1')
-        .resolves({ content: '{"txt":"samp"}' });
-      return expect(stories.getStory(1, 'user1')).to.eventually.deep.equal({
-        content: { txt: 'samp' },
-      });
-    });
-
-    it('should resolve undefined if story does not exist', function () {
-      fakeGetStoryOfUser.withArgs(2, 'user2').resolves();
-      return expect(stories.getStory(2, 'user2')).to.be.eventually.undefined;
-    });
-  });
-
   context('.createStory', function () {
     let fakeCreateStoryByUser;
 
@@ -306,7 +245,7 @@ describe('Stories', function () {
       fakeFindStory.resolves(1);
       stories.getPrivateStory(1, 'author').then((story) => {
         assert.isTrue(story instanceof Story);
-        sinon.assert.calledWith(fakeFindStory, 1, 'author');
+        sinon.assert.calledWithExactly(fakeFindStory, 1, 'author', '%');
         done();
       });
     });
@@ -331,7 +270,7 @@ describe('Stories', function () {
       fakeFindStory.resolves(1);
       stories.getPublicStory(1).then((story) => {
         assert.isTrue(story instanceof Story);
-        sinon.assert.calledWith(fakeFindStory, 1, '%');
+        sinon.assert.calledWithExactly(fakeFindStory, 1, '%', 'published');
         done();
       });
     });
@@ -385,85 +324,6 @@ describe('Stories', function () {
       return expect(
         stories.comment({ storyID: 1, userID: 'me' })
       ).to.be.eventually.rejected;
-    });
-  });
-});
-
-describe('Claps', function () {
-  const fakeDbClient = {};
-  const claps = new Claps(fakeDbClient);
-
-  context('clapCount', function () {
-    before(() => {
-      const fakeClapCount = sinon.stub();
-      fakeClapCount.withArgs(6).resolves({ count: 2 });
-      fakeClapCount.withArgs(2).resolves({ count: 0 });
-      fakeDbClient.clapCount = fakeClapCount;
-    });
-
-    after(sinon.restore);
-
-    it('should count the claps for a given story if clap present', function () {
-      return expect(claps.clapCount(6)).to.be.eventually.deep.equal({
-        count: 2,
-      });
-    });
-
-    it('should count the claps for a given story if clap absent', function () {
-      return expect(claps.clapCount(2)).to.be.eventually.deep.equal({
-        count: 0,
-      });
-    });
-  });
-
-  context('isClapped', function () {
-    before(() => {
-      const fakeIsClapped = sinon.stub();
-      fakeIsClapped.withArgs(6, 'palpriyanshu').resolves(true);
-      fakeIsClapped.withArgs(2, 'palpriyanshu').resolves(false);
-      fakeDbClient.isClapped = fakeIsClapped;
-    });
-
-    after(sinon.restore);
-
-    it('should give true if given user has already clapped on given story', function () {
-      return expect(claps.isClapped(6, 'palpriyanshu')).to.be.eventually.true;
-    });
-
-    it('should do count the claps for a given story if clap absent', function () {
-      return expect(claps.isClapped(2, 'palpriyanshu')).to.be.eventually.false;
-    });
-  });
-
-  context('addClap', function () {
-    before(() => {
-      const fakeAddClap = sinon.stub();
-      fakeAddClap.withArgs(6, 'palpriyanshu').resolves();
-      fakeDbClient.addClap = fakeAddClap;
-    });
-
-    after(sinon.restore);
-
-    it('should resolve after adding clap on given story by given user', function () {
-      return expect(
-        claps.addClap(6, 'palpriyanshu')
-      ).to.be.eventually.fulfilled;
-    });
-  });
-
-  context('removeClap', function () {
-    before(() => {
-      const fakeRemoveClap = sinon.stub();
-      fakeRemoveClap.withArgs(6, 'palpriyanshu').resolves();
-      fakeDbClient.removeClap = fakeRemoveClap;
-    });
-
-    after(sinon.restore);
-
-    it('should resolve after adding clap on given story by given user', function () {
-      return expect(
-        claps.removeClap(6, 'palpriyanshu')
-      ).to.be.eventually.fulfilled;
     });
   });
 });

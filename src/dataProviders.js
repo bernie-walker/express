@@ -12,8 +12,6 @@ const {
   clapInfo,
   addClap,
   removeClap,
-  isClapped,
-  clapCount,
   updateStory,
   findStory,
   listComments,
@@ -109,9 +107,9 @@ class ExpressDB {
     this.dbClient = dbClient;
   }
 
-  findStory(storyID, authorID) {
+  findStory(storyID, authorID, state) {
     return new Promise((resolve) => {
-      this.dbClient.get(findStory, [storyID, authorID], (err, row) => {
+      this.dbClient.get(findStory, [storyID, authorID, state], (err, row) => {
         resolve(row);
       });
     });
@@ -267,25 +265,6 @@ class ExpressDB {
   removeClap(clappedOn, clappedBy) {
     return new Promise((resolve) => {
       this.dbClient.run(removeClap, [clappedOn, clappedBy], resolve);
-    });
-  }
-
-  isClapped(clappedOn, clappedBy) {
-    return new Promise((resolve) => {
-      this.dbClient.get(isClapped, [clappedOn, clappedBy], (err, row) => {
-        if (row) {
-          return resolve(true);
-        }
-        resolve(false);
-      });
-    });
-  }
-
-  clapCount(clappedOn) {
-    return new Promise((resolve) => {
-      this.dbClient.get(clapCount, [clappedOn], (err, row) => {
-        resolve(row);
-      });
     });
   }
 

@@ -76,19 +76,6 @@ class Stories {
     });
   }
 
-  getStoryPage(storyID) {
-    return this.db.getPublishedStory(storyID).then((story) => {
-      if (!story) {
-        return Promise.reject();
-      }
-
-      story.content = JSON.parse(story.content);
-      story.tags = story.tags ? story.tags.split(',') : [];
-
-      return Promise.resolve(story);
-    });
-  }
-
   getStory(storyID, userID) {
     return this.db.getStoryOfUser(storyID, userID).then((story) => {
       if (story) {
@@ -105,8 +92,8 @@ class Stories {
       .then((storyID) => Promise.resolve(storyID));
   }
 
-  async getPrivateStory(storyID, author) {
-    const story = await this.db.findStory(storyID, author);
+  async getPrivateStory(storyID, author, state) {
+    const story = await this.db.findStory(storyID, author, state || '%');
 
     if (!story) {
       return null;
@@ -116,7 +103,7 @@ class Stories {
   }
 
   getPublicStory(storyID) {
-    return this.getPrivateStory(storyID, '%');
+    return this.getPrivateStory(storyID, '%', 'published');
   }
 
   listCommentsOn(storyID) {
@@ -140,34 +127,4 @@ class Tags {
   }
 }
 
-class Claps {
-  constructor(db) {
-    this.db = db;
-  }
-
-  isClapped(clappedOn, clappedBy) {
-    return this.db.isClapped(clappedOn, clappedBy);
-  }
-
-  addClap(clappedOn, clappedBy) {
-    return this.db.addClap(clappedOn, clappedBy);
-  }
-
-  removeClap(clappedOn, clappedBy) {
-    return this.db.removeClap(clappedOn, clappedBy);
-  }
-
-  async toggleClap(clappedOn, clappedBy) {
-    const reply = await this.isClapped(clappedOn, clappedBy);
-    if (reply) {
-      return this.removeClap(clappedOn, clappedBy);
-    }
-    return this.addClap(clappedOn, clappedBy);
-  }
-
-  clapCount(clappedOn) {
-    return this.db.clapCount(clappedOn);
-  }
-}
-
-module.exports = { Users, Stories, Tags, Claps, Story };
+module.exports = { Users, Stories, Tags, Story };

@@ -24,23 +24,18 @@ const serveBlogImage = function (req, res) {
   });
 };
 
-const serveBlogPage = async function (req, res) {
-  const { stories, claps } = req.app.locals;
-  const { storyID } = req.params;
-  let isClapped = false;
-  if (req.user) {
-    isClapped = await claps.isClapped(storyID, req.user.id);
+const serveBlogPage = async function (req, res, next) {
+  const { stories } = req.app.locals;
+  const story = await stories.getPublicStory(req.params.storyID);
+  const userID = req.user ? req.user.id : null;
+
+  if (!story) {
+    next(new Error('Story does not exist'));
+    return;
   }
-  const clapsCount = await claps.clapCount(storyID);
-  stories
-    .getStoryPage(storyID)
-    .then((blog) => {
-      res.render(
-        'blogPage',
-        Object.assign(blog, req.user, clapsCount, { isClapped })
-      );
-    })
-    .catch(() => res.sendStatus(statusCodes.notFound));
+
+  const storyPage = await story.render(userID);
+  res.render('blogPage', Object.assign(storyPage, req.user));
 };
 
 const serveComments = async function (req, res) {

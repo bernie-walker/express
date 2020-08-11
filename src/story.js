@@ -21,7 +21,15 @@ class Story {
     this.id = id;
   }
 
-  // render() {}
+  async render(userID) {
+    const storyPage = await this.dbClient.getPublishedStory(this.id);
+    const clapsInfo = await this.dbClient.getClapInfo(this.id, userID);
+
+    storyPage.content = JSON.parse(storyPage.content);
+    storyPage.tags = storyPage.tags ? storyPage.tags.split(',') : [];
+
+    return Promise.resolve(Object.assign(storyPage, clapsInfo));
+  }
 
   // getContent() {}
 
