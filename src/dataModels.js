@@ -1,3 +1,5 @@
+const { Story } = require('./story');
+
 const validateUserID = function (userID) {
   return userID && !userID.match(/\s/);
 };
@@ -103,26 +105,14 @@ class Stories {
       .then((storyID) => Promise.resolve(storyID));
   }
 
-  async setCoverImage({ content = [], id, author }) {
-    const imageBlock = content.find((block) => block.type === 'image');
-    if (imageBlock) {
-      const coverImage = imageBlock.data.file.url;
-      await this.db.setCoverImage(id, author, coverImage);
+  async getPrivateStory(storyID, author) {
+    const story = await this.db.findStory(storyID, author);
+
+    if (!story) {
+      return null;
     }
-  }
 
-  updateStory(editedStory) {
-    const { id, author } = editedStory;
-
-    return this.getStory(id, author).then((story) => {
-      if (!story) {
-        return Promise.reject();
-      }
-
-      this.setCoverImage(editedStory);
-
-      return this.db.updateStory(editedStory);
-    });
+    return new Story(this.db, storyID);
   }
 
   listCommentsOn(storyID) {
@@ -138,13 +128,6 @@ class Stories {
 class Tags {
   constructor(db) {
     this.db = db;
-  }
-
-  async updateTags(storyID, tags) {
-    await this.db.deleteTags(storyID);
-    for (const tag of tags) {
-      await this.db.addTag(storyID, tag);
-    }
   }
 
   async getAllTags(storyID) {
@@ -183,4 +166,4 @@ class Claps {
   }
 }
 
-module.exports = { Users, Stories, Tags, Claps };
+module.exports = { Users, Stories, Tags, Claps, Story };

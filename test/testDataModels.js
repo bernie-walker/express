@@ -1,6 +1,6 @@
 const { assert, expect } = require('chai').use(require('chai-as-promised'));
 const sinon = require('sinon');
-const { Users, Stories, Claps } = require('../src/dataModels');
+const { Users, Stories, Story, Claps } = require('../src/dataModels');
 
 describe('Users', function () {
   const fakeDbClient = {};
@@ -292,64 +292,28 @@ describe('Stories', function () {
     });
   });
 
-  context('.setCoverImage', function () {
+  context('.getPrivateStory', function () {
+    let fakeFindStory;
+
     before(() => {
-      const fakeGetStoryOfUser = sinon.stub();
-      fakeGetStoryOfUser
-        .withArgs(1, 'user1')
-        .resolves({ content: '{"txt":"samp"}' });
-      fakeGetStoryOfUser.withArgs(2, 'user2').resolves();
-      fakeDbClient.getStoryOfUser = fakeGetStoryOfUser;
-      fakeDbClient.setCoverImage = sinon.stub().resolves();
+      fakeFindStory = sinon.stub();
+      fakeDbClient.findStory = fakeFindStory;
     });
 
     after(sinon.restore);
 
-    it('should set the cover image if story exists', function () {
-      return expect(
-        stories.setCoverImage({
-          id: 1,
-          author: 'user1',
-          content: [
-            {
-              type: 'image',
-              data: { file: { url: '/blog_image/image_1_1.png' } },
-            },
-          ],
-        })
-      ).to.be.eventually.fulfilled;
+    it('should resolve with a Story if it exists', function (done) {
+      fakeFindStory.resolves(1);
+      stories.getPrivateStory(1, 'author').then((story) => {
+        assert.isTrue(story instanceof Story);
+        sinon.assert.calledWith(fakeFindStory, 1, 'author');
+        done();
+      });
     });
 
-    it('should not set cover image if image does not exists', function () {
-      return expect(
-        stories.setCoverImage({ id: 2, author: 'user2', content: [] })
-      ).to.be.eventually.fulfilled;
-    });
-  });
-
-  context('.updateStory', function () {
-    before(() => {
-      const fakeGetStoryOfUser = sinon.stub();
-      fakeGetStoryOfUser
-        .withArgs(1, 'user1')
-        .resolves({ content: '{"txt":"samp"}' });
-      fakeGetStoryOfUser.withArgs(2, 'user2').resolves();
-      fakeDbClient.getStoryOfUser = fakeGetStoryOfUser;
-      fakeDbClient.updateStory = sinon.stub().resolves();
-    });
-
-    after(sinon.restore);
-
-    it('should update the story if story exists', function () {
-      return expect(
-        stories.updateStory({ id: 1, author: 'user1' })
-      ).to.be.eventually.fulfilled;
-    });
-
-    it('should reject if story does not exists', function () {
-      return expect(
-        stories.updateStory({ id: 2, author: 'user2' })
-      ).to.be.eventually.rejected;
+    it('should resolve null when the story does not exist', function () {
+      fakeFindStory.resolves(null);
+      return expect(stories.getPrivateStory(2, 'author')).to.be.eventually.null;
     });
   });
 

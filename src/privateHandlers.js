@@ -49,23 +49,37 @@ const deleteUnusedImages = async function (req, res, next) {
 
 const saveStory = async function (req, res) {
   const { stories } = req.app.locals;
-  const { storyTitle, blocks: content, storyID: id } = req.body;
-  const title = storyTitle.trim() || 'Untitled Story';
+  const { storyTitle: title, blocks: content, storyID } = req.body;
+  const story = await stories.getPrivateStory(storyID, req.user.id);
 
-  stories
-    .updateStory({ title, content, state: 'drafted', author: req.user.id, id })
-    .then(res.end.bind(res))
-    .catch(() => {
-      res.sendStatus(statusCodes.unprocessableEntity);
-    });
+  if (!story) {
+    res.sendStatus(statusCodes.unprocessableEntity);
+    return;
+  }
+
+  story.save({ title, content, author: req.user.id }).then(res.end.bind(res));
+};
+
+const publishStory = async function (req, res) {
+  const { stories } = req.app.locals;
+  const { storyTitle: title, blocks: content, storyID, tags } = req.body;
+  const story = await stories.getPrivateStory(storyID, req.user.id);
+
+  if (!story) {
+    res.sendStatus(statusCodes.unprocessableEntity);
+    return;
+  }
+
+  story
+    .publish({ title, content, tags, author: req.user.id })
+    .then(() => res.redirect(`/blogPage/${storyID}`))
+    .catch(() => res.sendStatus(statusCodes.unprocessableEntity));
 };
 
 // eslint-disable-next-line no-unused-vars
 const handleError = function (error, req, res, next) {
-  if (error) {
-    res.status(statusCodes.unprocessableEntity);
-    res.send({ error: error.message });
-  }
+  res.status(statusCodes.unprocessableEntity);
+  res.send({ error: error.message });
 };
 
 const uploadImage = async function (req, res) {
@@ -75,42 +89,6 @@ const uploadImage = async function (req, res) {
   const cloudImage = await imageStorage.upload(storyID, req.file);
 
   res.send({ success: 1, file: { url: cloudImage } });
-};
-
-const validateTags = function (tags = []) {
-  const MAX_TAG_LENGTH = 26;
-  return tags.reduce((tags, tagValue) => {
-    const tag = tagValue.trim();
-    if (tag && tag.length < MAX_TAG_LENGTH && !tags.includes(tag)) {
-      tags.push(tag);
-    }
-    return tags;
-  }, []);
-};
-
-const isStoryValid = function (title, allTags) {
-  const MAX_TAGS_ALLOWED = 5;
-  return title && allTags.length <= MAX_TAGS_ALLOWED;
-};
-
-const publishStory = async function (req, res) {
-  const author = req.user.id;
-  const { stories, tags } = req.app.locals;
-  const { storyTitle, blocks: content, storyID: id, tags: newTags } = req.body;
-
-  const title = storyTitle && storyTitle.trim();
-  const allTags = validateTags(newTags);
-
-  if (!isStoryValid(title, allTags)) {
-    return res.sendStatus(statusCodes.unprocessableEntity);
-  }
-
-  tags.updateTags(id, allTags);
-
-  stories
-    .updateStory({ title, content, state: 'published', author, id })
-    .then(() => res.redirect(`/blogPage/${id}`))
-    .catch(() => res.sendStatus(statusCodes.unprocessableEntity));
 };
 
 const updateClap = async function (req, res) {

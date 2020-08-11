@@ -13,8 +13,8 @@ const {
   removeClap,
   isClapped,
   clapCount,
-  setCoverImage,
   updateStory,
+  findStory,
   listComments,
   newComment,
 } = require('./queries.json');
@@ -108,6 +108,14 @@ class ExpressDB {
     this.dbClient = dbClient;
   }
 
+  findStory(storyID, authorID) {
+    return new Promise((resolve) => {
+      this.dbClient.get(findStory, [storyID, authorID], (err, row) => {
+        resolve(row);
+      });
+    });
+  }
+
   getLatestNStories(count = -1, offset = 0) {
     return new Promise((resolve) => {
       this.dbClient.all(latestNStories, [count, offset], (err, rows) => {
@@ -144,19 +152,13 @@ class ExpressDB {
     });
   }
 
-  setCoverImage(id, author, coverImage) {
-    return new Promise((resolve) => {
-      this.dbClient.run(setCoverImage, [coverImage, id, author], resolve);
-    });
-  }
-
   updateStory(modifiedStory) {
-    const { title, content, state, id, author } = modifiedStory;
+    const { title, content, state, id, author, coverImage } = modifiedStory;
 
     return new Promise((resolve) => {
       this.dbClient.run(
         updateStory,
-        [title, JSON.stringify(content), state, id, author],
+        [title, JSON.stringify(content), state, coverImage, id, author],
         resolve
       );
     });
