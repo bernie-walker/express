@@ -2,37 +2,13 @@ body {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-.header {
-  border-bottom: 1px solid #fff;
-  box-shadow: 0 5px 2px #efefef;
-  display: flex;
-  justify-content: center;
-  padding: 4px;
-  height: 48px;
-}
-
-@media (max-width: 420px) {
-  .header {
-    height: 32px;
-  }
-}
-
-.header > div {
-  width: 35%;
-}
-
-@media (max-width: 420px) {
-  .header {
-    justify-content: space-between;
-  }
-}
-
 .links {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   height: 48px;
 }
+
 @media (max-width: 420px) {
   .links {
     margin: 2px;
@@ -54,6 +30,7 @@ body {
   padding: 20px;
   text-align: center;
 }
+
 @media (max-width: 420px) {
   .advertise div {
     font-size: 32px;

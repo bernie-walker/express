@@ -38,8 +38,6 @@ body {
 .profile-icon img {
   height: 20vh;
   width: 20vh;
-  border-radius: 50%;
-  border: 1px solid #555;
 }
 
 .optionBar {
@@ -88,8 +86,6 @@ body {
 .author-profile-icon img {
   height: inherit;
   width: inherit;
-  border: 1px solid #555;
-  border-radius: 50%;
 }
 
 .author-info {

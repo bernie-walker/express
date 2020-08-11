@@ -184,19 +184,6 @@ template {
   display: none;
 }
 
-.inactive {
-  pointer-events: none;
-  opacity: 0.4;
-}
-
-.hidden {
-  display: none;
-}
-
-[hidden] {
-  display: none;
-}
-
 ::-webkit-scrollbar {
   width: 4px;
 }
@@ -214,4 +201,31 @@ template {
 
 ::-webkit-scrollbar-thumb:window-inactive {
   background: rgba(117, 117, 121, 0.8);
+}
+
+.inactive {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.hidden {
+  display: none;
+}
+
+[hidden] {
+  display: none;
+}
+
+.underline:hover {
+  text-decoration: underline;
+}
+
+.underline {
+  text-decoration: none;
+  color: inherit;
+}
+
+.circular-img {
+  border: 0.05vw solid rgba(10, 10, 10, 0.4);
+  border-radius: 50%;
 }

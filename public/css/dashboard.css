@@ -96,13 +96,7 @@ body {
 .author {
   letter-spacing: 0.02vw;
   font-weight: 600;
-  text-decoration: none;
-  color: inherit;
   width: fit-content;
-}
-
-.author:hover {
-  text-decoration: underline;
 }
 
 .date {

@@ -19,8 +19,6 @@
 .avatar {
   height: 48px;
   width: 48px;
-  border: 1px solid #0a0a0a99;
-  border-radius: 50%;
 }
 
 .profile img {
@@ -118,11 +116,6 @@
 #username {
   color: #555;
   font-weight: 200;
-}
-
-#username:hover {
-  text-decoration: underline;
-  cursor: pointer;
 }
 
 #username::before {

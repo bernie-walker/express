@@ -7,7 +7,7 @@ mixin storyCard(id, title, content, createdAt, coverImage)
   div.card(target_url=`/blogPage/${id}`) 
     .author-profile-div
       .author-profile-icon
-        img.author-avatar(src= profileAvatar)
+        img.author-avatar.circular-img(src= profileAvatar)
       .author-info
         #author-name= profileName
         - const [,month,date,year] = new Date(createdAt).toString().split(' ');
@@ -46,7 +46,7 @@ html
           #name= profileName
           .bio= bio
         .profile-icon
-          img.author-avatar(src= profileAvatar)
+          img.author-avatar.circular-img(src= profileAvatar)
       .optionBar
       //-   div Profile
       .card-container

@@ -1,11 +1,11 @@
 each comment in comments
   .comment
         .commenter
-          .commenterAvatar
+          .commenterAvatar.circular-img
             img.icon-image(src= comment.commenterAvatarURL)
           .comment-info
             .commenter-name
-              a(href=`/profile/${comment.commenterID}`)= comment.commenter
+              a.underline(href=`/profile/${comment.commenterID}`)= comment.commenter
             - const [,month,date,year] = new Date(comment.commentDate).toString().split(' ');  
             .comment-date= `${month} ${date}, ${year}`
         .comment-text= comment.commentText

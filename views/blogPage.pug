@@ -38,11 +38,11 @@ html
       #blogTitle(storyid=storyID)= title
       .blog-meta
         div
-          .author-icon
+          .author-icon.circular-img
             img(src=authorAvatar class="icon-image")
           .blog-info
             .author-name
-              a(href="/profile/"+authorID)= authorName
+              a.underline(href="/profile/"+authorID)= authorName
             - const [,month,date,year] = new Date(lastModified).toString().split(' ');
             .blog-date= `${month} ${date}, ${year}`
         button#shareSection
