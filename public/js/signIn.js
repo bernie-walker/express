@@ -20,3 +20,5 @@ const attachSignInListeners = function () {
   backCover.addEventListener('click', hideIfTargetIsCover);
   document.querySelector('body').addEventListener('keydown', hideSigInIfEsc);
 };
+
+window.onload = attachSignInListeners;
