@@ -68,12 +68,12 @@ const shareBlog = function () {
 const clapOnStory = async function () {
   const storyID = blogTitle.getAttribute('storyid');
   const response = await fetch(`/clap/${storyID}`, { method: 'POST' });
-  const { isClapped, count } = await response.json();
+  const { isClapped, clapsCount } = await response.json();
   getElement('.clap-image').classList.remove('clapped');
   if (isClapped) {
     getElement('.clap-image').classList.add('clapped');
   }
-  getElement('.story-response div #count').innerText = count;
+  getElement('.story-response div #count').innerText = clapsCount;
 };
 
 const main = function () {

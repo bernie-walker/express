@@ -115,6 +115,10 @@ class Stories {
     return new Story(this.db, storyID);
   }
 
+  getPublicStory(storyID) {
+    return this.getPrivateStory(storyID, '%');
+  }
+
   listCommentsOn(storyID) {
     return this.db.listCommentsOnStory(storyID);
   }

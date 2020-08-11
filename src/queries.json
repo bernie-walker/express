@@ -9,12 +9,13 @@
   "addTag": "INSERT INTO tags(tag_on, tag) VALUES(?,?);",
   "deleteTag": "DELETE FROM tags WHERE tag_on=?;",
   "getAllTags": "SELECT * FROM tags WHERE tag_on=?;",
+  "clapInfo": "SELECT IFNULL(sum(clapsCount), 0) AS clapsCount, IFNULL(isClapped, 0) AS isClapped FROM ( SELECT count(*) AS clapsCount, CASE clapped_by WHEN ? THEN TRUE ELSE false END isClapped FROM claps WHERE clapped_on = ? GROUP BY isClapped ORDER BY clapsCount );",
   "addClap": "INSERT INTO claps (clapped_on, clapped_by) VALUES(?,?);",
   "removeClap": "DELETE FROM claps WHERE clapped_on=? AND clapped_by=?;",
   "isClapped": "SELECT * FROM claps WHERE clapped_on=? AND clapped_by=?;",
   "clapCount": "SELECT count(*) as count FROM claps WHERE clapped_on=?;",
   "updateStory": "UPDATE stories SET title=?, content=?, state=?, cover_image=?, last_modified=CURRENT_TIMESTAMP WHERE id=? AND written_by=?;",
-  "findStory": "SELECT id FROM stories WHERE id = ? AND written_by = ?;",
+  "findStory": "SELECT id FROM stories WHERE id = ? AND written_by LIKE ?;",
   "listComments": "SELECT cmnt.commented_by AS commenterID, date(cmnt.commented_at) AS commentDate, cmnt.comment as commentText, usr.display_name AS commenter, usr.avatar_url AS commenterAvatarURL FROM comments AS cmnt JOIN users AS usr ON cmnt.commented_by = usr.id WHERE cmnt.commented_on = ? ORDER BY cmnt.commented_at DESC;",
   "newComment": "INSERT INTO comments(commented_on, commented_by, comment) VALUES(?, ?, ?);"
 }

@@ -317,6 +317,31 @@ describe('Stories', function () {
     });
   });
 
+  context('.getPrivateStory', function () {
+    let fakeFindStory;
+
+    before(() => {
+      fakeFindStory = sinon.stub();
+      fakeDbClient.findStory = fakeFindStory;
+    });
+
+    after(sinon.restore);
+
+    it('should resolve with a Story if it exists', function (done) {
+      fakeFindStory.resolves(1);
+      stories.getPublicStory(1).then((story) => {
+        assert.isTrue(story instanceof Story);
+        sinon.assert.calledWith(fakeFindStory, 1, '%');
+        done();
+      });
+    });
+
+    it('should resolve null when the story does not exist', function () {
+      fakeFindStory.resolves(null);
+      return expect(stories.getPublicStory(2)).to.be.eventually.null;
+    });
+  });
+
   context('.listCommentsOn', function () {
     beforeEach(() => {
       const fakeListComments = sinon.stub();

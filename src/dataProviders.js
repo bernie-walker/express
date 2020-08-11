@@ -9,6 +9,7 @@ const {
   addTag,
   deleteTag,
   getAllTags,
+  clapInfo,
   addClap,
   removeClap,
   isClapped,
@@ -245,6 +246,14 @@ class ExpressDB {
     return new Promise((resolve) => {
       this.dbClient.all(getAllTags, [storyID], (err, rows) => {
         resolve(rows);
+      });
+    });
+  }
+
+  getClapInfo(clappedOn, clappedBy) {
+    return new Promise((resolve) => {
+      this.dbClient.get(clapInfo, [clappedBy, clappedOn], (err, row) => {
+        resolve(row);
       });
     });
   }

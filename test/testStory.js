@@ -116,4 +116,35 @@ describe('Story', function () {
       ).to.be.eventually.rejected;
     });
   });
+
+  context('.toggleClap', function () {
+    let fakeGetClapInfo, fakeRemoveClap, fakeAddClap;
+
+    beforeEach(() => {
+      fakeGetClapInfo = sinon.stub();
+      fakeDBClient.getClapInfo = fakeGetClapInfo;
+      fakeRemoveClap = sinon.stub();
+      fakeDBClient.removeClap = fakeRemoveClap;
+      fakeAddClap = sinon.stub();
+      fakeDBClient.addClap = fakeAddClap;
+    });
+
+    it('should remove the clap if already clapped', function (done) {
+      fakeGetClapInfo.resolves({ clapsCount: 1, isClapped: 1 });
+      story.toggleClap('usr').then((clapInfo) => {
+        assert.deepStrictEqual(clapInfo, { clapsCount: 0, isClapped: false });
+        sinon.assert.calledWithExactly(fakeRemoveClap, 1, 'usr');
+        done();
+      });
+    });
+
+    it('should add the clap if already not clapped', function (done) {
+      fakeGetClapInfo.resolves({ clapsCount: 1, isClapped: 0 });
+      story.toggleClap('usr').then((clapInfo) => {
+        assert.deepStrictEqual(clapInfo, { clapsCount: 2, isClapped: true });
+        sinon.assert.calledWithExactly(fakeAddClap, 1, 'usr');
+        done();
+      });
+    });
+  });
 });

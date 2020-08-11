@@ -63,7 +63,20 @@ class Story {
     );
   }
 
-  // toggleClap(clapBy) {}
+  async toggleClap(clapBy) {
+    const claps = await this.dbClient.getClapInfo(this.id, clapBy);
+    let clapsCount = claps.clapsCount;
+
+    if (claps.isClapped) {
+      await this.dbClient.removeClap(this.id, clapBy);
+      --clapsCount;
+    } else {
+      await this.dbClient.addClap(this.id, clapBy);
+      ++clapsCount;
+    }
+
+    return { clapsCount, isClapped: !claps.isClapped };
+  }
 
   // addComment(commenter) {}
 }

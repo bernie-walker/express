@@ -622,16 +622,16 @@ describe('POST', function () {
       request(app)
         .post('/clap/1')
         .expect(200)
-        .expect({ count: 2, isClapped: true })
+        .expect({ clapsCount: 2, isClapped: true })
         .end(done);
     });
 
-    it('should remove clap if story is clapped yet by user', function (done) {
+    it('should remove clap if story is clapped by user', function (done) {
       fakeGetSession.resolves('palpriyanshu');
       request(app)
         .post('/clap/1')
         .expect(200)
-        .expect({ count: 0, isClapped: false })
+        .expect({ clapsCount: 0, isClapped: false })
         .end(done);
     });
 

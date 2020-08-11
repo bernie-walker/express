@@ -84,14 +84,17 @@ const uploadImage = async function (req, res) {
   res.send({ success: 1, file: { url: cloudImage } });
 };
 
-const updateClap = async function (req, res) {
-  const { claps } = req.app.locals;
-  const { storyID } = req.params;
+const updateClap = async function (req, res, next) {
+  const { stories } = req.app.locals;
+  const story = await stories.getPublicStory(req.params.storyID);
 
-  await claps.toggleClap(storyID, req.user.id);
-  const clapsCount = await claps.clapCount(storyID);
-  const isClapped = await claps.isClapped(storyID, req.user.id);
-  res.json(Object.assign(clapsCount, { isClapped }));
+  if (!story) {
+    next(new Error('Story does not exist'));
+    return;
+  }
+
+  const clapInfo = await story.toggleClap(req.user.id);
+  res.json(clapInfo);
 };
 
 const addComment = async function (req, res, next) {
