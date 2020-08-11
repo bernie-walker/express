@@ -1,0 +1,26 @@
+#logo {
+  display: flex;
+  align-items: center;
+}
+
+#logo svg {
+  cursor: pointer;
+}
+
+#logo > div {
+  justify-content: center;
+  transform: scale(1.4);
+  width: 132px;
+  align-items: center;
+  position: relative;
+  margin-left: 28px;
+  height: 28px;
+}
+
+@media (max-width: 420px) {
+  #logo > div {
+    transform: scale(1);
+    width: 100%;
+    margin-left: 0;
+  }
+}
