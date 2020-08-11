@@ -81,11 +81,11 @@ const publishBlog = async function () {
 };
 
 const togglePublishedOnTitle = function () {
-  const button = getAllElements('.story-actions .btn');
+  const $button = getAllElements('.story-actions .btn')[0];
   if (articleTitle.innerText.trim()) {
-    button.classList.remove('inactive');
+    $button.classList.remove('inactive');
   } else {
-    button.classList.add('inactive');
+    $button.classList.add('inactive');
   }
 };
 
@@ -165,15 +165,13 @@ const attachTagListener = function () {
 };
 
 const attachSaveOrPublishStory = function () {
-  if (getElement('#publishBtn')) {
+  if (publishBtn.innerText === 'Publish') {
     editorjs.addEventListener('keyup', saveDraft);
     articleTitle.addEventListener('keyup', saveDraft);
-    publishBtn.addEventListener('click', openPopUp);
   }
+  publishBtn.addEventListener('click', openPopUp);
   const $publishNowBtn = getElement('#publishNowBtn');
   $publishNowBtn && $publishNowBtn.addEventListener('click', publishBlog);
-  const $saveAndPublish = getElement('#saveAndPublish');
-  $saveAndPublish && $saveAndPublish.addEventListener('click', openPopUp);
 };
 
 const main = function () {

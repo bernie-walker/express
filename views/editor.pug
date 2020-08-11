@@ -9,13 +9,15 @@ head
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/inline-code@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/delimiter@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/image@latest')
-  script(src='/js/header.js')
-  script(src='/js/editor.js')
+
   link(rel='stylesheet' href='/css/normalize.css')
   link(rel='stylesheet' href='/css/logo.css')
   link(rel='stylesheet' href='/css/headerLayout.css')
   link(rel='stylesheet' href='/css/profileModal.css')
   link(rel='stylesheet' href='/css/editor.css')
+  
+  script(src='/js/header.js')
+  script(src='/js/editor.js')
   script. 
       const content = !{JSON.stringify(content)};
       localStorage.setItem('storyContent', JSON.stringify(content));
@@ -32,10 +34,8 @@ body
       #saveConfirmation= status
     .searchAndProfile
       .story-actions
-        if state === 'published'  
-          .btn#saveAndPublish Save and publish
-        else
-          .btn#publishBtn Publish
+        -const buttonText= state === 'published' ? 'Save and publish' : 'Publish'
+        .btn#publishBtn= buttonText
 
       include ./includes/profileModal.pug
       
