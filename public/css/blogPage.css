@@ -15,6 +15,7 @@ a {
   width: 800px;
   margin: 20px auto;
 }
+
 @media (max-width: 45rem) {
   .blog {
     width: 95%;
