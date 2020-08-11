@@ -8,53 +8,16 @@ body {
 }
 
 .header {
-  display: flex;
-  justify-content: center;
-  padding: 4px;
-  height: 48px;
-}
-@media (max-width: 420px) {
-  .header {
-    height: 32px;
-  }
-}
-.header > div {
-  width: 35%;
-}
-@media (max-width: 420px) {
-  .header {
-    justify-content: space-between;
-  }
+  border-bottom: none;
+  box-shadow: none;
 }
 
 #editorHeader {
   display: flex;
 }
 
-#logo {
-  display: flex;
-  align-items: center;
-}
-
-#logo svg {
-  cursor: pointer;
-}
-
 #logo > div {
-  justify-content: center;
-  transform: scale(1.4);
-  align-items: center;
-  position: relative;
-  margin-left: 28px;
-  height: 28px;
-}
-
-@media (max-width: 420px) {
-  #logo > div {
-    transform: scale(1);
-    width: 100%;
-    margin-left: 0;
-  }
+  width: 2vh;
 }
 
 #saveConfirmation {
@@ -82,6 +45,7 @@ body {
   display: flex;
   margin-right: 2vw;
 }
+
 .btn {
   margin: 1.5vh 0.5vw;
   font-size: calc(0.8vh + 0.7em);
