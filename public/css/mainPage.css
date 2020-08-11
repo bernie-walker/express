@@ -2,11 +2,6 @@ body {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
 .header {
   border-bottom: 1px solid #fff;
   box-shadow: 0 5px 2px #efefef;
@@ -93,82 +88,6 @@ a {
   }
 }
 
-#backCover {
-  background-color: rgba(255, 255, 255, 0.9);
-  position: absolute;
-  height: 99%;
-  width: 100%;
-  right: 0;
-  top: 0;
-}
-
-#signInPopup {
-  box-shadow: 0 1px 0.6vw 0.4vw rgba(187, 186, 186, 0.2);
-  background-color: white;
-  padding: 0.5vw;
-  position: absolute;
-  width: 30%;
-  height: 60%;
-  top: 23.5%;
-  right: 35%;
-  text-align: center;
-  font-family: 'Epilogue-Medium';
-}
-
-#closeBtn {
-  float: right;
-}
-
-#closeIcon {
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  font-size: 1.7vw;
-  font-weight: 100;
-  opacity: 0.5;
-  cursor: pointer;
-}
-
-#closeIcon:hover {
-  opacity: 1;
-}
-
-#signInInfo {
-  height: 50%;
-  margin-top: 8.5vh;
-  padding-top: 3vh;
-  font-size: 2.2vw;
-  font-weight: 600;
-}
-
-#signInBtn {
-  font-family: 'Epilogue-Light';
-  border: 1px solid rgba(0, 0, 0, 0.4);
-  border-radius: 0.4vw;
-  width: 55%;
-  margin: 11vh auto;
-  padding: 1vw;
-  font-weight: 100;
-  font-size: 1.5vw;
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-around;
-}
-
-#signInBtn:hover {
-  border: 1px solid rgba(0, 0, 0, 0.8);
-}
-
-#signUpSuggestion {
-  font-size: 1.8vw;
-  font-weight: 100;
-  margin-top: 4vh;
-}
-
-#signUpSuggestion > a {
-  font-weight: 600;
-  color: green;
-}
-
 .advertise {
   height: 80vh;
   display: flex;
@@ -187,8 +106,4 @@ a {
   .advertise div {
     font-size: 32px;
   }
-}
-
-.hidden {
-  display: none;
 }
