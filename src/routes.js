@@ -27,6 +27,7 @@ const {
   attachUserIfSignedIn,
   authorizeUser,
   closeSession,
+  handleUnprocessableEntity,
 } = require('./generalHandlers');
 
 const {
@@ -52,11 +53,11 @@ const {
   serveDashboard,
   createNewStory,
   renderEditor,
+  attachStory,
   saveStory,
-  handleError,
+  publishStory,
   uploadImage,
   deleteUnusedImages,
-  publishStory,
   updateClap,
   addComment,
   serveUserStoriesPage,
@@ -124,13 +125,17 @@ app.get('/blogPage/:storyID', serveBlogPage);
 
 app.use(authorizeUser);
 app.get('/newStory', createNewStory);
-app.get('/editor/:storyID', renderEditor);
 app.get('/userStories', serveUserStoriesPage);
+app.post('/uploadImage/:storyID', imageValidation, uploadImage);
 
-app.post('/saveStory', deleteUnusedImages, saveStory);
-app.post('/uploadImage/:storyID', imageValidation, uploadImage, handleError);
-app.post('/publishStory', deleteUnusedImages, publishStory);
+app.get('/editor/:storyID', renderEditor);
 app.post('/clap/:storyID', updateClap);
 app.post('/addComment', addComment, serveComments);
+
+app.use(attachStory);
+app.post('/saveStory', deleteUnusedImages, saveStory);
+app.post('/publishStory', deleteUnusedImages, publishStory);
+
+app.use(handleUnprocessableEntity);
 
 module.exports = { app };

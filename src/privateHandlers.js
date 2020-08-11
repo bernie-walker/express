@@ -5,7 +5,7 @@ const statusCodes = require('./statusCodes.json');
 const upload = multer({
   limits: { fileSize: 2000000 },
   fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+    if (!file.mimetype.match(/image\/(jpg|jpeg|png)$/)) {
       cb(new Error('please upload an image'));
     }
     cb(null, true);
@@ -47,39 +47,32 @@ const deleteUnusedImages = async function (req, res, next) {
   next();
 };
 
-const saveStory = async function (req, res) {
+const attachStory = async function (req, res, next) {
   const { stories } = req.app.locals;
-  const { storyTitle: title, blocks: content, storyID } = req.body;
-  const story = await stories.getPrivateStory(storyID, req.user.id);
+  const story = await stories.getPrivateStory(req.body.storyID, req.user.id);
 
   if (!story) {
-    res.sendStatus(statusCodes.unprocessableEntity);
-    return;
+    next(new Error('Story does not exist'));
+  } else {
+    req.app.locals.story = story;
+    next();
   }
+};
 
+const saveStory = async function (req, res) {
+  const { story } = req.app.locals;
+  const { storyTitle: title, blocks: content } = req.body;
   story.save({ title, content, author: req.user.id }).then(res.end.bind(res));
 };
 
-const publishStory = async function (req, res) {
-  const { stories } = req.app.locals;
+const publishStory = async function (req, res, next) {
+  const { story } = req.app.locals;
   const { storyTitle: title, blocks: content, storyID, tags } = req.body;
-  const story = await stories.getPrivateStory(storyID, req.user.id);
-
-  if (!story) {
-    res.sendStatus(statusCodes.unprocessableEntity);
-    return;
-  }
 
   story
     .publish({ title, content, tags, author: req.user.id })
     .then(() => res.redirect(`/blogPage/${storyID}`))
-    .catch(() => res.sendStatus(statusCodes.unprocessableEntity));
-};
-
-// eslint-disable-next-line no-unused-vars
-const handleError = function (error, req, res, next) {
-  res.status(statusCodes.unprocessableEntity);
-  res.send({ error: error.message });
+    .catch(() => next(new Error('Wrong data')));
 };
 
 const uploadImage = async function (req, res) {
@@ -134,11 +127,11 @@ module.exports = {
   serveDashboard,
   createNewStory,
   renderEditor,
+  attachStory,
   saveStory,
-  handleError,
+  publishStory,
   uploadImage,
   deleteUnusedImages,
-  publishStory,
   updateClap,
   addComment,
   serveUserStoriesPage,
