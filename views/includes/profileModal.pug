@@ -1,0 +1,19 @@
+.profile
+  img#profile(src= avatar_url, alt="avatar")
+  .arrow
+  .profile-modal.hidden
+    .section#profileSection
+      .avatar
+        img(src= avatar_url, alt="avatar")
+      .name
+        .display_name= display_name
+        #username= id
+    .section
+      div 
+        a(href="/newStory") Write a story
+      div 
+        a(href="/userStories") Stories
+    .section
+      div 
+        #signOut Sign out
+      //- div help

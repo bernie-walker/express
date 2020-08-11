@@ -4,29 +4,6 @@
     if !isSignedIn
       .signIn#signIn Sign in
     else
-      .profile
-        img#profile(src= avatar_url, alt="avatar")
-        .arrow
-        .profile-modal.hidden
-          .section#profileSection
-            .avatar
-              img(src= avatar_url, alt="avatar")
-            .name
-              .display_name= display_name
-              #username= id
-          .section
-            div 
-              a(href="/newStory") Write a story
-            div 
-              a(href="/userStories") Stories
-          .section
-            div 
-              #signOut Sign out
-            //- div help
+      include ./profileModal.pug
+include ./signOut.pug
 
-.sign-out-confirmation
-  div
-    .msg Are you sure you want to Sign out?
-  .actions
-    #cancel Cancel
-    a(href="/signout") Sign out

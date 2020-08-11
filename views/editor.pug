@@ -36,25 +36,8 @@ body
         else
           .btn#publishBtn Publish
 
-      .profile
-        img#profile(src= avatar_url, alt="avatar")
-        .arrow
-        .profile-modal.hidden
-          .section#profileSection
-            .avatar
-              img(src= avatar_url, alt="avatar")
-            .name
-              .display_name= display_name
-              #username= id
-          .section
-            div 
-              a(href="/newStory") Write a story
-            div 
-              a(href="/userStories") Stories
-          .section
-            div 
-              #signOut Sign out
-            //- div help
+      include ./includes/profileModal.pug
+      
   #editor
     - const storyTitle = title === 'Untitled Story' ?  '' : title;
     #articleTitle(contenteditable='true',storyid=storyID)= storyTitle
@@ -76,10 +59,4 @@ body
       div#closeBtn
         img(src="/images/close.png", alt="X")
 
-
-  .sign-out-confirmation
-    div
-      .msg Are you sure you want to sign out?
-    .actions
-      #cancel Cancel
-      a(href="/signout") Sign out
+  include ./includes/signOut.pug
