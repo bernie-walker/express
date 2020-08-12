@@ -18,9 +18,8 @@ const destroyImage = function (cloud, imageId) {
 };
 
 class ImageStorage {
-  constructor(cloud, db) {
+  constructor(cloud) {
     this.cloud = cloud;
-    this.db = db;
   }
 
   upload(storyID, file) {
@@ -40,9 +39,8 @@ class ImageStorage {
     });
   }
 
-  async delete(storyID, userID, currentContent) {
-    const story = await this.db.getStoryOfUser(storyID, userID);
-    const storedImages = getUsedImages(JSON.parse(story.content));
+  async delete(currentContent, oldContent) {
+    const storedImages = getUsedImages(oldContent);
     const usedImages = getUsedImages(currentContent);
 
     for (const image of storedImages) {

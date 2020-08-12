@@ -434,7 +434,7 @@ describe('POST', function () {
     beforeEach(() => sinon.stub(ImageStorage.prototype, 'delete').resolves());
 
     before(() =>
-      setUpDatabase(app.locals.dbClientReference, ['stories', 'users'])
+      setUpDatabase(app.locals.dbClientReference, ['stories', 'users', 'tags'])
     );
 
     after(() => cleanDatabase(app.locals.dbClientReference));

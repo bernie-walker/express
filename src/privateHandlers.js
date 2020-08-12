@@ -45,9 +45,10 @@ const renderEditor = async function (req, res) {
 };
 
 const deleteUnusedImages = async function (req, res, next) {
-  const { imageStorage } = req.app.locals;
-  const { storyID, blocks: content } = req.body;
-  await imageStorage.delete(storyID, req.user.id, content);
+  const { imageStorage, story } = req.app.locals;
+  const { blocks: content } = req.body;
+  const { content: oldContent } = await story.get();
+  await imageStorage.delete(content, oldContent);
   next();
 };
 

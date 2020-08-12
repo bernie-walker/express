@@ -8,7 +8,7 @@ describe('ImageStorage', function () {
   const imageStorage = new ImageStorage(fakeCloud, fakeDb);
   const fakeStream = { write: sinon.fake(), end: sinon.fake() };
 
-  afterEach(() => sinon.restore());
+  afterEach(sinon.restore);
 
   context('.upload', function () {
     before(() => {
@@ -31,43 +31,38 @@ describe('ImageStorage', function () {
   });
 
   context('.delete', function () {
-    const content = JSON.stringify([
-      {
-        type: 'image',
-        data: { file: { url: 'http//blog_image/image_1.png' } },
-      },
-    ]);
+    let oldContent;
 
-    before(() => {
-      const fakeGetStoryOfUser = sinon
-        .stub()
-        .withArgs(1, 1)
-        .returns({ content });
-
+    beforeEach(() => {
       fakeCloud.uploader.destroy = sinon.stub();
-      fakeDb.getStoryOfUser = fakeGetStoryOfUser;
+      oldContent = [
+        {
+          type: 'image',
+          data: { file: { url: 'http//blog_image/image_1.png' } },
+        },
+      ];
     });
 
     it('should not delete an image if it is present in usedImages', function () {
-      imageStorage
-        .delete(1, 1, [
-          { type: 'image', data: { file: { url: '/blog_image/image_1.png' } } },
-        ])
-        .then((reply) => {
-          sinon.assert.notCalled(fakeCloud.uploader.destroy);
-          assert.isTrue(reply);
-        });
+      const content = [
+        { type: 'image', data: { file: { url: '/blog_image/image_1.png' } } },
+      ];
+
+      imageStorage.delete(content, oldContent).then((reply) => {
+        sinon.assert.notCalled(fakeCloud.uploader.destroy);
+        assert.isTrue(reply);
+      });
     });
 
     it('should delete an image if it is not present in usedImages', function () {
-      imageStorage
-        .delete(2, 1, [
-          { type: 'image', data: { file: { url: '/blog_image/image_2.png' } } },
-        ])
-        .then((reply) => {
-          sinon.assert.called(fakeCloud.uploader.destroy);
-          assert.isTrue(reply);
-        });
+      const content = [
+        { type: 'image', data: { file: { url: '/blog_image/image_2.png' } } },
+      ];
+
+      imageStorage.delete(content, oldContent).then((reply) => {
+        sinon.assert.called(fakeCloud.uploader.destroy);
+        assert.isTrue(reply);
+      });
     });
   });
 });

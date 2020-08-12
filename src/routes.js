@@ -87,10 +87,10 @@ cloudinary.config({
   api_key: CLOUD_KEY || 'key',
   api_secret: CLOUD_SECRET || 'secret',
 });
+app.locals.imageStorage = new ImageStorage(cloudinary);
 
 const expressDS = new ExpressDS(dsClient);
 app.locals.expressDS = expressDS;
-app.locals.imageStorage = new ImageStorage(cloudinary, expressDB);
 
 app.set('view engine', 'pug');
 
