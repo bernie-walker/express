@@ -39,8 +39,7 @@ const closeSession = async function (req, res) {
 
 // eslint-disable-next-line no-unused-vars
 const handleUnprocessableEntity = function (error, req, res, next) {
-  res.status(statusCodes.unprocessableEntity);
-  res.send({ error: error.message });
+  res.sendStatus(statusCodes[error.message]);
 };
 
 module.exports = {

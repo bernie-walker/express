@@ -42,6 +42,7 @@ const {
 const {
   serveHomepage,
   checkUsernameAvailability,
+  attachPublicStory,
   serveBlogImage,
   serveBlogPage,
   serveComments,
@@ -110,7 +111,7 @@ app.get(
 );
 
 app.get('/blog_image/:imageID', serveBlogImage);
-app.get('/commentList/:storyID', serveComments);
+app.get('/commentList/:storyID', attachPublicStory, serveComments);
 app.get('/signOut', closeSession);
 
 app.get('/checkUsername/:userName', checkUsernameAvailability);
@@ -119,15 +120,15 @@ app.post('/signUp', registerUser, finishRegistration);
 app.use(attachUserIfSignedIn);
 app.get('/', serveHomepage, serveDashboard);
 app.get('/profile/:profileID', serveProfilePage);
-app.get('/blogPage/:storyID', serveBlogPage);
+app.get('/blogPage/:storyID', attachPublicStory, serveBlogPage);
 
 app.use(authorizeUser);
 app.get('/newStory', createNewStory);
 app.get('/userStories', serveUserStoriesPage);
 app.post('/uploadImage/:storyID', imageValidation, uploadImage);
 
-app.post('/clap/:storyID', updateClap);
-app.post('/addComment', addComment, serveComments);
+app.post('/clap/:storyID', attachPublicStory, updateClap);
+app.post('/addComment', attachPublicStory, addComment, serveComments);
 
 app.get('/editor/:storyID', attachStory, renderEditor);
 

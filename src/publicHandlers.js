@@ -24,28 +24,30 @@ const serveBlogImage = function (req, res) {
   });
 };
 
-const serveBlogPage = async function (req, res, next) {
+const attachPublicStory = async function (req, res, next) {
   const { stories } = req.app.locals;
-  const story = await stories.getPublicStory(req.params.storyID);
-  const userID = req.user ? req.user.id : null;
+  const storyID = req.body.storyID || req.params.storyID;
+
+  const story = await stories.getPublicStory(storyID);
 
   if (!story) {
-    next(new Error('Story does not exist'));
-    return;
+    next(new Error('notFound'));
+  } else {
+    req.app.locals.story = story;
+    next();
   }
+};
+
+const serveBlogPage = async function (req, res) {
+  const { story } = req.app.locals;
+  const userID = req.user ? req.user.id : null;
 
   const storyPage = await story.render(userID);
   res.render('blogPage', Object.assign(storyPage, req.user));
 };
 
-const serveComments = async function (req, res, next) {
-  const { stories } = req.app.locals;
-  const story = await stories.getPublicStory(req.params.storyID);
-
-  if (!story) {
-    next(new Error('Story does not exist'));
-    return;
-  }
+const serveComments = async function (req, res) {
+  const { story } = req.app.locals;
 
   const comments = await story.listComments();
   res.render('comments', { comments });
@@ -68,6 +70,7 @@ module.exports = {
   serveHomepage,
   checkUsernameAvailability,
   serveBlogImage,
+  attachPublicStory,
   serveBlogPage,
   serveComments,
   serveProfilePage,

@@ -6,7 +6,7 @@ const upload = multer({
   limits: { fileSize: 2000000 },
   fileFilter(req, file, cb) {
     if (!file.mimetype.match(/image\/(jpg|jpeg|png)$/)) {
-      cb(new Error('please upload an image'));
+      cb(new Error('unprocessableEntity'));
     }
     cb(null, true);
   },
@@ -31,7 +31,7 @@ const attachStory = async function (req, res, next) {
   const story = await stories.getPrivateStory(storyID, req.user.id);
 
   if (!story) {
-    next(new Error('Story does not exist'));
+    next(new Error('notFound'));
   } else {
     req.app.locals.story = story;
     next();
@@ -65,7 +65,7 @@ const publishStory = async function (req, res, next) {
   story
     .publish({ title, content, tags, author: req.user.id })
     .then(() => res.redirect(`/blogPage/${storyID}`))
-    .catch(() => next(new Error('Wrong data')));
+    .catch(() => next(new Error('unprocessableEntity')));
 };
 
 const uploadImage = async function (req, res) {
@@ -77,27 +77,15 @@ const uploadImage = async function (req, res) {
   res.send({ success: 1, file: { url: cloudImage } });
 };
 
-const updateClap = async function (req, res, next) {
-  const { stories } = req.app.locals;
-  const story = await stories.getPublicStory(req.params.storyID);
-
-  if (!story) {
-    next(new Error('Story does not exist'));
-    return;
-  }
+const updateClap = async function (req, res) {
+  const { story } = req.app.locals;
 
   const clapInfo = await story.toggleClap(req.user.id);
   res.json(clapInfo);
 };
 
 const addComment = async function (req, res, next) {
-  const { stories } = req.app.locals;
-  const story = await stories.getPublicStory(req.body.storyID);
-
-  if (!story) {
-    next(new Error('Story does not exist'));
-    return;
-  }
+  const { story } = req.app.locals;
 
   story
     .comment({ comment: req.body.comment, userID: req.user.id })

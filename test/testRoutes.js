@@ -81,7 +81,7 @@ describe('GET', () => {
     });
 
     it('should respond with not found when story does not exist', function (done) {
-      request(app).get('/editor/3').expect(422).end(done);
+      request(app).get('/editor/3').expect(404).end(done);
     });
 
     it('should respond with 401 for unauthorized user', function (done) {
@@ -121,7 +121,7 @@ describe('GET', () => {
     });
 
     it('should respond NOT FOUND if blog does not exist', function (done) {
-      request(app).get('/blogPage/2').expect(422).end(done);
+      request(app).get('/blogPage/2').expect(404).end(done);
     });
   });
 
@@ -415,7 +415,7 @@ describe('POST', function () {
           storyID: '3',
           tags: ['tag1', 'tag2'],
         })
-        .expect(422)
+        .expect(404)
         .end(done);
     });
 
@@ -483,7 +483,7 @@ describe('POST', function () {
           blocks: [],
           storyID: '3',
         })
-        .expect(422)
+        .expect(404)
         .end(done);
     });
 
@@ -534,7 +534,6 @@ describe('POST', function () {
         .post('/uploadImage/2')
         .attach('image', 'test/testData/images/image.pdf')
         .expect(422)
-        .expect({ error: 'please upload an image' })
         .end(done);
     });
   });
