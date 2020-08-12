@@ -215,4 +215,41 @@ describe('Story', function () {
       });
     });
   });
+
+  context('.listComments', function () {
+    beforeEach(() => {
+      const fakeListComments = sinon.stub();
+      fakeListComments.resolves([{ comment: 'hello' }]);
+      fakeDBClient.listCommentsOnStory = fakeListComments;
+    });
+
+    it('should resolve with the comments when there are comments', function () {
+      expect(story.listComments()).to.eventually.deep.equal([
+        { comment: 'hello' },
+      ]);
+    });
+  });
+
+  context('.comment', function () {
+    let fakeAddComment;
+
+    beforeEach(() => {
+      fakeAddComment = sinon.stub();
+      fakeAddComment.withArgs({ on: 1, by: 'me', text: 'text' }).resolves(1);
+      fakeAddComment.rejects();
+      fakeDBClient.addComment = fakeAddComment;
+    });
+
+    afterEach(sinon.restore);
+
+    it('should return the promise from addComment', function () {
+      return expect(
+        story.comment({ userID: 'me', comment: 'text' })
+      ).to.be.eventually.equal(1);
+    });
+
+    it('should reject when the commentInfo  is insufficient', function () {
+      return expect(story.comment({ userID: 'me' })).to.be.eventually.rejected;
+    });
+  });
 });

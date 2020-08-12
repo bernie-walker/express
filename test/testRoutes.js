@@ -55,7 +55,7 @@ describe('GET', () => {
       request(app)
         .get('/newStory')
         .expect(302)
-        .expect('Location', '/editor/4')
+        .expect('Location', '/editor/5')
         .end(done);
     });
 
@@ -137,7 +137,11 @@ describe('GET', () => {
 
   context('/commentList', function () {
     before(() =>
-      setUpDatabase(app.locals.dbClientReference, ['users', 'comments'])
+      setUpDatabase(app.locals.dbClientReference, [
+        'users',
+        'comments',
+        'stories',
+      ])
     );
 
     after(() => cleanDatabase(app.locals.dbClientReference));
@@ -152,7 +156,7 @@ describe('GET', () => {
 
     it('should respond  with empty message for when there are no comments', function (done) {
       request(app)
-        .get('/commentList/2')
+        .get('/commentList/4')
         .expect(200)
         .expect(/Be the first/)
         .end(done);
@@ -643,7 +647,11 @@ describe('POST', function () {
 
   context('addComment', function () {
     before(() =>
-      setUpDatabase(app.locals.dbClientReference, ['users', 'comments'])
+      setUpDatabase(app.locals.dbClientReference, [
+        'users',
+        'comments',
+        'stories',
+      ])
     );
 
     after(() => cleanDatabase(app.locals.dbClientReference));

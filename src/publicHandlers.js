@@ -38,9 +38,16 @@ const serveBlogPage = async function (req, res, next) {
   res.render('blogPage', Object.assign(storyPage, req.user));
 };
 
-const serveComments = async function (req, res) {
+const serveComments = async function (req, res, next) {
   const { stories } = req.app.locals;
-  const comments = await stories.listCommentsOn(req.params.storyID);
+  const story = await stories.getPublicStory(req.params.storyID);
+
+  if (!story) {
+    next(new Error('Story does not exist'));
+    return;
+  }
+
+  const comments = await story.listComments();
   res.render('comments', { comments });
 };
 

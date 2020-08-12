@@ -92,8 +92,15 @@ const updateClap = async function (req, res, next) {
 
 const addComment = async function (req, res, next) {
   const { stories } = req.app.locals;
-  stories
-    .comment(Object.assign(req.body, { userID: req.user.id }))
+  const story = await stories.getPublicStory(req.body.storyID);
+
+  if (!story) {
+    next(new Error('Story does not exist'));
+    return;
+  }
+
+  story
+    .comment({ comment: req.body.comment, userID: req.user.id })
     .then((storyID) => {
       req.params.storyID = storyID;
       next();

@@ -93,7 +93,14 @@ class Story {
     return { clapsCount, isClapped: !claps.isClapped };
   }
 
-  // addComment(commenter) {}
+  listComments() {
+    return this.dbClient.listCommentsOnStory(this.id);
+  }
+
+  comment(commentBlock) {
+    const { userID: by, comment: text } = commentBlock;
+    return this.dbClient.addComment({ on: this.id, text, by });
+  }
 }
 
 module.exports = { Story };

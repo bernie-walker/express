@@ -95,15 +95,6 @@ class Stories {
   getPublicStory(storyID) {
     return this.getPrivateStory(storyID, '%', 'published');
   }
-
-  listCommentsOn(storyID) {
-    return this.db.listCommentsOnStory(storyID);
-  }
-
-  comment(commentInfo) {
-    const { storyID: on, userID: by, comment: text } = commentInfo;
-    return this.db.addComment({ on, text, by });
-  }
 }
 
 module.exports = { Users, Stories, Story };
