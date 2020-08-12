@@ -31,7 +31,14 @@ class Story {
     return Promise.resolve(Object.assign(storyPage, clapsInfo));
   }
 
-  // getContent() {}
+  async get() {
+    const story = await this.dbClient.getStory(this.id);
+
+    story.content = JSON.parse(story.content);
+    story.tags = story.tags ? story.tags.split(',') : [];
+
+    return story;
+  }
 
   update(story) {
     return this.dbClient.updateStory(Object.assign(story, { id: this.id }));

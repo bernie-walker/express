@@ -81,7 +81,7 @@ describe('GET', () => {
     });
 
     it('should respond with not found when story does not exist', function (done) {
-      request(app).get('/editor/3').expect(404).end(done);
+      request(app).get('/editor/3').expect(422).end(done);
     });
 
     it('should respond with 401 for unauthorized user', function (done) {

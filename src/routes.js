@@ -5,7 +5,7 @@ const axios = require('axios');
 const cloudinary = require('cloudinary').v2;
 const cookieParser = require('cookie-parser');
 const { ExpressDB, ExpressDS } = require('./dataProviders');
-const { Users, Stories, Tags } = require('./dataModels');
+const { Users, Stories } = require('./dataModels');
 const { Fetch } = require('./resourceFetcher');
 const { ImageStorage } = require('./imageStorage');
 
@@ -76,7 +76,6 @@ const expressDB = new ExpressDB(dbClient);
 app.locals.dbClientReference = dbClient;
 app.locals.users = new Users(expressDB);
 app.locals.stories = new Stories(expressDB);
-app.locals.tags = new Tags(expressDB);
 
 const dsClient = redis.createClient({
   url: REDIS_URL || 'redis://127.0.0.1:6379',
@@ -127,9 +126,10 @@ app.get('/newStory', createNewStory);
 app.get('/userStories', serveUserStoriesPage);
 app.post('/uploadImage/:storyID', imageValidation, uploadImage);
 
-app.get('/editor/:storyID', renderEditor);
 app.post('/clap/:storyID', updateClap);
 app.post('/addComment', addComment, serveComments);
+
+app.get('/editor/:storyID', attachStory, renderEditor);
 
 app.use(attachStory);
 app.post('/saveStory', deleteUnusedImages, saveStory);

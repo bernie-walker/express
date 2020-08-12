@@ -51,6 +51,35 @@ describe('Story', function () {
     });
   });
 
+  context('.get', function () {
+    let fakeGetStory;
+
+    beforeEach(() => {
+      fakeGetStory = sinon.stub();
+      fakeDBClient.getStory = fakeGetStory;
+    });
+
+    afterEach(sinon.restore);
+
+    it('should resolve the story page with tags', function () {
+      fakeGetStory
+        .withArgs(1)
+        .resolves({ content: '{"txt":"samp"}', tags: 'a,b' });
+      return expect(story.get(1)).to.eventually.deep.equal({
+        content: { txt: 'samp' },
+        tags: ['a', 'b'],
+      });
+    });
+
+    it('should resolve the story page without tags', function () {
+      fakeGetStory.withArgs(1).resolves({ content: '{"txt":"samp"}' });
+      return expect(story.get(1)).to.eventually.deep.equal({
+        content: { txt: 'samp' },
+        tags: [],
+      });
+    });
+  });
+
   context('.save', function () {
     let fakeUpdate;
 

@@ -1,14 +1,13 @@
 const {
   latestNStories,
   publishedStory,
-  storyOfUser,
+  story,
   findAccount,
   userInfo,
   userStories,
   userProfile,
   addTag,
   deleteTag,
-  getAllTags,
   clapInfo,
   addClap,
   removeClap,
@@ -131,9 +130,9 @@ class ExpressDB {
     });
   }
 
-  getStoryOfUser(storyID, userID) {
+  getStory(storyID) {
     return new Promise((resolve) => {
-      this.dbClient.get(storyOfUser, [storyID, userID], (err, row) => {
+      this.dbClient.get(story, [storyID], (err, row) => {
         resolve(row);
       });
     });
@@ -237,14 +236,6 @@ class ExpressDB {
   deleteTags(tagOn) {
     return new Promise((resolve) => {
       this.dbClient.run(deleteTag, [tagOn], resolve);
-    });
-  }
-
-  getTags(storyID) {
-    return new Promise((resolve) => {
-      this.dbClient.all(getAllTags, [storyID], (err, rows) => {
-        resolve(rows);
-      });
     });
   }
 

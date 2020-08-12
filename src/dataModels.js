@@ -76,16 +76,6 @@ class Stories {
     });
   }
 
-  getStory(storyID, userID) {
-    return this.db.getStoryOfUser(storyID, userID).then((story) => {
-      if (story) {
-        story.content = JSON.parse(story.content);
-      }
-
-      return Promise.resolve(story);
-    });
-  }
-
   createStory(userID) {
     return this.db
       .createStoryByUser(userID, '[]')
@@ -116,15 +106,4 @@ class Stories {
   }
 }
 
-class Tags {
-  constructor(db) {
-    this.db = db;
-  }
-
-  async getAllTags(storyID) {
-    const tags = await this.db.getTags(storyID);
-    return tags.map((tag) => tag.tag);
-  }
-}
-
-module.exports = { Users, Stories, Tags, Story };
+module.exports = { Users, Stories, Story };

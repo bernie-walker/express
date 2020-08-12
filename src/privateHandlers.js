@@ -25,31 +25,10 @@ const createNewStory = async function (req, res) {
   res.redirect(`/editor/${storyID}`);
 };
 
-const renderEditor = async function (req, res) {
-  const { stories, tags } = req.app.locals;
-  const storyContent = await stories.getStory(req.params.storyID, req.user.id);
-
-  if (storyContent && storyContent.state === 'published') {
-    storyContent.tags = await tags.getAllTags(req.params.storyID);
-  }
-
-  if (storyContent) {
-    res.render('editor', Object.assign(storyContent, req.user));
-  } else {
-    res.sendStatus(statusCodes.notFound);
-  }
-};
-
-const deleteUnusedImages = async function (req, res, next) {
-  const { imageStorage } = req.app.locals;
-  const { storyID, blocks: content } = req.body;
-  await imageStorage.delete(storyID, req.user.id, content);
-  next();
-};
-
 const attachStory = async function (req, res, next) {
   const { stories } = req.app.locals;
-  const story = await stories.getPrivateStory(req.body.storyID, req.user.id);
+  const storyID = req.body.storyID || req.params.storyID;
+  const story = await stories.getPrivateStory(storyID, req.user.id);
 
   if (!story) {
     next(new Error('Story does not exist'));
@@ -57,6 +36,19 @@ const attachStory = async function (req, res, next) {
     req.app.locals.story = story;
     next();
   }
+};
+
+const renderEditor = async function (req, res) {
+  const { story } = req.app.locals;
+  const storyContent = await story.get();
+  res.render('editor', Object.assign(storyContent, req.user));
+};
+
+const deleteUnusedImages = async function (req, res, next) {
+  const { imageStorage } = req.app.locals;
+  const { storyID, blocks: content } = req.body;
+  await imageStorage.delete(storyID, req.user.id, content);
+  next();
 };
 
 const saveStory = async function (req, res) {
