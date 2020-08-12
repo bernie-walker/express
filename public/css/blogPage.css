@@ -40,12 +40,7 @@ a {
 .blog-meta {
   margin: 2.5vh 0;
   padding: 1vh 1.5vw;
-  display: flex;
   justify-content: space-between;
-}
-
-.blog-meta > div {
-  display: flex;
 }
 
 .author-icon {
@@ -58,12 +53,6 @@ a {
     height: 4.8rem;
     width: 4.8rem;
   }
-}
-
-.icon-image {
-  border-radius: inherit;
-  height: inherit;
-  width: inherit;
 }
 
 .blog-info {
@@ -94,7 +83,7 @@ a {
 .blog-content {
   padding: 0 1.2vw 0 1.2vw;
   font-size: 2rem;
-  line-height: 2.8rem;
+  line-height: 3rem;
   letter-spacing: 0.02vw;
   word-spacing: 0.05vw;
   color: rgba(10, 10, 10, 0.8);
@@ -123,6 +112,7 @@ figure > img {
   max-width: 100%;
   margin: 0 auto;
   display: block;
+  margin-bottom: 2.5vh;
 }
 
 @media (max-width: 45rem) {
@@ -131,6 +121,11 @@ figure > img {
     font-size: 2rem;
   }
 }
+
+figcaption {
+  margin-bottom: 2.5vh;
+}
+
 p b {
   font-weight: 900;
 }
@@ -206,7 +201,6 @@ p b {
 }
 
 .tags {
-  display: flex;
   flex-wrap: wrap;
   margin-top: 6vh;
 }
@@ -222,14 +216,12 @@ p b {
 }
 
 .story-response {
-  display: flex;
   padding: 1vh 1vw;
   margin-top: 2vh;
 }
 
 .story-response div {
   align-items: center;
-  display: flex;
 }
 
 .story-response img {
@@ -277,12 +269,7 @@ span#count {
   font-family: 'Epilogue-Medium';
 }
 
-.commenter {
-  display: flex;
-}
-
 #writeComment {
-  display: flex;
   height: 20vh;
 }
 
@@ -353,11 +340,4 @@ span#count {
   margin: 1vh auto -0.5vh auto;
   padding: 0.7vw;
   color: rgba(10, 10, 10, 0.8);
-}
-
-.emptyMessage {
-  color: rgb(135, 127, 127);
-  font-size: calc(0.8vw + 1em);
-  margin-top: 5vh;
-  text-align: center;
 }

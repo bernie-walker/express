@@ -3,7 +3,6 @@ body {
 }
 
 .links {
-  display: flex;
   justify-content: flex-end;
   align-items: center;
   height: 48px;
@@ -18,7 +17,6 @@ body {
 
 .advertise {
   height: 80vh;
-  display: flex;
   justify-content: center;
   align-items: center;
 }

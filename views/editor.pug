@@ -24,18 +24,18 @@ head
   title Express | Editor
 body
   .header
-    #editorHeader
+    .column
       #logo
         div
           svg&attributes({width:21, height:26, style:{border:"1px solid", "background-color": 'black'}})
             text&attributes({y:24, style:{"font-family": 'sans-serif', "font-size": '1.9em', "font-weight": 600, fill: 'white'}}) E
          
       - const status = state === 'drafted' ? 'Draft': ''
-      #saveConfirmation= status
+      #saveConfirmation.column= status
     .searchAndProfile
       .story-actions
         -const buttonText= state === 'published' ? 'Save and publish' : 'Publish'
-        .btn#publishBtn= buttonText
+        .btn#publishBtn.buttonLink= buttonText
 
       include ./includes/profileModal.pug
       
@@ -48,16 +48,16 @@ body
       p Add tags (up to 5) so readers know what your story is about
       p.notification Max 25 characters are allowed
       input#tagInput(placeholder="Add a tag..." maxlength="25" title="max 25 alphaNumeric characters only")
-      .tags
+      .tags.column
         if state === 'published'
           each tag in tags
             .tagBox
               .tag= tag
               .cross &#215;
 
-      div.button
-        button.btn#publishNowBtn Publish now
+      div.button.column
+        button.btn#publishNowBtn.buttonLink Publish now
       div#closeBtn
-        img(src="/images/close.png", alt="X")
+        img.inherit(src="/images/close.png", alt="X")
 
   include ./includes/signOut.pug

@@ -11,10 +11,10 @@ head
   title Express
 .header
   include ./includes/logo.pug
-  .links
-    .signIn#signIn Sign in
-    .signIn 
+  .links.column
+    .signIn#signIn.buttonLink Sign in
+    .signIn.buttonLink 
       a.btnAnchor(href='/authenticate') Sign up
     include ./includes/signInPrompt.pug 
-.advertise
+.advertise.column
   div Get smarter about what matters to you.

@@ -12,16 +12,11 @@ body {
   box-shadow: none;
 }
 
-#editorHeader {
-  display: flex;
-}
-
 #logo > div {
   width: 2vh;
 }
 
 #saveConfirmation {
-  display: flex;
   margin-left: 2vw;
   align-items: center;
   letter-spacing: 0.05vw;
@@ -30,7 +25,6 @@ body {
 }
 
 .story-actions {
-  display: flex;
   margin-right: 2vw;
 }
 
@@ -40,11 +34,7 @@ body {
   border: 1px solid green;
   color: green;
   height: 3.5vh;
-  border-radius: 4px;
   padding: 0.3vw 0.8vw 0 0.8vw;
-  font-weight: 600;
-  align-content: center;
-  cursor: pointer;
 }
 
 #editor {
@@ -131,7 +121,6 @@ body {
 }
 
 .tags {
-  display: flex;
   flex-wrap: wrap;
   margin: 1vh;
   min-height: 5vh;
@@ -181,7 +170,6 @@ body {
 }
 
 .button {
-  display: flex;
   justify-content: center;
 }
 
@@ -203,10 +191,7 @@ body {
   width: 5vh;
   cursor: pointer;
 }
+
 #closeBtn:hover {
   transform: scale(1.1);
-}
-#closeBtn > img {
-  height: inherit;
-  width: inherit;
 }

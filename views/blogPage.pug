@@ -36,10 +36,10 @@ html
       include includes/signInPrompt.pug
     .blog
       #blogTitle(storyid=storyID)= title
-      .blog-meta
-        div
-          .author-icon.circular-img
-            img(src=authorAvatar class="icon-image")
+      .blog-meta.column
+        div.column
+          .author-icon
+            img.circular-img.inherit(src=authorAvatar)
           .blog-info
             .author-name
               a.underline(href="/profile/"+authorID)= authorName
@@ -62,23 +62,23 @@ html
           if block.type == 'delimiter'
             p.content-block(style="text-align:center") * * *
       
-      .tags 
+      .tags.column
         each tag in tags
           .tag= tag
-      .story-response
+      .story-response.column
         -const clappedClass = isClapped ? "clapped": ""
-        div(class= className)
+        div.column(class= className)
           -const clapOnClickListener = isSignedIn ? "clapOnStory()" : "showSignInPopup()"
           img(src="/images/clap.png" class=['clap-image', 'not-clapped', clappedClass] onclick=clapOnClickListener)
           span#count= clapsCount  
           span claps
-        #response(onclick="toggleComments()")
+        #response.column(onclick="toggleComments()")
           img(src="/images/comment.png") 
           span #{comments} responses
       #comments.hidden
         .comment-header
           | responses
-        #writeComment
+        #writeComment.column
           #rawComment(contenteditable onclick= isSignedIn  ? "" : "showSignInPopup()")
           #respond.inactive Respond
         #commentList

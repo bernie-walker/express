@@ -1,10 +1,10 @@
 .profile
-  img#profile.circular-img(src= avatar_url, alt="avatar")
+  img#profile.circular-img.inherit(src= avatar_url, alt="avatar")
   .arrow
   .profile-modal.hidden
     .section#profileSection
       .avatar
-        img.circular-img(src= avatar_url, alt="avatar")
+        img.circular-img.inherit(src= avatar_url, alt="avatar")
       .name
         .display_name= display_name
         a#username.underline(href="/profile/"+id)= id

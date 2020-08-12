@@ -4,9 +4,8 @@ mixin  generateSubContent(content)
   p !{miniContent}
 
 
-
 mixin storyCard(id, title, content, author,authorID, createdAt, imageUrl)
-    div.card(id=id) 
+    div.column.card(id=id) 
       - className = imageUrl ? 'card-content' : '';
         div(class= className)
             div.title= title
@@ -17,7 +16,7 @@ mixin storyCard(id, title, content, author,authorID, createdAt, imageUrl)
             .date 
               i Last modified #{dateFormat}
         if imageUrl
-          .card-image
+          .card-image.column
             img(src= imageUrl, alt="blogImage")
 
 html(lang="en")
@@ -33,7 +32,7 @@ html(lang="en")
     script(src="/js/dashBoard.js")
   body 
     include ./includes/header.pug
-    div.card-container
+    div.card-container.column
       each story in recentStories
         - const paragraph = story.content.find(data=> data.type ==='paragraph')
         - const content = paragraph ? paragraph.data.text : ''

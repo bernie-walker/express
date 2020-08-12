@@ -23,10 +23,8 @@
 
 .profile img {
   cursor: pointer;
-  height: inherit;
-  width: inherit;
-  border-radius: 50%;
 }
+
 @media (max-width: 420px) {
   .profile {
     height: 40px;

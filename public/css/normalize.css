@@ -229,3 +229,36 @@ template {
   border: 0.05vw solid rgba(10, 10, 10, 0.4);
   border-radius: 50%;
 }
+
+.inherit {
+  height: inherit;
+  width: inherit;
+}
+
+.emptyMessage {
+  color: rgb(135, 127, 127);
+  font-size: calc(0.8vw + 1em);
+  margin-top: 5vh;
+  text-align: center;
+  font-family: 'Epilogue-Light';
+}
+
+.buttonLink {
+  border: 1px solid rgba(0, 128, 0, 0.6);
+  color: rgba(0, 128, 0, 0.7);
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.buttonLink:hover {
+  border: 1px solid green;
+  color: green;
+}
+
+.column {
+  display: flex;
+}

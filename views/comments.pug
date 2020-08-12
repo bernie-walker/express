@@ -1,13 +1,13 @@
 each comment in comments
   .comment
-        .commenter
-          .commenterAvatar.circular-img
-            img.icon-image(src= comment.commenterAvatarURL)
-          .comment-info
-            .commenter-name
-              a.underline(href=`/profile/${comment.commenterID}`)= comment.commenter
-            - const [,month,date,year] = new Date(comment.commentDate).toString().split(' ');  
-            .comment-date= `${month} ${date}, ${year}`
-        .comment-text= comment.commentText
+    .column
+      .commenterAvatar
+        img.icon-image.inherit.circular-img(src= comment.commenterAvatarURL)
+      .comment-info
+        .commenter-name
+          a.underline(href=`/profile/${comment.commenterID}`)= comment.commenter
+        - const [,month,date,year] = new Date(comment.commentDate).toString().split(' ');  
+        .comment-date= `${month} ${date}, ${year}`
+    .comment-text= comment.commentText
 else 
   .emptyMessage Be the first one to respond to this story

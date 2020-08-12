@@ -5,9 +5,9 @@ mixin  generateSubContent(content)
 
 mixin storyCard(id, title, content, createdAt, coverImage)
   div.card(target_url=`/blogPage/${id}`) 
-    .author-profile-div
+    .column
       .author-profile-icon
-        img.author-avatar.circular-img(src= profileAvatar)
+        img.author-avatar.circular-img.inherit(src= profileAvatar)
       .author-info
         #author-name= profileName
         - const [,month,date,year] = new Date(createdAt).toString().split(' ');
@@ -15,7 +15,7 @@ mixin storyCard(id, title, content, createdAt, coverImage)
         .story-date #{timeStamp}
     if coverImage    
       div#coverImage
-        img(src= coverImage, alt="coverImage")
+        img.inherit(src= coverImage, alt="coverImage")
     .story-title= title
     div.content
       +generateSubContent(content)
@@ -41,15 +41,15 @@ html
     if !isSignedIn 
       include includes/signInPrompt.pug
     div.container
-      .profile-div
+      .profile-div.column
         .info
           #name= profileName
           .bio= bio
         .profile-icon
-          img.author-avatar.circular-img(src= profileAvatar)
+          img.author-avatar.circular-img.inherit(src= profileAvatar)
       .optionBar
       //-   div Profile
-      .card-container
+      .card-container.column
         each story in stories
           - const paragraph = story.content.find(data=> data.type ==='paragraph')
           - const content = paragraph ? paragraph.data.text : ''

@@ -4,7 +4,6 @@ body {
 
 .card-container {
   width: 800px;
-  display: flex;
   flex-direction: column;
   margin: 2vh auto;
   color: rgba(10, 10, 10, 0.8);
@@ -23,7 +22,6 @@ body {
 }
 
 .card {
-  display: flex;
   justify-content: space-between;
   padding: 2vw;
   margin: 1vw;
@@ -46,13 +44,11 @@ body {
 }
 
 .card-content {
-  display: flex;
   flex-direction: column;
   width: 72%;
 }
 
 .card-image {
-  display: flex;
   width: 25%;
   align-items: center;
 }

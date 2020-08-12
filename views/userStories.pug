@@ -7,7 +7,7 @@ mixin storyListRow(title, lastModified, id, path)
       .date
         i= `Last modified on ${month} ${date}, ${year}`
       .story-actions
-        a(href=`/editor/${id}`).edit edit
+        a.underline(href=`/editor/${id}`).edit edit
 
 mixin storyList(list, path, emptyMessage)
   each story in list
@@ -34,7 +34,7 @@ html
     div.container
       div.heading
         div.page-title Your Stories
-        a#writeBtn(href="/newStory") Write a story
+        a#writeBtn.buttonLink(href="/newStory") Write a story
       .optionBar
         div#drafts.active Drafts #{draftedStories.length}
         div#published Published #{publishedStories.length}
